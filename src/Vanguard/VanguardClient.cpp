@@ -825,29 +825,29 @@ void VanguardClient::LoadRom(String^ filename) {
 
 bool VanguardClient::LoadState(std::string filename) {
 
-    //RTCV::CorruptCore::StepActions::ClearStepBlastUnits();
-    RTCV::NetCore::LocalNetCoreRouter::Route(Endpoints::CorruptCore, NetCore::Commands::Remote::ClearStepBlastUnits, nullptr, false);
+    ////RTCV::CorruptCore::StepActions::ClearStepBlastUnits();
+    //RTCV::NetCore::LocalNetCoreRouter::Route(Endpoints::CorruptCore, NetCore::Commands::Remote::ClearStepBlastUnits, nullptr, false);
 
-    //control->ParseConfigFile(Helpers::systemStringToUtf8String((Helpers::utf8StringToSystemString(filename) + ".conf")).c_str());
-    
-    RtcClock::ResetCount();
-    stateLoading = true;
-    UnmanagedWrapper::VANGUARD_LOADSTATE(filename);
+    ////control->ParseConfigFile(Helpers::systemStringToUtf8String((Helpers::utf8StringToSystemString(filename) + ".conf")).c_str());
+    //
+    //RtcClock::ResetCount();
+    //stateLoading = true;
+    //UnmanagedWrapper::VANGUARD_LOADSTATE(filename);
 
-    UnmanagedWrapper::VANGUARD_LOADSTATE_DONE();
-    // We have to do it this way to prevent deadlock due to synced calls. It sucks but it's required
-    // at the moment
-    int i = 0;
-    do {
-        Thread::Sleep(20);
-        System::Windows::Forms::Application::DoEvents();
+    //UnmanagedWrapper::VANGUARD_LOADSTATE_DONE();
+    //// We have to do it this way to prevent deadlock due to synced calls. It sucks but it's required
+    //// at the moment
+    //int i = 0;
+    //do {
+    //    Thread::Sleep(20);
+    //    System::Windows::Forms::Application::DoEvents();
 
-        // We wait for 20 ms every time. If loading a game takes longer than 10 seconds, break out.
-        if(++i > 500) {
-            stateLoading = false;
-            return false;
-        }
-    } while(stateLoading);
+    //    // We wait for 20 ms every time. If loading a game takes longer than 10 seconds, break out.
+    //    if(++i > 500) {
+    //        stateLoading = false;
+    //        return false;
+    //    }
+    //} while(stateLoading);
     RefreshDomains();
     return true;
 }
