@@ -20,6 +20,7 @@
 #include "xmlfile.h"
 
 #include "osdepend.h"
+#include "../Vanguard/VanguardClient.h"
 
 
 //**************************************************************************
@@ -264,6 +265,7 @@ void video_manager::frame_update(bool from_debugger)
 	// call the end-of-frame callback
 	if (phase == machine_phase::RUNNING)
 	{
+		VanguardClientUnmanaged::CORE_STEP();
 		// reset partial updates if we're paused or if the debugger is active
 		screen_device *const screen = screen_device_enumerator(machine().root_device()).first();
 		bool const debugger_enabled = machine().debug_flags & DEBUG_FLAG_ENABLED;

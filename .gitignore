@@ -40,6 +40,8 @@
 !/mame.doxygen
 !/*.md
 !/*.bdf
+!/build/
+./build/vs2019
 !/LICENSE
 /.idea
 docs/build
@@ -48,3 +50,31 @@ regtests/chdman/temp
 regtests/jedutil/output
 /CMakeLists.txt
 /samples
+/3rdparty/bgfx/3rdparty/meshoptimizer/out/build/x64-Debug (default)
+/3rdparty/bgfx/3rdparty/meshoptimizer/out/build/x64-Debug (default)
+/3rdparty/bgfx/3rdparty/spirv-cross/out/build/x64-Debug (default)
+/3rdparty/bgfx/3rdparty/meshoptimizer/out/build/x64-Debug (default)/.cmake/api/v1/query/client-MicrosoftVS/query.json
+/3rdparty/bgfx/3rdparty/spirv-tools/examples/out/build/x64-Debug (default)
+/3rdparty/bgfx/3rdparty/spirv-tools/external/out/build/x64-Debug (default)/.cmake/api/v1/query/client-MicrosoftVS/query.json
+/3rdparty/bgfx/3rdparty/spirv-tools/external/out/build/x64-Debug (default)/CMakeFiles
+/3rdparty/bgfx/3rdparty/spirv-tools/external/out/build/x64-Debug (default)
+/3rdparty/bgfx/3rdparty/spirv-tools/source/out/build/x64-Debug (default)/.cmake/api/v1/query/client-MicrosoftVS
+/3rdparty/bgfx/3rdparty/spirv-tools/source/out/build/x64-Debug (default)/CMakeFiles
+/3rdparty/bgfx/3rdparty/spirv-tools/source/out/build/x64-Debug (default)/CMakeCache.txt
+/3rdparty/bgfx/3rdparty/spirv-tools/source/out/build/x64-Debug (default)/VSInheritEnvironments.txt
+/3rdparty/bgfx/3rdparty/spirv-tools/test/out/build/x64-Debug (default)/.cmake/api/v1/query/client-MicrosoftVS
+/3rdparty/bgfx/3rdparty/spirv-tools/test/out/build/x64-Debug (default)/CMakeFiles
+/3rdparty/bgfx/3rdparty/spirv-tools/test/out/build/x64-Debug (default)/CMakeCache.txt
+/3rdparty/bgfx/3rdparty/spirv-tools/test/out/build/x64-Debug (default)/VSInheritEnvironments.txt
+/3rdparty/expat/out/build/x64-Debug (default)
+/3rdparty/lua-zlib/out/build/x64-Debug (default)
+/3rdparty/lzma/CS/7zip/Compress/LzmaAlone/obj
+/3rdparty/portaudio/out/build/x64-Debug (default)
+/3rdparty/portmidi/out/build/x64-Debug (default)
+/3rdparty/pugixml/out/build/x64-Debug (default)
+/3rdparty/rapidjson/out/build/x64-Debug (default)
+/3rdparty/SDL2/out/build/x64-Debug (default)
+/3rdparty/utf8proc/out/build/x64-Debug (default)
+/3rdparty/zlib/out/build/x64-Debug (default)
+/build/projects/windows/mamearcade/vs2019/.vs/mamearcade
+/build/vs2019

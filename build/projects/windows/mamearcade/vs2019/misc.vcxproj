@@ -1,0 +1,1201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{0856EA64-F4E4-732E-9D03-8829897184D4}</ProjectGuid>
+    <RootNamespace>misc</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformMinVersion>10.0.10240.0</WindowsTargetPlatformMinVersion>
+    <Keyword>Win32Proj</Keyword>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>..\..\..\..\vs2019\bin\x32\Debug\mame_arcade\</OutDir>
+    <IntDir>..\..\..\..\vs2019\obj\x32\Debug\misc\</IntDir>
+    <TargetName>misc</TargetName>
+    <TargetExt>.lib</TargetExt>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>..\..\..\..\vs2019\bin\x64\Debug\mame_arcade\</OutDir>
+    <IntDir>..\..\..\..\vs2019\obj\x64\Debug\misc\</IntDir>
+    <TargetName>misc</TargetName>
+    <TargetExt>.lib</TargetExt>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>..\..\..\..\vs2019\bin\x32\Release\mame_arcade\</OutDir>
+    <IntDir>..\..\..\..\vs2019\obj\x32\Release\misc\</IntDir>
+    <TargetName>misc</TargetName>
+    <TargetExt>.lib</TargetExt>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>..\..\..\..\vs2019\bin\x64\Release\mame_arcade\</OutDir>
+    <IntDir>..\..\..\..\vs2019\obj\x64\Release\misc\</IntDir>
+    <TargetName>misc</TargetName>
+    <TargetExt>.lib</TargetExt>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <AdditionalOptions>/bigobj /WX /w45038 /wd4003 /wd4005 /wd4018 /wd4060 /wd4065 /wd4100 /wd4127 /wd4146 /wd4201 /wd4244 /wd4245 /wd4250 /wd4267 /wd4310 /wd4319 /wd4324 /wd4334 /wd4389 /wd4456 /wd4457 /wd4458 /wd4459 /wd4702 /wd4706 /wd4804 /wd4805 /wd4996 /std:c++17  %(AdditionalOptions)</AdditionalOptions>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>..\..\..\..\..\3rdparty\dxsdk\Include;..\..\..\..\..\src\osd;..\..\..\..\..\src\emu;..\..\..\..\..\src\devices;..\..\..\..\..\src\mame;..\..\..\..\..\src\lib;..\..\..\..\..\src\lib\util;..\..\..\..\..\3rdparty;..\..\..\..\generated\mame\layout;..\..\..\..\..\3rdparty\libflac\include;..\..\..\..\..\3rdparty\glm;..\..\..\..\..\3rdparty\libjpeg;..\..\..\..\..\3rdparty\rapidjson\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>MAME_DEBUG;MAME_PROFILER;CRLF=3;LSB_FIRST;FLAC__NO_DLL;PUGIXML_HEADER_ONLY;NATIVE_DRC=drcbe_x86;LUA_COMPAT_ALL;LUA_COMPAT_5_1;LUA_COMPAT_5_2;XML_STATIC;WIN32;_WIN32;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;_CRT_STDIO_LEGACY_WIDE_SPECIFIERS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>false</MinimalRebuild>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <MultiProcessorCompilation>false</MultiProcessorCompilation>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level4</WarningLevel>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <ProgramDataBaseFileName>$(OutDir)misc.pdb</ProgramDataBaseFileName>
+      <DiagnosticsFormat>Caret</DiagnosticsFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>MAME_DEBUG;MAME_PROFILER;CRLF=3;LSB_FIRST;FLAC__NO_DLL;PUGIXML_HEADER_ONLY;NATIVE_DRC=drcbe_x86;LUA_COMPAT_ALL;LUA_COMPAT_5_1;LUA_COMPAT_5_2;XML_STATIC;WIN32;_WIN32;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;_CRT_STDIO_LEGACY_WIDE_SPECIFIERS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\..\..\..\3rdparty\dxsdk\Include;..\..\..\..\..\src\osd;..\..\..\..\..\src\emu;..\..\..\..\..\src\devices;..\..\..\..\..\src\mame;..\..\..\..\..\src\lib;..\..\..\..\..\src\lib\util;..\..\..\..\..\3rdparty;..\..\..\..\generated\mame\layout;..\..\..\..\..\3rdparty\libflac\include;..\..\..\..\..\3rdparty\glm;..\..\..\..\..\3rdparty\libjpeg;..\..\..\..\..\3rdparty\rapidjson\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Lib>
+      <OutputFile>$(OutDir)misc.lib</OutputFile>
+      <AdditionalOptions>/ignore:4221 %(AdditionalOptions)</AdditionalOptions>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Lib>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ProgramDatabaseFile>$(OutDir)misc.pdb</ProgramDatabaseFile>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <AdditionalOptions>/bigobj /WX /w45038 /wd4003 /wd4005 /wd4018 /wd4060 /wd4065 /wd4100 /wd4127 /wd4146 /wd4201 /wd4244 /wd4245 /wd4250 /wd4267 /wd4310 /wd4319 /wd4324 /wd4334 /wd4389 /wd4456 /wd4457 /wd4458 /wd4459 /wd4702 /wd4706 /wd4804 /wd4805 /wd4996 /std:c++17  %(AdditionalOptions)</AdditionalOptions>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>..\..\..\..\..\3rdparty\dxsdk\Include;..\..\..\..\..\src\osd;..\..\..\..\..\src\emu;..\..\..\..\..\src\devices;..\..\..\..\..\src\mame;..\..\..\..\..\src\lib;..\..\..\..\..\src\lib\util;..\..\..\..\..\3rdparty;..\..\..\..\generated\mame\layout;..\..\..\..\..\3rdparty\libflac\include;..\..\..\..\..\3rdparty\glm;..\..\..\..\..\3rdparty\libjpeg;..\..\..\..\..\3rdparty\rapidjson\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>X64_WINDOWS_ABI;PTR64=1;MAME_DEBUG;MAME_PROFILER;CRLF=3;LSB_FIRST;FLAC__NO_DLL;PUGIXML_HEADER_ONLY;NATIVE_DRC=drcbe_x64;LUA_COMPAT_ALL;LUA_COMPAT_5_1;LUA_COMPAT_5_2;_WIN64;XML_STATIC;WIN32;_WIN32;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;_CRT_STDIO_LEGACY_WIDE_SPECIFIERS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>false</MinimalRebuild>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <MultiProcessorCompilation>false</MultiProcessorCompilation>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level4</WarningLevel>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <ProgramDataBaseFileName>$(OutDir)misc.pdb</ProgramDataBaseFileName>
+      <DiagnosticsFormat>Caret</DiagnosticsFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>X64_WINDOWS_ABI;PTR64=1;MAME_DEBUG;MAME_PROFILER;CRLF=3;LSB_FIRST;FLAC__NO_DLL;PUGIXML_HEADER_ONLY;NATIVE_DRC=drcbe_x64;LUA_COMPAT_ALL;LUA_COMPAT_5_1;LUA_COMPAT_5_2;_WIN64;XML_STATIC;WIN32;_WIN32;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;_CRT_STDIO_LEGACY_WIDE_SPECIFIERS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\..\..\..\3rdparty\dxsdk\Include;..\..\..\..\..\src\osd;..\..\..\..\..\src\emu;..\..\..\..\..\src\devices;..\..\..\..\..\src\mame;..\..\..\..\..\src\lib;..\..\..\..\..\src\lib\util;..\..\..\..\..\3rdparty;..\..\..\..\generated\mame\layout;..\..\..\..\..\3rdparty\libflac\include;..\..\..\..\..\3rdparty\glm;..\..\..\..\..\3rdparty\libjpeg;..\..\..\..\..\3rdparty\rapidjson\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Lib>
+      <OutputFile>$(OutDir)misc.lib</OutputFile>
+      <AdditionalOptions>/ignore:4221 %(AdditionalOptions)</AdditionalOptions>
+      <TargetMachine>MachineX64</TargetMachine>
+    </Lib>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ProgramDatabaseFile>$(OutDir)misc.pdb</ProgramDatabaseFile>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <AdditionalOptions>/bigobj /WX /w45038 /wd4003 /wd4005 /wd4018 /wd4060 /wd4065 /wd4100 /wd4127 /wd4146 /wd4201 /wd4244 /wd4245 /wd4250 /wd4267 /wd4310 /wd4319 /wd4324 /wd4334 /wd4389 /wd4456 /wd4457 /wd4458 /wd4459 /wd4702 /wd4706 /wd4804 /wd4805 /wd4996 /std:c++17  %(AdditionalOptions)</AdditionalOptions>
+      <Optimization>Full</Optimization>
+      <AdditionalIncludeDirectories>..\..\..\..\..\3rdparty\dxsdk\Include;..\..\..\..\..\src\osd;..\..\..\..\..\src\emu;..\..\..\..\..\src\devices;..\..\..\..\..\src\mame;..\..\..\..\..\src\lib;..\..\..\..\..\src\lib\util;..\..\..\..\..\3rdparty;..\..\..\..\generated\mame\layout;..\..\..\..\..\3rdparty\libflac\include;..\..\..\..\..\3rdparty\glm;..\..\..\..\..\3rdparty\libjpeg;..\..\..\..\..\3rdparty\rapidjson\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>NDEBUG;CRLF=3;LSB_FIRST;FLAC__NO_DLL;PUGIXML_HEADER_ONLY;NATIVE_DRC=drcbe_x86;LUA_COMPAT_ALL;LUA_COMPAT_5_1;LUA_COMPAT_5_2;XML_STATIC;WIN32;_WIN32;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;_CRT_STDIO_LEGACY_WIDE_SPECIFIERS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>false</MinimalRebuild>
+      <StringPooling>true</StringPooling>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level4</WarningLevel>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+      <DiagnosticsFormat>Caret</DiagnosticsFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>NDEBUG;CRLF=3;LSB_FIRST;FLAC__NO_DLL;PUGIXML_HEADER_ONLY;NATIVE_DRC=drcbe_x86;LUA_COMPAT_ALL;LUA_COMPAT_5_1;LUA_COMPAT_5_2;XML_STATIC;WIN32;_WIN32;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;_CRT_STDIO_LEGACY_WIDE_SPECIFIERS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\..\..\..\3rdparty\dxsdk\Include;..\..\..\..\..\src\osd;..\..\..\..\..\src\emu;..\..\..\..\..\src\devices;..\..\..\..\..\src\mame;..\..\..\..\..\src\lib;..\..\..\..\..\src\lib\util;..\..\..\..\..\3rdparty;..\..\..\..\generated\mame\layout;..\..\..\..\..\3rdparty\libflac\include;..\..\..\..\..\3rdparty\glm;..\..\..\..\..\3rdparty\libjpeg;..\..\..\..\..\3rdparty\rapidjson\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Lib>
+      <OutputFile>$(OutDir)misc.lib</OutputFile>
+      <AdditionalOptions>/ignore:4221 %(AdditionalOptions)</AdditionalOptions>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Lib>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalOptions>/bigobj /WX /w45038 /wd4003 /wd4005 /wd4018 /wd4060 /wd4065 /wd4100 /wd4127 /wd4146 /wd4201 /wd4244 /wd4245 /wd4250 /wd4267 /wd4310 /wd4319 /wd4324 /wd4334 /wd4389 /wd4456 /wd4457 /wd4458 /wd4459 /wd4702 /wd4706 /wd4804 /wd4805 /wd4996 /std:c++17  %(AdditionalOptions)</AdditionalOptions>
+      <Optimization>Full</Optimization>
+      <AdditionalIncludeDirectories>..\..\..\..\..\3rdparty\dxsdk\Include;..\..\..\..\..\src\osd;..\..\..\..\..\src\emu;..\..\..\..\..\src\devices;..\..\..\..\..\src\mame;..\..\..\..\..\src\lib;..\..\..\..\..\src\lib\util;..\..\..\..\..\3rdparty;..\..\..\..\generated\mame\layout;..\..\..\..\..\3rdparty\libflac\include;..\..\..\..\..\3rdparty\glm;..\..\..\..\..\3rdparty\libjpeg;..\..\..\..\..\3rdparty\rapidjson\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>X64_WINDOWS_ABI;PTR64=1;NDEBUG;CRLF=3;LSB_FIRST;FLAC__NO_DLL;PUGIXML_HEADER_ONLY;NATIVE_DRC=drcbe_x64;LUA_COMPAT_ALL;LUA_COMPAT_5_1;LUA_COMPAT_5_2;_WIN64;XML_STATIC;WIN32;_WIN32;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;_CRT_STDIO_LEGACY_WIDE_SPECIFIERS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>false</MinimalRebuild>
+      <StringPooling>true</StringPooling>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level4</WarningLevel>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+      <DiagnosticsFormat>Caret</DiagnosticsFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>X64_WINDOWS_ABI;PTR64=1;NDEBUG;CRLF=3;LSB_FIRST;FLAC__NO_DLL;PUGIXML_HEADER_ONLY;NATIVE_DRC=drcbe_x64;LUA_COMPAT_ALL;LUA_COMPAT_5_1;LUA_COMPAT_5_2;_WIN64;XML_STATIC;WIN32;_WIN32;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;_CRT_STDIO_LEGACY_WIDE_SPECIFIERS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\..\..\..\3rdparty\dxsdk\Include;..\..\..\..\..\src\osd;..\..\..\..\..\src\emu;..\..\..\..\..\src\devices;..\..\..\..\..\src\mame;..\..\..\..\..\src\lib;..\..\..\..\..\src\lib\util;..\..\..\..\..\3rdparty;..\..\..\..\generated\mame\layout;..\..\..\..\..\3rdparty\libflac\include;..\..\..\..\..\3rdparty\glm;..\..\..\..\..\3rdparty\libjpeg;..\..\..\..\..\3rdparty\rapidjson\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Lib>
+      <OutputFile>$(OutDir)misc.lib</OutputFile>
+      <AdditionalOptions>/ignore:4221 %(AdditionalOptions)</AdditionalOptions>
+      <TargetMachine>MachineX64</TargetMachine>
+    </Lib>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\..\src\mame\machine\pxa255.h" />
+    <ClInclude Include="..\..\..\..\..\src\mame\includes\3do.h" />
+    <ClInclude Include="..\..\..\..\..\src\mame\includes\4enraya.h" />
+    <ClInclude Include="..\..\..\..\..\src\mame\includes\ampoker2.h" />
+    <ClInclude Include="..\..\..\..\..\src\mame\includes\amspdwy.h" />
+    <ClInclude Include="..\..\..\..\..\src\mame\includes\artmagic.h" />
+    <ClInclude Include="..\..\..\..\..\src\mame\includes\aztarac.h" />
+    <ClInclude Include="..\..\..\..\..\src\mame\includes\calomega.h" />
+    <ClInclude Include="..\..\..\..\..\src\mame\includes\cave.h" />
+    <ClInclude Include="..\..\..\..\..\src\mame\includes\cdi.h" />
+    <ClInclude Include="..\..\..\..\..\src\mame\video\mcd212.h" />
+    <ClInclude Include="..\..\..\..\..\src\mame\machine\cdislavehle.h" />
+    <ClInclude Include="..\..\..\..\..\src\mame\machine\cdicdic.h" />
+    <ClInclude Include="..\..\..\..\..\src\mame\audio\nl_cocoloco.h" />
+    <ClInclude Include="..\..\..\..\..\src\mame\includes\coolpool.h" />
+    <ClInclude Include="..\..\..\..\..\src\mame\machine\inder_sb.h" />
+    <ClInclude Include="..\..\..\..\..\src\mame\machine\inder_vid.h" />
+    <ClInclude Include="..\..\..\..\..\src\mame\includes\dcheese.h" />
+    <ClInclude Include="..\..\..\..\..\src\mame\includes\dribling.h" />
+    <ClInclude Include="..\..\..\..\..\src\mame\includes\efdt.h" />
+    <ClInclude Include="..\..\..\..\..\src\mame\includes\epos.h" />
+    <ClInclude Include="..\..\..\..\..\src\mame\includes\esd16.h" />
+    <ClInclude Include="..\..\..\..\..\src\mame\includes\esripsys.h" />
+    <ClInclude Include="..\..\..\..\..\src\mame\includes\freekick.h" />
+    <ClInclude Include="..\..\..\..\..\src\mame\includes\gotcha.h" />
+    <ClInclude Include="..\..\..\..\..\src\mame\includes\gumbo.h" />
+    <ClInclude Include="..\..\..\..\..\src\mame\includes\homedata.h" />
+    <ClInclude Include="..\..\..\..\..\src\mame\includes\kyugo.h" />
+    <ClInclude Include="..\..\..\..\..\src\mame\includes\ladyfrog.h" />
+    <ClInclude Include="..\..\..\..\..\src\mame\includes\lethalj.h" />
+    <ClInclude Include="..\..\..\..\..\src\mame\includes\malzak.h" />
+    <ClInclude Include="..\..\..\..\..\src\mame\includes\mcatadv.h" />
+    <ClInclude Include="..\..\..\..\..\src\mame\includes\micro3d.h" />
+    <ClInclude Include="..\..\..\..\..\src\mame\audio\micro3d.h" />
+    <ClInclude Include="..\..\..\..\..\src\mame\includes\mosaic.h" />
+    <ClInclude Include="..\..\..\..\..\src\mame\includes\multfish.h" />
+    <ClInclude Include="..\..\..\..\..\src\mame\includes\news.h" />
+    <ClInclude Include="..\..\..\..\..\src\mame\includes\norautp.h" />
+    <ClInclude Include="..\..\..\..\..\src\mame\includes\oneshot.h" />
+    <ClInclude Include="..\..\..\..\..\src\mame\includes\pass.h" />
+    <ClInclude Include="..\..\..\..\..\src\mame\includes\policetr.h" />
+    <ClInclude Include="..\..\..\..\..\src\mame\includes\polyplay.h" />
+    <ClInclude Include="..\..\..\..\..\src\mame\includes\shangkid.h" />
+    <ClInclude Include="..\..\..\..\..\src\mame\audio\special.h" />
+    <ClInclude Include="..\..\..\..\..\src\mame\includes\taxidriv.h" />
+    <ClInclude Include="..\..\..\..\..\src\mame\includes\thedeep.h" />
+    <ClInclude Include="..\..\..\..\..\src\mame\includes\truco.h" />
+    <ClInclude Include="..\..\..\..\..\src\mame\includes\trucocl.h" />
+    <ClInclude Include="..\..\..\..\..\src\mame\includes\usgames.h" />
+    <ClInclude Include="..\..\..\..\..\src\mame\includes\vectrex.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\39in1.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\3do.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\machine\3do.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)1\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\4enraya.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\video\4enraya.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)1\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\4enlinea.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\5clown.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\a1supply.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\acefruit.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\aces1.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\acesp.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\age_candy.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\alinvade.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\amaticmg.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\amerihok.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\ampoker2.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\video\ampoker2.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)1\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\amspdwy.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\video\amspdwy.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)1\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\amusco.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\anes.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\arachnid.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\artmagic.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\video\artmagic.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)1\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\astrafr.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\astrcorp.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\astropc.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\atronic.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\attckufo.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\avt.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\aztarac.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\audio\aztarac.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)1\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\video\aztarac.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)2\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)2\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)2\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)2\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\bailey.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\beaminv.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\beezer.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\belatra.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\bgt.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\bingoman.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\bingor.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\blitz68k.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\blocktax.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\buster.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\calomega.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\video\calomega.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)1\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\cardline.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\carrera.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\castle.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\cave.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\video\cave.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)1\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\cavepc.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\cv1k.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\cb2001.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\cdi.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\video\mcd212.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\machine\cdislavehle.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\machine\cdicdic.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\chameleonrx1.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\chance32.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\changyu.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\chexx.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\chicago.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\chsuper.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\cirsa820xxx.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\clowndwn.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\clpoker.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\cocoloco.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\audio\nl_cocoloco.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\coinmstr.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\coinmvga.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\cointek.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\comebaby.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\cowtipping.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\crazybal.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\cromptons.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\cupidon.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\bntyhunt.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\coolpool.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\megaphx.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\machine\inder_sb.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\machine\inder_vid.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\corona.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\cwheel.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\crystal.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\ddz.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\menghong.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\trivrus.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\crospuzl.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\psattack.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\v0bowl.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\cubeqst.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\cybertnk.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\daryde.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\dcheese.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\video\dcheese.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)1\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\dfruit.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\dgpix.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\diamondking.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\discoboy.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\dominob.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\dorachan.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\drdmania.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\dreamwld.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\dribling.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\video\dribling.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)1\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\dwarfd.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\dynadice.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\dynamoah.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\ecoinfr.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\ecoinf1.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\ecoinf2.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\ecoinf3.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\efdt.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\electra.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\epos.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\video\epos.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)1\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\esd16.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\video\esd16.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)1\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\esh.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\esripsys.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\video\esripsys.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)1\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\ettrivia.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\extrema.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\ez2d.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\fastinvaders.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\fireball.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\flipjack.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\flower.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\audio\flower.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)1\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\fortecar.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\fresh.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\freekick.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\video\freekick.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)1\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\freeway.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\fungames.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\funkball.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\gambl186.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\galaxi.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\galgame.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\gamecstl.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\gamemasters.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\gammagic.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\gamtor.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\gei.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\globalfr.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\globalvr.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\gluck2.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\goldngam.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\goldnpkr.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\good.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\gotcha.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\video\gotcha.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)1\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\gsspade.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\gumbo.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\video\gumbo.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)1\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\gunpey.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\hapyfish.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\hideseek.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\hazelgr.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\headonb.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\highvdeo.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\hitpoker.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\hobbyplay.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\homedata.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\video\homedata.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)1\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\hotblock.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\hotstuff.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\ichiban.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\imolagp.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\intrscti.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\island.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\istellar.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\itgambl2.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\itgambl3.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\itgamble.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\jackpool.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\jackpot.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\jankenmn.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\jokrwild.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\joystand.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\jubilee.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\jungleyo.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\kas89.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\kingpin.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\kurukuru.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\kyugo.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\video\kyugo.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)1\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\ladyfrog.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\video\ladyfrog.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)1\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\laserbas.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\laz_aftrshok.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\laz_ribrac.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\lethalj.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\video\lethalj.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)1\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\limenko.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\ltcasino.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\luckybal.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\magic10.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\magicard.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\magicfly.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\magictg.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\magreel.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\magtouch.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\majorpkr.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\malzak.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\video\malzak.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)1\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\marywu.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\matrix.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\mcatadv.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\video\mcatadv.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)1\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\mgavegas.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\meyc8080.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\meyc8088.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\micro3d.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\machine\micro3d.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)1\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\video\micro3d.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)2\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)2\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)2\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)2\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\audio\micro3d.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)3\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)3\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)3\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)3\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\microdar.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\midas.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\mil4000.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\miniboy7.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\minivideo.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\mirax.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\missbamby.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\mjsenpu.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\mole.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\mosaic.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\video\mosaic.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)1\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\mpu12wbk.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\multfish.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\multfish_boot.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\murogem.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\murogmbl.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\neoprint.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\neptunp2.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\news.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\video\news.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)1\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\nexus3d.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\nibble.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\norautp.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\audio\norautp.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)1\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\notechan.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\nsg6809.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\nsmpoker.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\odyssey.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\oneshot.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\video\oneshot.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)1\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\onetwo.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\othello.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\pachifev.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\pasha2.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\pass.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\video\pass.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)1\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\photon.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\piggypas.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\video\pk8000.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\photon2.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\photoply.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\photoplysx.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\pipeline.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\pkscram.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\pntnpuzl.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\policetr.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\video\policetr.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)1\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\polyplay.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\audio\polyplay.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)1\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\video\polyplay.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)2\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)2\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)2\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)2\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\poker72.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\pokerout.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\potgoldu.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\proconn.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\pse.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\quizo.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\quizpun2.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\rbmk.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\rcorsair.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\re900.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\rf51w14cg.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\rfslots8085.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\rfslotspcpent.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\rgum.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\roul.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\rulechan.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\savquest.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\sanremo.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\sanremmg.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\scm_500.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\sealy.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\sealy_fr.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\sfbonus.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\shangkid.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\video\shangkid.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)1\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\skeetsht.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\skimaxx.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\skopro.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\skyarmy.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\skylncr.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\sliver.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\smotor.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\smsmcorp.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\sothello.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\special_gambl.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\audio\special.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\spool99.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\sprcros2.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\sshot.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\ssingles.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\sstrangr.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\startouch.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\statriv2.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\strkzn.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\stuntair.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\su2000.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\subhuntr.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\summit.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\sumt8035.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\supercrd.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\supertnk.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\tapatune.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\tattack.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\taxidriv.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\video\taxidriv.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)1\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\teamjocs.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\tecnodar.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\thayers.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\thedeep.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\video\thedeep.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)1\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\tickee.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\tmspoker.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\triviaquiz.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\truco.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\video\truco.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)1\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\trucocl.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\video\trucocl.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)1\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\trvmadns.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\trvquest.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\ttchamp.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\tugboat.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\tvg01.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\twinbskt.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\ice_bozopail.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\ice_hhhippos.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\ice_tbd.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\umipoker.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\unkhorse.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\unkpoker.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\usbilliards.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\usgames.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\video\usgames.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)1\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\vamphalf.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\vcombat.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\vectrex.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\video\vectrex.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)1\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)1\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\machine\vectrex.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)2\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)2\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)2\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)2\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\video21.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\videosaa.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\vlc.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\voyager.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\vp101.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\vpoker.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\vroulet.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\wildpkr.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\winbingo.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\wms.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\xtom3d.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\xyonix.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\mame\drivers\yuvomz80.cpp">
+    </ClCompile>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

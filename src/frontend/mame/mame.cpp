@@ -29,6 +29,7 @@
 #include "osdepend.h"
 
 #include <ctime>
+#include "../../Vanguard/VanguardClientInitializer.h"
 
 
 //**************************************************************************
@@ -271,6 +272,7 @@ int mame_machine_manager::execute()
 		if (m_new_driver_pending)
 		{
 			// set up new system name and adjust device options accordingly
+			VanguardClientInitializer::Initialize();
 			m_options.set_system_name(m_new_driver_pending->name);
 			m_firstrun = true;
 		}
