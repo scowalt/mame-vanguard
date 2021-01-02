@@ -7,6 +7,7 @@ public:
 	static long long GetMemorySize(std::string domain);
 	static int GetByteWidth(std::string domain);
 	static void ACTIVATELUA();
-	static std::string GetMachine();
-	static std::string GetDomain();
+	static std::string GetDevice(int devnum);
+	static std::string GetMemRegion(int regionnum);
+	static bool IsBigEndian(std::string domain);
 };

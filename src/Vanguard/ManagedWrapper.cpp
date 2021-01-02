@@ -29,3 +29,20 @@ void ManagedWrapper::ACTIVATELUA()
 {
 	mame_machine_manager::instance()->start_luaengine();
 }
+
+std::string ManagedWrapper::GetDevice(int devnum)
+{
+	return std::string();
+}
+
+std::string ManagedWrapper::GetMemRegion(int regionnum)
+{
+	return std::string();
+}
+
+bool ManagedWrapper::IsBigEndian(std::string domain)
+{
+	if (mame_machine_manager::instance()->machine()->root_device().memregion(domain.c_str())->endianness() == ENDIANNESS_BIG)
+		return true;
+	else return false;
+}

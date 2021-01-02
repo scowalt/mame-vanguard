@@ -458,7 +458,7 @@ bool maincpu::BigEndian::get() {
 	/*if (&memory_region::endianness == ENDIANNESS_BIG) {
 		return true;
 	}
-	else */return false;
+	else */return ManagedWrapper::IsBigEndian("maincpu");
 }
 
 unsigned char maincpu::PeekByte(long long addr) {
