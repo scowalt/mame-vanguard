@@ -5,33 +5,74 @@
 #include "ManagedWrapper.h"
 #include "../src/frontend/mame/mame.h"
 #include "UnmanagedWrapper.h"
-unsigned char ManagedWrapper::PEEK(std::string device, long long addr)
+unsigned char ManagedWrapper::PEEK(std::string memclass, std::string region, long long addr)
 {
-	if(mame_machine_manager::instance()->machine()->system().name != NULL)
-		return mame_machine_manager::instance()->machine()->device(device.c_str())->memory().space().read_byte(addr);
+	if (memclass == "region")
+	{
+		memory_region& mregion = *mame_machine_manager::instance()->machine()->root_device().memregion(region);
+		unsigned char mem_content = 0;
+		mem_content |= mregion.as_u8((BYTE8_XOR_LE(addr)) | (addr));
+
+		return mem_content;
+
+	}
+	else if (memclass == "share")
+	{
+		memory_share& mshare = *mame_machine_manager::instance()->machine()->root_device().memshare(region);
+		unsigned char mem_content = 0;
+		u8* ptr = (u8*)mshare.ptr();
+		mem_content |= ptr[((BYTE8_XOR_LE(addr)) | (addr))];
+
+		return mem_content;
+	}
 	else return NULL;
-	
 }
 
-void ManagedWrapper::POKE(std::string device, long long addr, unsigned char val)
+void ManagedWrapper::POKE(std::string memclass, std::string region, long long addr, unsigned char val)
 {
-	if (mame_machine_manager::instance()->machine()->system().name != NULL)
-		mame_machine_manager::instance()->machine()->device(device.c_str())->memory().space().write_byte(addr, val);
+	if (memclass == "region")
+	{
+		memory_region& mregion = *mame_machine_manager::instance()->machine()->root_device().memregion(region);
+		mregion.base()[(BYTE8_XOR_LE(addr)) | (addr)] = val & 0xff;
+	}
+	else if (memclass == "share")
+	{
+		memory_share& mshare = *mame_machine_manager::instance()->machine()->root_device().memshare(region);
+		u8* ptr = (u8*)mshare.ptr();
+		ptr[(BYTE8_XOR_LE(addr)) | (addr)] = val & 0xff;
+	}
 	else return;
 }
 
-long long ManagedWrapper::GetMemorySize(std::string region)
+long long ManagedWrapper::GetMemorySize(std::string memclass, std::string region)
 {
-	if (mame_machine_manager::instance()->machine()->system().name != NULL)
-		return (long long)mame_machine_manager::instance()->machine()->root_device().memregion(region.c_str())->bytes();
-	else return NULL;
+	if (memclass == "region")
+	{
+		memory_region& mregion = *mame_machine_manager::instance()->machine()->root_device().memregion(region);
+		return mregion.bytes();
+	}
+	if (memclass == "share")
+	{
+
+		memory_share& mshare = *mame_machine_manager::instance()->machine()->root_device().memshare(region);
+		return mshare.bytes();
+	}
+	else return 0;
 }
 
-int ManagedWrapper::GetByteWidth(std::string region)
+int ManagedWrapper::GetByteWidth(std::string memclass, std::string region)
 {
-	if (mame_machine_manager::instance()->machine()->system().name != NULL)
-		return (int)mame_machine_manager::instance()->machine()->root_device().memregion(region.c_str())->bytewidth();
-	else return NULL;
+	if (memclass == "region")
+	{
+		memory_region& mregion = *mame_machine_manager::instance()->machine()->root_device().memregion(region);
+		return mregion.bytewidth();
+	}
+	if (memclass == "share")
+	{
+		memory_share& mshare = *mame_machine_manager::instance()->machine()->root_device().memshare(region);
+		return mshare.bytewidth();
+	}
+	else return 0;
 }
 
 void ManagedWrapper::ACTIVATELUA()
@@ -39,22 +80,35 @@ void ManagedWrapper::ACTIVATELUA()
 	mame_machine_manager::instance()->start_luaengine();
 }
 
-std::string ManagedWrapper::GetDevice(int devnum)
+std::string ManagedWrapper::GetMemoryDomain(int indexnum)
 {
 	return std::string();
 }
 
-std::string ManagedWrapper::GetMemRegion(int regionnum)
+std::string ManagedWrapper::GetDomainClass(std::string name)
 {
 	return std::string();
 }
 
-bool ManagedWrapper::IsBigEndian(std::string region)
+bool ManagedWrapper::IsBigEndian(std::string memclass, std::string region)
 {
-	if (mame_machine_manager::instance()->machine()->system().name != NULL)
-		if (mame_machine_manager::instance()->machine()->root_device().memregion(region.c_str())->endianness() == ENDIANNESS_BIG)
-			return true;
+	if (memclass == "region")
+	{
+		if (mame_machine_manager::instance()->machine()->system().name != NULL)
+			if (mame_machine_manager::instance()->machine()->root_device().memregion(region.c_str())->endianness() == ENDIANNESS_BIG)
+				return true;
+			else return false;
 		else return false;
+	}
+	if (memclass == "share")
+	{
+		if (mame_machine_manager::instance()->machine()->system().name != NULL)
+			if (mame_machine_manager::instance()->machine()->root_device().memshare(region.c_str())->endianness() == ENDIANNESS_BIG)
+				return true;
+			else return false;
+		else return false;
+	}
+
 	else return false;
 }
 
@@ -68,12 +122,12 @@ void ManagedWrapper::SaveSaveState(std::string filename)
 void ManagedWrapper::LoadSaveState(std::string filename)
 {
 	printf("Savestate path is %s.\n", filename.c_str());
-	if (mame_machine_manager::instance()->machine()->system().name != NULL)
+	/*if (mame_machine_manager::instance()->machine()->system().name != NULL)
 	{
-		mame_machine_manager::instance()->machine()->immediate_load(filename.c_str());
+		*/mame_machine_manager::instance()->machine()->immediate_load(filename.c_str());
 		UnmanagedWrapper::VANGUARD_LOADSTATE_DONE();
-	}
-	else return;
+	/*}
+	else return;*/
 }
 
 std::string ManagedWrapper::GetGameName()

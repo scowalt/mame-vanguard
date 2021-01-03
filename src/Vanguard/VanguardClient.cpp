@@ -345,17 +345,7 @@ public:
 	virtual unsigned char PeekByte(long long addr);
 	virtual cli::array<unsigned char>^ PeekBytes(long long address, int length);
 	virtual void PokeByte(long long addr, unsigned char val);
-};
-public
-ref class screen : RTCV::CorruptCore::IMemoryDomain {
-public:
-	property System::String^ Name { virtual System::String^ get(); }
-	property long long Size { virtual long long get(); }
-	property int WordSize { virtual int get(); }
-	property bool BigEndian { virtual bool get(); }
-	virtual unsigned char PeekByte(long long addr);
-	virtual cli::array<unsigned char>^ PeekBytes(long long address, int length);
-	virtual void PokeByte(long long addr, unsigned char val);
+	property std::string MemoryClass {virtual std::string get(); }
 };
 
 //public
@@ -430,6 +420,10 @@ String^ maincpu::Name::get() {/*
     return "maincpu";
 }
 
+std::string maincpu::MemoryClass::get()
+{
+	return "region";
+}
 long long maincpu::Size::get() {/*
     if(UnmanagedWrapper::IS_N3DS()) {
         return maincpu::FCRAM_N3DS_SIZE;
@@ -447,24 +441,25 @@ long long maincpu::Size::get() {/*
 
     ///* roll memsize into memsizekb, simplify this code */
     //return (memsizekb/1024 + memsize) * 1024ul * 1024ul;
-	return ManagedWrapper::GetMemorySize("maincpu");
+	return ManagedWrapper::GetMemorySize(maincpu::MemoryClass , "maincpu");
 }
 
 int maincpu::WordSize::get() {
-	return ManagedWrapper::GetByteWidth("maincpu");
+	return ManagedWrapper::GetByteWidth(maincpu::MemoryClass, "maincpu");
 }
 
 bool maincpu::BigEndian::get() {
 	/*if (&memory_region::endianness == ENDIANNESS_BIG) {
 		return true;
 	}
-	else */return ManagedWrapper::IsBigEndian("maincpu");
+	else */return ManagedWrapper::IsBigEndian(maincpu::MemoryClass, "maincpu");
 }
+
 
 unsigned char maincpu::PeekByte(long long addr) {
     if(addr < maincpu::Size)
     {
-		return ManagedWrapper::PEEK("maincpu", addr);
+		return ManagedWrapper::PEEK(maincpu::MemoryClass, "maincpu", addr);
     }
     else
     {
@@ -476,7 +471,7 @@ unsigned char maincpu::PeekByte(long long addr) {
 void maincpu::PokeByte(long long addr, unsigned char val) {
     if(addr < maincpu::Size)
     {
-		ManagedWrapper::POKE("maincpu", addr, val);
+		ManagedWrapper::POKE(maincpu::MemoryClass, "maincpu", addr, val);
     }
     else
     {
@@ -494,81 +489,81 @@ cli::array<unsigned char>^ maincpu::PeekBytes(long long address, int length) {
     return bytes;
 }
 #pragma endregion
-#pragma region screen
-String^ screen::Name::get() {/*
-	if(UnmanagedWrapper::IS_N3DS()) {
-		return "FCRam(N3DS)";
-	}
-	else {
-		return "FCRam";
-	}*/
-	return "screen";
-}
-
-long long screen::Size::get() {/*
-	if(UnmanagedWrapper::IS_N3DS()) {
-		return maincpu::FCRAM_N3DS_SIZE;
-	}
-	return maincpu::FCRAM_SIZE;*/
-	//Section_prop* section = static_cast<Section_prop*>(control->GetSection("dosbox"));
-	//Bitu memsizekb = (Bitu)section->Get_int("memsizekb");
-	//Bitu memsize = (Bitu)section->Get_int("memsize");
-
-	//if(memsizekb == 0 && memsize < 1) memsize = 1;
-	//else if(memsizekb != 0 && (Bits)memsize < 0) memsize = 0;
-
-	///* round up memsizekb to 4KB multiple */
-	//memsizekb = (memsizekb + 3ul) & (~3ul);
-
-	///* roll memsize into memsizekb, simplify this code */
-	//return (memsizekb/1024 + memsize) * 1024ul * 1024ul;
-	return ManagedWrapper::GetMemorySize("screen");
-}
-
-int screen::WordSize::get() {
-	return ManagedWrapper::GetByteWidth("screen");
-}
-
-bool screen::BigEndian::get() {
-	/*if (&memory_region::endianness == ENDIANNESS_BIG) {
-		return true;
-	}
-	else */return false;
-}
-
-unsigned char screen::PeekByte(long long addr) {
-	if (addr < screen::Size)
-	{
-		return ManagedWrapper::PEEK("screen", addr);
-	}
-	else
-	{
-		printf("Error : the provided address is bigger than the memory size!");
-		return 0;
-	}
-}
-
-void screen::PokeByte(long long addr, unsigned char val) {
-	if (addr < screen::Size)
-	{
-		ManagedWrapper::POKE("screen", addr, val);
-	}
-	else
-	{
-		printf("Error : the provided address is bigger than the memory size!");
-		return;
-	}
-}
-
-cli::array<unsigned char>^ screen::PeekBytes(long long address, int length) {
-
-	cli::array<unsigned char>^ bytes = gcnew cli::array<unsigned char>(length);
-	for (int i = 0; i < length; i++) {
-		bytes[i] = PeekByte(address + i);
-	}
-	return bytes;
-}
-#pragma endregion
+//#pragma region screen
+//String^ screen::Name::get() {/*
+//	if(UnmanagedWrapper::IS_N3DS()) {
+//		return "FCRam(N3DS)";
+//	}
+//	else {
+//		return "FCRam";
+//	}*/
+//	return "screen";
+//}
+//
+//long long screen::Size::get() {/*
+//	if(UnmanagedWrapper::IS_N3DS()) {
+//		return maincpu::FCRAM_N3DS_SIZE;
+//	}
+//	return maincpu::FCRAM_SIZE;*/
+//	//Section_prop* section = static_cast<Section_prop*>(control->GetSection("dosbox"));
+//	//Bitu memsizekb = (Bitu)section->Get_int("memsizekb");
+//	//Bitu memsize = (Bitu)section->Get_int("memsize");
+//
+//	//if(memsizekb == 0 && memsize < 1) memsize = 1;
+//	//else if(memsizekb != 0 && (Bits)memsize < 0) memsize = 0;
+//
+//	///* round up memsizekb to 4KB multiple */
+//	//memsizekb = (memsizekb + 3ul) & (~3ul);
+//
+//	///* roll memsize into memsizekb, simplify this code */
+//	//return (memsizekb/1024 + memsize) * 1024ul * 1024ul;
+//	return ManagedWrapper::GetMemorySize("screen");
+//}
+//
+//int screen::WordSize::get() {
+//	return ManagedWrapper::GetByteWidth("screen");
+//}
+//
+//bool screen::BigEndian::get() {
+//	/*if (&memory_region::endianness == ENDIANNESS_BIG) {
+//		return true;
+//	}
+//	else */return false;
+//}
+//
+//unsigned char screen::PeekByte(long long addr) {
+//	if (addr < screen::Size)
+//	{
+//		return ManagedWrapper::PEEK("screen", addr);
+//	}
+//	else
+//	{
+//		printf("Error : the provided address is bigger than the memory size!");
+//		return 0;
+//	}
+//}
+//
+//void screen::PokeByte(long long addr, unsigned char val) {
+//	if (addr < screen::Size)
+//	{
+//		ManagedWrapper::POKE("screen", addr, val);
+//	}
+//	else
+//	{
+//		printf("Error : the provided address is bigger than the memory size!");
+//		return;
+//	}
+//}
+//
+//cli::array<unsigned char>^ screen::PeekBytes(long long address, int length) {
+//
+//	cli::array<unsigned char>^ bytes = gcnew cli::array<unsigned char>(length);
+//	for (int i = 0; i < length; i++) {
+//		bytes[i] = PeekByte(address + i);
+//	}
+//	return bytes;
+//}
+//#pragma endregion
 
 static cli::array<MemoryDomainProxy^>^ GetInterfaces() {
 
