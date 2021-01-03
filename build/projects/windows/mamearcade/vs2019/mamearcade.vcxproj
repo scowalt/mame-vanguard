@@ -143,9 +143,9 @@
       <AdditionalOptions>/ignore:4221 %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <PreBuildEvent>
-      <Command>mkdir "m:\mame\build\generated\resource\" 2&gt;NUL
+      <Command>mkdir "..\..\..\..\..\build\generated\resource\" 2&gt;NUL
 @echo Emitting mamevers.rc...
-python "m:\mame\scripts\build\verinfo.py" -r -b mame "m:\mame\build\generated\version.cpp" &gt; "m:\mame\build\generated\resource\mamevers.rc"</Command>
+python "..\..\..\..\..\scripts\build\verinfo.py" -r -b mame "..\..\..\..\..\build\generated\version.cpp" &gt; "..\..\..\..\..\build\generated\resource\mamevers.rc"</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -183,9 +183,9 @@ python "m:\mame\scripts\build\verinfo.py" -r -b mame "m:\mame\build\generated\ve
       <AdditionalOptions>/ignore:4221 %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <PreBuildEvent>
-      <Command>mkdir "m:\mame\build\generated\resource\" 2&gt;NUL
+      <Command>mkdir "..\..\..\..\..\build\generated\resource\" 2&gt;NUL
 @echo Emitting mamevers.rc...
-python "m:\mame\scripts\build\verinfo.py" -r -b mame "m:\mame\build\generated\version.cpp" &gt; "m:\mame\build\generated\resource\mamevers.rc"</Command>
+python "..\..\..\..\..\scripts\build\verinfo.py" -r -b mame "..\..\..\..\..\build\generated\version.cpp" &gt; "..\..\..\..\..\build\generated\resource\mamevers.rc"</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -225,9 +225,9 @@ python "m:\mame\scripts\build\verinfo.py" -r -b mame "m:\mame\build\generated\ve
       <AdditionalOptions>/ignore:4221 %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <PreBuildEvent>
-      <Command>mkdir "m:\mame\build\generated\resource\" 2&gt;NUL
+      <Command>mkdir "..\..\..\..\..\build\generated\resource\" 2&gt;NUL
 @echo Emitting mamevers.rc...
-python "m:\mame\scripts\build\verinfo.py" -r -b mame "m:\mame\build\generated\version.cpp" &gt; "m:\mame\build\generated\resource\mamevers.rc"</Command>
+python "..\..\..\..\..\scripts\build\verinfo.py" -r -b mame "..\..\..\..\..\build\generated\version.cpp" &gt; "..\..\..\..\..\build\generated\resource\mamevers.rc"</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -268,9 +268,9 @@ python "m:\mame\scripts\build\verinfo.py" -r -b mame "m:\mame\build\generated\ve
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
     </Link>
     <PreBuildEvent>
-      <Command>mkdir "m:\mame\build\generated\resource\" 2&gt;NUL
+      <Command>mkdir "..\..\..\..\..\build\generated\resource\" 2&gt;NUL
 @echo Emitting mamevers.rc...
-python "m:\mame\scripts\build\verinfo.py" -r -b mame "m:\mame\build\generated\version.cpp" &gt; "m:\mame\build\generated\resource\mamevers.rc"</Command>
+python "..\..\..\..\..\scripts\build\verinfo.py" -r -b mame "..\..\..\..\..\build\generated\version.cpp" &gt; "..\..\..\..\..\build\generated\resource\mamevers.rc"</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>

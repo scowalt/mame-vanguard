@@ -6,6 +6,7 @@
 //#include "Vanguard/VanguardClient.h"
 //#include "emumem.h"
 #include "VanguardClient.h"
+#include "ManagedWrapper.h"
 
 //#include <cpu.h>
 //#include <mixer.h>
@@ -55,7 +56,7 @@ std::string UnmanagedWrapper::VANGUARD_GETGAMENAME() {
     //}
     //title = name;
     //return title;
-	return "IGNORE";
+	return ManagedWrapper::GetGameName();
 }
 
 void UnmanagedWrapper::VANGUARD_LOADSTATE(const std::string& file) {
@@ -72,6 +73,7 @@ void UnmanagedWrapper::VANGUARD_LOADSTATE(const std::string& file) {
     //SaveState::save(SaveState::SLOT_COUNT);
     //SaveState::instance().load(1);
     //SaveState::instance().load(SaveState::SLOT_COUNT * SaveState::MAX_PAGE - 1, file);
+	//ManagedWrapper::LoadSaveState(file);
     return;
 }
 
@@ -91,20 +93,21 @@ std::string UnmanagedWrapper::VANGUARD_SAVESTATE(const std::string& file) {
     //}
 
     //std::string path = SaveState::instance().save(SaveState::SLOT_COUNT * SaveState::MAX_PAGE - 1);
-    //const std::string& filetemp = file + ".temp";
-    //System::IO::FileStream ^ fs = System::IO::File::OpenWrite(gcnew System::String(filetemp.c_str()));
-    //fs->Close();
-    return "";
+	ManagedWrapper::SaveSaveState(file);
+    /*const std::string& filetemp = file + ".temp";
+    System::IO::FileStream ^ fs = System::IO::File::OpenWrite(gcnew System::String(filetemp.c_str()));
+    fs->Close();*/
+    return file;
 
 }
 
 void UnmanagedWrapper::VANGUARD_LOADSTATE_DONE() {
 
-    //VanguardClientUnmanaged::LOAD_STATE_DONE();
+    VanguardClientUnmanaged::LOAD_STATE_DONE();
 }
 void UnmanagedWrapper::VANGUARD_SAVESTATE_DONE() {
 
-    //VanguardClientUnmanaged::SAVE_STATE_DONE();
+    VanguardClientUnmanaged::SAVE_STATE_DONE();
 }
 
 void UnmanagedWrapper::PADDR_POKEBYTE(long long addr, unsigned char val, long offset) {

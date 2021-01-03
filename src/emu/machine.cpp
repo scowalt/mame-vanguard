@@ -291,7 +291,6 @@ void running_machine::start()
 	// if we're in autosave mode, schedule a load
 	else if (options().autosave() && (m_system.flags & MACHINE_SUPPORTS_SAVE) != 0)
 		schedule_load("auto");
-
 	manager().update_machine();
 }
 

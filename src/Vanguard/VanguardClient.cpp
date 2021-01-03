@@ -657,7 +657,10 @@ void VanguardClientUnmanaged::LOAD_GAME_START(std::string romPath) {
 
 
 void VanguardClientUnmanaged::LOAD_GAME_DONE() {
-
+	if (ManagedWrapper::GetGameName() == "" || ManagedWrapper::GetGameName() == " ")
+		return;
+	if (VanguardInitializationComplete == false)
+		return;
     //RTCV::CorruptCore::StepActions::ClearStepBlastUnits();
     RTCV::NetCore::LocalNetCoreRouter::Route(Endpoints::CorruptCore, NetCore::Commands::Remote::ClearStepBlastUnits, nullptr, false);
     //This should make blast units go away when a program changes
@@ -680,8 +683,8 @@ void VanguardClientUnmanaged::LOAD_GAME_DONE() {
         gameDone->Set(VSPEC::GAMENAME,
             StringExtensions::MakeSafeFilename(gameName, replaceChar));
 
-        String^ syncsettings = VanguardClient::GetConfigAsJson(VanguardSettingsWrapper::GetVanguardSettingsFromDOSBox());
-        gameDone->Set(VSPEC::SYNCSETTINGS, syncsettings);
+        //String^ syncsettings = VanguardClient::GetConfigAsJson(VanguardSettingsWrapper::GetVanguardSettingsFromDOSBox());
+        //gameDone->Set(VSPEC::SYNCSETTINGS, syncsettings);
 
         AllSpec::VanguardSpec->Update(gameDone, true, false);
         RefreshDomains();
@@ -825,65 +828,64 @@ void VanguardClient::LoadRom(String^ filename) {
 
 bool VanguardClient::LoadState(std::string filename) {
 
-    ////RTCV::CorruptCore::StepActions::ClearStepBlastUnits();
+    //RTCV::CorruptCore::StepActions::ClearStepBlastUnits();
     //RTCV::NetCore::LocalNetCoreRouter::Route(Endpoints::CorruptCore, NetCore::Commands::Remote::ClearStepBlastUnits, nullptr, false);
 
-    ////control->ParseConfigFile(Helpers::systemStringToUtf8String((Helpers::utf8StringToSystemString(filename) + ".conf")).c_str());
-    //
-    //RtcClock::ResetCount();
-    //stateLoading = true;
-    //UnmanagedWrapper::VANGUARD_LOADSTATE(filename);
+    //control->ParseConfigFile(Helpers::systemStringToUtf8String((Helpers::utf8StringToSystemString(filename) + ".conf")).c_str());
+    
+    RtcClock::ResetCount();
+    stateLoading = true;
+	ManagedWrapper::LoadSaveState(filename);
+    // We have to do it this way to prevent deadlock due to synced calls. It sucks but it's required
+    // at the moment
+	Thread::Sleep(2000);
+    int i = 0;
+    do {
+        Thread::Sleep(20);
+        System::Windows::Forms::Application::DoEvents();
 
-    //UnmanagedWrapper::VANGUARD_LOADSTATE_DONE();
-    //// We have to do it this way to prevent deadlock due to synced calls. It sucks but it's required
-    //// at the moment
-    //int i = 0;
-    //do {
-    //    Thread::Sleep(20);
-    //    System::Windows::Forms::Application::DoEvents();
-
-    //    // We wait for 20 ms every time. If loading a game takes longer than 10 seconds, break out.
-    //    if(++i > 500) {
-    //        stateLoading = false;
-    //        return false;
-    //    }
-    //} while(stateLoading);
+        // We wait for 20 ms every time. If loading a game takes longer than 10 seconds, break out.
+        if(++i > 500) {
+            stateLoading = false;
+            return false;
+        }
+    } while(stateLoading);
     RefreshDomains();
     return true;
 }
 
 bool VanguardClient::SaveState(String^ filename, bool wait) {
-    //std::string s = Helpers::systemStringToUtf8String(filename);
+    std::string s = Helpers::systemStringToUtf8String(filename);
     //const char* converted_filename = s.c_str();
-    //VanguardClient::lastStateName = filename;
-    //VanguardClient::fileToCopy = Helpers::utf8StringToSystemString(UnmanagedWrapper::VANGUARD_SAVESTATE(s));
+    VanguardClient::lastStateName = filename;
+    VanguardClient::fileToCopy = Helpers::utf8StringToSystemString(UnmanagedWrapper::VANGUARD_SAVESTATE(s));
     //IO::FileInfo^ file = gcnew IO::FileInfo((filename)+".conf");
     //if(file->Directory != nullptr && file->Directory->Exists == false)
     //    file->Directory->Create();
     ////control->PrintConfig((Helpers::systemStringToUtf8String((filename)+".conf")).c_str());
     ////LOG_MSG("Savestate filename is %s", VanguardClient::fileToCopy);
-    //Thread::Sleep(2000);
+    Thread::Sleep(2000);
     //IO::File::Copy(VanguardClient::fileToCopy, filename);
-    //VanguardClientUnmanaged::SAVE_STATE_DONE();
+    VanguardClientUnmanaged::SAVE_STATE_DONE();
     return true;
 }
 
 void VanguardClientUnmanaged::SAVE_STATE_DONE() {
-    //if(!VanguardClient::enableRTC || VanguardClient::fileToCopy == nullptr ||
-    //    VanguardClient::fileToCopy == "")
-    //    return;
+    if(!VanguardClient::enableRTC || VanguardClient::fileToCopy == nullptr ||
+        VanguardClient::fileToCopy == "")
+        return;
     ////Thread::Sleep(2000);
     ////System::IO::File::Copy(VanguardClient::fileToCopy, VanguardClient::lastStateName, true);
 
-    //String^ gameName = Helpers::utf8StringToSystemString(UnmanagedWrapper::VANGUARD_GETGAMENAME());
+    String^ gameName = Helpers::utf8StringToSystemString(UnmanagedWrapper::VANGUARD_GETGAMENAME());
 
     ////force update current game after savestate until we can detect an actual game change
     ////TODO: Replace this with proper handling
-    //PartialSpec^ gameDone = gcnew PartialSpec("VanguardSpec");
-    //char replaceChar = L'-';
-    //gameDone->Set(VSPEC::GAMENAME,
-    //    StringExtensions::MakeSafeFilename(gameName, replaceChar));
-    //AllSpec::VanguardSpec->Update(gameDone, true, false);
+    PartialSpec^ gameDone = gcnew PartialSpec("VanguardSpec");
+    char replaceChar = L'-';
+    gameDone->Set(VSPEC::GAMENAME,
+        StringExtensions::MakeSafeFilename(gameName, replaceChar));
+    AllSpec::VanguardSpec->Update(gameDone, true, false);
 }
 
 //void VanguardClientUnmanaged::DOSBOX_LOADEXE() {

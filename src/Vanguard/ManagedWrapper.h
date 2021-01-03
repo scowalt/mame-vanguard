@@ -10,4 +10,7 @@ public:
 	static std::string GetDevice(int devnum);
 	static std::string GetMemRegion(int regionnum);
 	static bool IsBigEndian(std::string domain);
+	static void SaveSaveState(std::string filename);
+	static void LoadSaveState(std::string filename);
+	static std::string GetGameName();
 };

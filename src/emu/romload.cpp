@@ -18,6 +18,7 @@
 
 #include <algorithm>
 #include <set>
+#include "../Vanguard/VanguardClient.h"
 
 
 #define LOG_LOAD 0
@@ -1475,6 +1476,7 @@ rom_load_manager::rom_load_manager(running_machine &machine)
 
 	// process the ROM entries we were passed
 	process_region_list();
+	VanguardClientUnmanaged::LOAD_GAME_DONE();
 
 	// display the results and exit
 	display_rom_load_results(false);
