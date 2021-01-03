@@ -5,32 +5,32 @@
 #include "ManagedWrapper.h"
 #include "../src/frontend/mame/mame.h"
 #include "UnmanagedWrapper.h"
-unsigned char ManagedWrapper::PEEK(std::string domain, long long addr)
+unsigned char ManagedWrapper::PEEK(std::string device, long long addr)
 {
 	if(mame_machine_manager::instance()->machine()->system().name != NULL)
-		return mame_machine_manager::instance()->machine()->device(domain.c_str())->memory().space().read_byte(addr);
+		return mame_machine_manager::instance()->machine()->device(device.c_str())->memory().space().read_byte(addr);
 	else return NULL;
 	
 }
 
-void ManagedWrapper::POKE(std::string domain, long long addr, unsigned char val)
+void ManagedWrapper::POKE(std::string device, long long addr, unsigned char val)
 {
 	if (mame_machine_manager::instance()->machine()->system().name != NULL)
-		mame_machine_manager::instance()->machine()->device(domain.c_str())->memory().space().write_byte(addr, val);
+		mame_machine_manager::instance()->machine()->device(device.c_str())->memory().space().write_byte(addr, val);
 	else return;
 }
 
-long long ManagedWrapper::GetMemorySize(std::string domain)
+long long ManagedWrapper::GetMemorySize(std::string region)
 {
 	if (mame_machine_manager::instance()->machine()->system().name != NULL)
-		return (long long)mame_machine_manager::instance()->machine()->root_device().memregion(domain.c_str())->bytes();
+		return (long long)mame_machine_manager::instance()->machine()->root_device().memregion(region.c_str())->bytes();
 	else return NULL;
 }
 
-int ManagedWrapper::GetByteWidth(std::string domain)
+int ManagedWrapper::GetByteWidth(std::string region)
 {
 	if (mame_machine_manager::instance()->machine()->system().name != NULL)
-		return (int)mame_machine_manager::instance()->machine()->root_device().memregion(domain.c_str())->bytewidth();
+		return (int)mame_machine_manager::instance()->machine()->root_device().memregion(region.c_str())->bytewidth();
 	else return NULL;
 }
 
@@ -49,10 +49,10 @@ std::string ManagedWrapper::GetMemRegion(int regionnum)
 	return std::string();
 }
 
-bool ManagedWrapper::IsBigEndian(std::string domain)
+bool ManagedWrapper::IsBigEndian(std::string region)
 {
 	if (mame_machine_manager::instance()->machine()->system().name != NULL)
-		if (mame_machine_manager::instance()->machine()->root_device().memregion(domain.c_str())->endianness() == ENDIANNESS_BIG)
+		if (mame_machine_manager::instance()->machine()->root_device().memregion(region.c_str())->endianness() == ENDIANNESS_BIG)
 			return true;
 		else return false;
 	else return false;
