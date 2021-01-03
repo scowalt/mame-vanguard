@@ -8,7 +8,7 @@ public:
 	static int GetByteWidth(std::string memclass, std::string region);
 	static void ACTIVATELUA();
 	static std::string GetMemoryDomain(int indexnum);
-	static std::string GetDomainClass(std::string name);
+	static std::string GetDomainClass(int indexnum);
 	static bool IsBigEndian(std::string memclass, std::string region);
 	static void SaveSaveState(std::string filename);
 	static void LoadSaveState(std::string filename);

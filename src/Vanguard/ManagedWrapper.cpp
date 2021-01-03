@@ -82,12 +82,58 @@ void ManagedWrapper::ACTIVATELUA()
 
 std::string ManagedWrapper::GetMemoryDomain(int indexnum)
 {
-	return std::string();
+	std::string regionArray[500];
+	std::string shareArray[500];
+	int regioncounter = 0;
+	int sharecounter = 0;
+	for (auto i = mame_machine_manager::instance()->machine()->memory().regions().cbegin(); i != mame_machine_manager::instance()->machine()->memory().regions().cend(); ++i)
+	{
+		regioncounter += 1;
+		regionArray[regioncounter] = i->first;
+	}
+	for (auto i = mame_machine_manager::instance()->machine()->memory().shares().cbegin(); i != mame_machine_manager::instance()->machine()->memory().shares().cend(); ++i)
+	{
+		sharecounter += 1;
+		shareArray[sharecounter] = i->first;
+	}
+	
+	if (regionArray[indexnum].empty() == false)
+	{
+		return regionArray[indexnum];
+	}
+	else if (shareArray[regioncounter - indexnum].empty() == false)
+	{
+		return shareArray[regioncounter - indexnum];
+	}
+	else return "";
 }
 
-std::string ManagedWrapper::GetDomainClass(std::string name)
+std::string ManagedWrapper::GetDomainClass(int indexnum)
 {
-	return std::string();
+	std::string regionArray[500];
+	std::string shareArray[500];
+	int regioncounter = 0;
+	int sharecounter = 0;
+	for (auto i = mame_machine_manager::instance()->machine()->memory().regions().cbegin(); i != mame_machine_manager::instance()->machine()->memory().regions().cend(); ++i)
+	{
+		regioncounter += 1;
+		regionArray[regioncounter] = i->first;
+	}
+	for (auto i = mame_machine_manager::instance()->machine()->memory().shares().cbegin(); i != mame_machine_manager::instance()->machine()->memory().shares().cend(); ++i)
+	{
+		sharecounter += 1;
+		shareArray[sharecounter] = i->first;
+	}
+
+	if (regionArray[indexnum].empty() == false)
+	{
+		return "region";
+	}
+	else if (shareArray[regioncounter - indexnum].empty() == false)
+	{
+		return "share";
+	}
+	else return "";
 }
 
 bool ManagedWrapper::IsBigEndian(std::string memclass, std::string region)
