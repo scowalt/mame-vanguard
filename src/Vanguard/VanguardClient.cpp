@@ -69,6 +69,7 @@ using namespace Diagnostics;
 
 static void EmuThreadExecute(Action^ callback);
 static void EmuThreadExecute(IntPtr ptr);
+static int currentMD;
 // Define this in here as it's managed and weird stuff happens if it's in a header
 public
 ref class VanguardClient {
@@ -336,9 +337,16 @@ void VanguardClient::SetSyncSettings(String^ ss) {
 
 //For some reason if we do these in another class, melon won't build
 public
-ref class maincpu : RTCV::CorruptCore::IMemoryDomain {
+ref class MAMEMemoryDomain : RTCV::CorruptCore::IMemoryDomain {
 public:
-	property System::String^ Name { virtual System::String^ get(); }
+	property System::String^ Name { virtual System::String^ get(); virtual void set(System::String^ name); }
+	operator System::String^() { return Name;  }
+	//MAMEMemoryDomain(std::string tempname)
+	//{
+	//	//memcpy(ToString(), Helpers::utf8StringToSystemString(tempname), strlen(tempname.c_str()));
+
+	//	Name = Helpers::utf8StringToSystemString(tempname);
+	//}
 	property long long Size { virtual long long get(); }
 	property int WordSize { virtual int get(); }
 	property bool BigEndian { virtual bool get(); }
@@ -346,29 +354,45 @@ public:
 	virtual cli::array<unsigned char>^ PeekBytes(long long address, int length);
 	virtual void PokeByte(long long addr, unsigned char val);
 	property std::string MemoryClass {virtual std::string get(); }
+	virtual String^ ToString() override
+	{
+		return (Name + " (" + Helpers::utf8StringToSystemString(MemoryClass) + ")");
+	}
+
+	
 };
 
 delegate void MessageDelegate(Object^);
-#pragma region maincpu
-String^ maincpu::Name::get() {/*
+#pragma region MAMEMemoryDomain
+String^ MAMEMemoryDomain::Name::get() {/*
     if(UnmanagedWrapper::IS_N3DS()) {
         return "FCRam(N3DS)";
     }
     else {
         return "FCRam";
     }*/
-    return Helpers::utf8StringToSystemString(ManagedWrapper::GetMemoryDomain(1));
+    return Helpers::utf8StringToSystemString(ManagedWrapper::GetMemoryDomain(currentMD));
 }
 
-std::string maincpu::MemoryClass::get()
-{
-	return ManagedWrapper::GetDomainClass(1);
+void MAMEMemoryDomain::Name::set(System::String^ name) {/*
+	if(UnmanagedWrapper::IS_N3DS()) {
+		return "FCRam(N3DS)";
+	}
+	else {
+		return "FCRam";
+	}*/
+	Name = name;
 }
-long long maincpu::Size::get() {/*
+
+std::string MAMEMemoryDomain::MemoryClass::get()
+{
+	return ManagedWrapper::GetDomainClass(currentMD);
+}
+long long MAMEMemoryDomain::Size::get() {/*
     if(UnmanagedWrapper::IS_N3DS()) {
-        return maincpu::FCRAM_N3DS_SIZE;
+        return MAMEMemoryDomain::FCRAM_N3DS_SIZE;
     }
-    return maincpu::FCRAM_SIZE;*/
+    return MAMEMemoryDomain::FCRAM_SIZE;*/
     //Section_prop* section = static_cast<Section_prop*>(control->GetSection("dosbox"));
     //Bitu memsizekb = (Bitu)section->Get_int("memsizekb");
     //Bitu memsize = (Bitu)section->Get_int("memsize");
@@ -381,25 +405,25 @@ long long maincpu::Size::get() {/*
 
     ///* roll memsize into memsizekb, simplify this code */
     //return (memsizekb/1024 + memsize) * 1024ul * 1024ul;
-	return ManagedWrapper::GetMemorySize(maincpu::MemoryClass , Helpers::systemStringToUtf8String(maincpu::Name));
+	return ManagedWrapper::GetMemorySize(MAMEMemoryDomain::MemoryClass , Helpers::systemStringToUtf8String(MAMEMemoryDomain::Name));
 }
 
-int maincpu::WordSize::get() {
-	return ManagedWrapper::GetByteWidth(maincpu::MemoryClass, Helpers::systemStringToUtf8String(maincpu::Name));
+int MAMEMemoryDomain::WordSize::get() {
+	return ManagedWrapper::GetByteWidth(MAMEMemoryDomain::MemoryClass, Helpers::systemStringToUtf8String(MAMEMemoryDomain::Name));
 }
 
-bool maincpu::BigEndian::get() {
+bool MAMEMemoryDomain::BigEndian::get() {
 	/*if (&memory_region::endianness == ENDIANNESS_BIG) {
 		return true;
 	}
-	else */return ManagedWrapper::IsBigEndian(maincpu::MemoryClass, Helpers::systemStringToUtf8String(maincpu::Name));
+	else */return ManagedWrapper::IsBigEndian(MAMEMemoryDomain::MemoryClass, Helpers::systemStringToUtf8String(MAMEMemoryDomain::Name));
 }
 
 
-unsigned char maincpu::PeekByte(long long addr) {
-    if(addr < maincpu::Size)
+unsigned char MAMEMemoryDomain::PeekByte(long long addr) {
+    if(addr < MAMEMemoryDomain::Size)
     {
-		return ManagedWrapper::PEEK(maincpu::MemoryClass, Helpers::systemStringToUtf8String(maincpu::Name), addr);
+		return ManagedWrapper::PEEK(MAMEMemoryDomain::MemoryClass, Helpers::systemStringToUtf8String(MAMEMemoryDomain::Name), addr);
     }
     else
     {
@@ -408,10 +432,10 @@ unsigned char maincpu::PeekByte(long long addr) {
     }
 }
 
-void maincpu::PokeByte(long long addr, unsigned char val) {
-    if(addr < maincpu::Size)
+void MAMEMemoryDomain::PokeByte(long long addr, unsigned char val) {
+    if(addr < MAMEMemoryDomain::Size)
     {
-		ManagedWrapper::POKE(maincpu::MemoryClass, Helpers::systemStringToUtf8String(maincpu::Name), addr, val);
+		ManagedWrapper::POKE(MAMEMemoryDomain::MemoryClass, Helpers::systemStringToUtf8String(MAMEMemoryDomain::Name), addr, val);
     }
     else
     {
@@ -420,7 +444,7 @@ void maincpu::PokeByte(long long addr, unsigned char val) {
     }
 }
 
-cli::array<unsigned char>^ maincpu::PeekBytes(long long address, int length) {
+cli::array<unsigned char>^ MAMEMemoryDomain::PeekBytes(long long address, int length) {
 
     cli::array<unsigned char>^ bytes = gcnew cli::array<unsigned char>(length);
     for(int i = 0; i < length; i++) {
@@ -434,8 +458,25 @@ static cli::array<MemoryDomainProxy^>^ GetInterfaces() {
 
     if(String::IsNullOrWhiteSpace(AllSpec::VanguardSpec->Get<String^>(VSPEC::OPENROMFILENAME)))
         return gcnew cli::array<MemoryDomainProxy^>(0);
-    cli::array<MemoryDomainProxy^>^ interfaces = gcnew cli::array<MemoryDomainProxy^>(1);
-    interfaces[0] = (gcnew MemoryDomainProxy(gcnew maincpu));
+    cli::array<MemoryDomainProxy^>^ interfaces = gcnew cli::array<MemoryDomainProxy^>(ManagedWrapper::GetTotalNumOfRegionsAndShares());
+	
+	printf("Total Memory Domains: %i\n", ManagedWrapper::GetTotalNumOfRegionsAndShares());
+	for (int i = 0; i < ManagedWrapper::GetTotalNumOfRegionsAndShares(); i++)
+	{
+		MAMEMemoryDomain^ md = gcnew MAMEMemoryDomain();
+		
+		currentMD +=1;
+		printf("Current MD Number: %i\n", currentMD);
+		//md->ToString()->Remove(0);
+		//md->ToString()->Insert(0, md->Name);
+		if (md->Name != "")
+		{
+			printf("Memory Domain Name: %s\n", Helpers::systemStringToUtf8String(md->Name).c_str());
+
+			printf("Memory Domain Class Name: %s\n", Helpers::systemStringToUtf8String(md->ToString()).c_str());
+			interfaces[i] = (gcnew MemoryDomainProxy(md));
+		}
+	}
     //interfaces[1] = (gcnew MemoryDomainProxy(gcnew screen));
     return interfaces;
 }
@@ -590,6 +631,7 @@ void VanguardClientUnmanaged::LOAD_STATE_DONE() {
 void VanguardClientUnmanaged::GAME_CLOSED() {
     if(!VanguardClient::enableRTC)
         return;
+	currentMD = 0;
     AllSpec::VanguardSpec->Update(VSPEC::OPENROMFILENAME, "", true, true);
     RefreshDomains();
     RtcCore::InvokeGameClosed(true);

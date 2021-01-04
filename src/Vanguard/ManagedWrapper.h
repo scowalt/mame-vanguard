@@ -12,5 +12,6 @@ public:
 	static bool IsBigEndian(std::string memclass, std::string region);
 	static void SaveSaveState(std::string filename);
 	static void LoadSaveState(std::string filename);
+	static int GetTotalNumOfRegionsAndShares();
 	static std::string GetGameName();
 };

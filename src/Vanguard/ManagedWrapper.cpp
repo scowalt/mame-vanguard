@@ -25,6 +25,10 @@ unsigned char ManagedWrapper::PEEK(std::string memclass, std::string region, lon
 
 		return mem_content;
 	}
+	else if (memclass == "addrmap")
+	{
+		return mame_machine_manager::instance()->machine()->device(region.c_str())->memory().space().read_byte(addr);
+	}
 	else return NULL;
 }
 
@@ -41,6 +45,10 @@ void ManagedWrapper::POKE(std::string memclass, std::string region, long long ad
 		u8* ptr = (u8*)mshare.ptr();
 		ptr[(BYTE8_XOR_LE(addr)) | (addr)] = val & 0xff;
 	}
+	else if (memclass == "addrmap")
+	{
+		mame_machine_manager::instance()->machine()->device(region.c_str())->memory().space().write_byte(addr, val);
+	}
 	else return;
 }
 
@@ -53,9 +61,13 @@ long long ManagedWrapper::GetMemorySize(std::string memclass, std::string region
 	}
 	if (memclass == "share")
 	{
-
 		memory_share& mshare = *mame_machine_manager::instance()->machine()->root_device().memshare(region);
 		return mshare.bytes();
+	}
+	if (memclass == "addrmap")
+	{
+
+		return (long long)mame_machine_manager::instance()->machine()->root_device().memregion(region.c_str())->bytes(); //No way to get a device memory map's size afaik so I'll just fetch a memregion named after it
 	}
 	else return 0;
 }
@@ -72,6 +84,10 @@ int ManagedWrapper::GetByteWidth(std::string memclass, std::string region)
 		memory_share& mshare = *mame_machine_manager::instance()->machine()->root_device().memshare(region);
 		return mshare.bytewidth();
 	}
+	if (memclass == "addrmap")
+	{
+		return (int)mame_machine_manager::instance()->machine()->root_device().memregion(region.c_str())->bytewidth();//No way to get a device memory map's byte width afaik so I'll just fetch a memregion named after it
+	}
 	else return 0;
 }
 
@@ -84,8 +100,10 @@ std::string ManagedWrapper::GetMemoryDomain(int indexnum)
 {
 	std::string regionArray[500];
 	std::string shareArray[500];
+	std::string deviceArray[500];
 	int regioncounter = 0;
 	int sharecounter = 0;
+	int devicecounter = 0;
 	for (auto i = mame_machine_manager::instance()->machine()->memory().regions().cbegin(); i != mame_machine_manager::instance()->machine()->memory().regions().cend(); ++i)
 	{
 		regioncounter += 1;
@@ -96,14 +114,22 @@ std::string ManagedWrapper::GetMemoryDomain(int indexnum)
 		sharecounter += 1;
 		shareArray[sharecounter] = i->first;
 	}
-	
-	if (regionArray[indexnum].empty() == false)
+	for (int i = 0; i < mame_machine_manager::instance()->machine()->root_device().subdevices().count(); ++i)
 	{
-		return regionArray[indexnum];
+		devicecounter += 1;
+		deviceArray[devicecounter] = mame_machine_manager::instance()->machine()->root_device().subdevices().at(i);
 	}
-	else if (shareArray[regioncounter - indexnum].empty() == false)
+	if (regionArray[indexnum] != "")
 	{
-		return shareArray[regioncounter - indexnum];
+		return regionArray[indexnum].erase(0, 1);
+	}
+	else if (shareArray[indexnum - regioncounter] != "")
+	{
+		return shareArray[indexnum - regioncounter].erase(0, 1);
+	}
+	else if (deviceArray[indexnum - (regioncounter+sharecounter)] != "")
+	{
+		return deviceArray[indexnum - (regioncounter+sharecounter)].erase(0, 1);
 	}
 	else return "";
 }
@@ -112,8 +138,10 @@ std::string ManagedWrapper::GetDomainClass(int indexnum)
 {
 	std::string regionArray[500];
 	std::string shareArray[500];
+	std::string deviceArray[500];
 	int regioncounter = 0;
 	int sharecounter = 0;
+	int devicecounter = 0;
 	for (auto i = mame_machine_manager::instance()->machine()->memory().regions().cbegin(); i != mame_machine_manager::instance()->machine()->memory().regions().cend(); ++i)
 	{
 		regioncounter += 1;
@@ -124,14 +152,23 @@ std::string ManagedWrapper::GetDomainClass(int indexnum)
 		sharecounter += 1;
 		shareArray[sharecounter] = i->first;
 	}
+	for (int i = 0; i < mame_machine_manager::instance()->machine()->root_device().subdevices().count(); ++i)
+	{
+		devicecounter += 1;
+		deviceArray[devicecounter] = mame_machine_manager::instance()->machine()->root_device().subdevices().at(i);
+	}
 
-	if (regionArray[indexnum].empty() == false)
+	if (regionArray[indexnum] != "")
 	{
 		return "region";
 	}
-	else if (shareArray[regioncounter - indexnum].empty() == false)
+	else if (shareArray[indexnum - regioncounter] != "")
 	{
 		return "share";
+	}
+	else if (deviceArray[indexnum - (regioncounter+sharecounter)] != "")
+	{
+		return "addrmap";
 	}
 	else return "";
 }
@@ -154,6 +191,10 @@ bool ManagedWrapper::IsBigEndian(std::string memclass, std::string region)
 			else return false;
 		else return false;
 	}
+	if (memclass == "addrmap")
+	{
+		return false; //little endian for now
+	}
 
 	else return false;
 }
@@ -174,6 +215,27 @@ void ManagedWrapper::LoadSaveState(std::string filename)
 		UnmanagedWrapper::VANGUARD_LOADSTATE_DONE();
 	/*}
 	else return;*/
+}
+
+int ManagedWrapper::GetTotalNumOfRegionsAndShares()
+{
+	int regioncounter = 0;
+	int sharecounter = 0;
+	int devicecounter = 0;
+	for (auto i = mame_machine_manager::instance()->machine()->memory().regions().cbegin(); i != mame_machine_manager::instance()->machine()->memory().regions().cend(); ++i)
+	{
+		regioncounter += 1;
+	}
+	for (auto i = mame_machine_manager::instance()->machine()->memory().shares().cbegin(); i != mame_machine_manager::instance()->machine()->memory().shares().cend(); ++i)
+	{
+		if (mame_machine_manager::instance()->machine()->memory().shares().size() != 0)
+			sharecounter += 1;
+	}
+	for (int i = 0; i < mame_machine_manager::instance()->machine()->root_device().subdevices().count(); ++i)
+	{
+		devicecounter += 1;
+	}
+	return regioncounter + sharecounter + 1; //of the mapped devioes, just fetch the main cpu for now
 }
 
 std::string ManagedWrapper::GetGameName()

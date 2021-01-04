@@ -404,7 +404,7 @@ class device_t : public delegate_late_bind
 		device_t *first() const { return m_list.first(); }
 		int count() const { return m_list.count(); }
 		bool empty() const { return m_list.empty(); }
-
+		std::string at(int i) const { return m_list.find(i)->tag(); } //RTC_Hijack: Tag fetching shenanigans
 		// range iterators
 		using auto_iterator = simple_list<device_t>::auto_iterator;
 		auto_iterator begin() const { return m_list.begin(); }
