@@ -263,6 +263,7 @@ void video_manager::frame_update(bool from_debugger)
 	}
 
 	VanguardClientUnmanaged::CORE_STEP();
+	
 	// call the end-of-frame callback
 	if (phase == machine_phase::RUNNING)
 	{

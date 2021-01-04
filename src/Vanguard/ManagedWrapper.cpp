@@ -25,7 +25,7 @@ unsigned char ManagedWrapper::PEEK(std::string memclass, std::string region, lon
 
 		return mem_content;
 	}
-	else if (memclass == "addrmap")
+	else if (memclass == "addrmap" && region != "screen")
 	{
 		return mame_machine_manager::instance()->machine()->device(region.c_str())->memory().space().read_byte(addr);
 	}
@@ -45,7 +45,7 @@ void ManagedWrapper::POKE(std::string memclass, std::string region, long long ad
 		u8* ptr = (u8*)mshare.ptr();
 		ptr[(BYTE8_XOR_LE(addr)) | (addr)] = val & 0xff;
 	}
-	else if (memclass == "addrmap")
+	else if (memclass == "addrmap" && region != "screen")
 	{
 		mame_machine_manager::instance()->machine()->device(region.c_str())->memory().space().write_byte(addr, val);
 	}
@@ -64,7 +64,7 @@ long long ManagedWrapper::GetMemorySize(std::string memclass, std::string region
 		memory_share& mshare = *mame_machine_manager::instance()->machine()->root_device().memshare(region);
 		return mshare.bytes();
 	}
-	if (memclass == "addrmap")
+	if (memclass == "addrmap" && region != "screen")
 	{
 
 		return (long long)mame_machine_manager::instance()->machine()->root_device().memregion(region.c_str())->bytes(); //No way to get a device memory map's size afaik so I'll just fetch a memregion named after it
@@ -84,7 +84,7 @@ int ManagedWrapper::GetByteWidth(std::string memclass, std::string region)
 		memory_share& mshare = *mame_machine_manager::instance()->machine()->root_device().memshare(region);
 		return mshare.bytewidth();
 	}
-	if (memclass == "addrmap")
+	if (memclass == "addrmap" && region != "screen")
 	{
 		return (int)mame_machine_manager::instance()->machine()->root_device().memregion(region.c_str())->bytewidth();//No way to get a device memory map's byte width afaik so I'll just fetch a memregion named after it
 	}
@@ -191,7 +191,7 @@ bool ManagedWrapper::IsBigEndian(std::string memclass, std::string region)
 			else return false;
 		else return false;
 	}
-	if (memclass == "addrmap")
+	if (memclass == "addrmap" && region != "screen")
 	{
 		return false; //little endian for now
 	}
@@ -235,12 +235,10 @@ int ManagedWrapper::GetTotalNumOfRegionsAndShares()
 	{
 		devicecounter += 1;
 	}
-	return regioncounter + sharecounter + 1; //of the mapped devioes, just fetch the main cpu for now
+	return regioncounter + sharecounter; //expose no device address maps for now since the getbyte function causes issues with neogeo games
 }
 
 std::string ManagedWrapper::GetGameName()
 {
-	if (mame_machine_manager::instance()->machine()->system().name != NULL)
-		return mame_machine_manager::instance()->machine()->system().name;
-	else return "";
+	return mame_machine_manager::instance()->machine()->system().name;
 }

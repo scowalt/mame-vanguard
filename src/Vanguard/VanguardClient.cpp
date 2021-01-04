@@ -69,7 +69,7 @@ using namespace Diagnostics;
 
 static void EmuThreadExecute(Action^ callback);
 static void EmuThreadExecute(IntPtr ptr);
-static int currentMD;
+static int currentMD = 0;
 // Define this in here as it's managed and weird stuff happens if it's in a header
 public
 ref class VanguardClient {
@@ -339,17 +339,16 @@ void VanguardClient::SetSyncSettings(String^ ss) {
 public
 ref class MAMEMemoryDomain : RTCV::CorruptCore::IMemoryDomain {
 public:
+	int domainNumber;
 	property System::String^ Name { virtual System::String^ get(); virtual void set(System::String^ name); }
-	operator System::String^() { return Name;  }
-	//MAMEMemoryDomain(std::string tempname)
-	//{
-	//	//memcpy(ToString(), Helpers::utf8StringToSystemString(tempname), strlen(tempname.c_str()));
-
-	//	Name = Helpers::utf8StringToSystemString(tempname);
-	//}
+	MAMEMemoryDomain(int i)
+	{
+		domainNumber = i;
+	}
 	property long long Size { virtual long long get(); }
 	property int WordSize { virtual int get(); }
 	property bool BigEndian { virtual bool get(); }
+	virtual int VerifyNumber(int i);
 	virtual unsigned char PeekByte(long long addr);
 	virtual cli::array<unsigned char>^ PeekBytes(long long address, int length);
 	virtual void PokeByte(long long addr, unsigned char val);
@@ -371,9 +370,12 @@ String^ MAMEMemoryDomain::Name::get() {/*
     else {
         return "FCRam";
     }*/
-    return Helpers::utf8StringToSystemString(ManagedWrapper::GetMemoryDomain(currentMD));
+    return Helpers::utf8StringToSystemString(ManagedWrapper::GetMemoryDomain(domainNumber));
 }
-
+int MAMEMemoryDomain::VerifyNumber(int i)
+{
+	return i;
+}
 void MAMEMemoryDomain::Name::set(System::String^ name) {/*
 	if(UnmanagedWrapper::IS_N3DS()) {
 		return "FCRam(N3DS)";
@@ -383,10 +385,9 @@ void MAMEMemoryDomain::Name::set(System::String^ name) {/*
 	}*/
 	Name = name;
 }
-
 std::string MAMEMemoryDomain::MemoryClass::get()
 {
-	return ManagedWrapper::GetDomainClass(currentMD);
+	return ManagedWrapper::GetDomainClass(domainNumber);
 }
 long long MAMEMemoryDomain::Size::get() {/*
     if(UnmanagedWrapper::IS_N3DS()) {
@@ -405,25 +406,25 @@ long long MAMEMemoryDomain::Size::get() {/*
 
     ///* roll memsize into memsizekb, simplify this code */
     //return (memsizekb/1024 + memsize) * 1024ul * 1024ul;
-	return ManagedWrapper::GetMemorySize(MAMEMemoryDomain::MemoryClass , Helpers::systemStringToUtf8String(MAMEMemoryDomain::Name));
+	return ManagedWrapper::GetMemorySize(MemoryClass , Helpers::systemStringToUtf8String(Name));
 }
 
 int MAMEMemoryDomain::WordSize::get() {
-	return ManagedWrapper::GetByteWidth(MAMEMemoryDomain::MemoryClass, Helpers::systemStringToUtf8String(MAMEMemoryDomain::Name));
+	return ManagedWrapper::GetByteWidth(MemoryClass, Helpers::systemStringToUtf8String(Name));
 }
 
 bool MAMEMemoryDomain::BigEndian::get() {
 	/*if (&memory_region::endianness == ENDIANNESS_BIG) {
 		return true;
 	}
-	else */return ManagedWrapper::IsBigEndian(MAMEMemoryDomain::MemoryClass, Helpers::systemStringToUtf8String(MAMEMemoryDomain::Name));
+	else */return ManagedWrapper::IsBigEndian(MemoryClass, Helpers::systemStringToUtf8String(Name));
 }
 
 
 unsigned char MAMEMemoryDomain::PeekByte(long long addr) {
     if(addr < MAMEMemoryDomain::Size)
     {
-		return ManagedWrapper::PEEK(MAMEMemoryDomain::MemoryClass, Helpers::systemStringToUtf8String(MAMEMemoryDomain::Name), addr);
+		return ManagedWrapper::PEEK(MemoryClass, Helpers::systemStringToUtf8String(Name), addr);
     }
     else
     {
@@ -435,7 +436,7 @@ unsigned char MAMEMemoryDomain::PeekByte(long long addr) {
 void MAMEMemoryDomain::PokeByte(long long addr, unsigned char val) {
     if(addr < MAMEMemoryDomain::Size)
     {
-		ManagedWrapper::POKE(MAMEMemoryDomain::MemoryClass, Helpers::systemStringToUtf8String(MAMEMemoryDomain::Name), addr, val);
+		ManagedWrapper::POKE(MemoryClass, Helpers::systemStringToUtf8String(Name), addr, val);
     }
     else
     {
@@ -461,20 +462,20 @@ static cli::array<MemoryDomainProxy^>^ GetInterfaces() {
     cli::array<MemoryDomainProxy^>^ interfaces = gcnew cli::array<MemoryDomainProxy^>(ManagedWrapper::GetTotalNumOfRegionsAndShares());
 	
 	printf("Total Memory Domains: %i\n", ManagedWrapper::GetTotalNumOfRegionsAndShares());
+	cli::array <MAMEMemoryDomain^>^ md = gcnew cli::array<MAMEMemoryDomain^>(ManagedWrapper::GetTotalNumOfRegionsAndShares());
 	for (int i = 0; i < ManagedWrapper::GetTotalNumOfRegionsAndShares(); i++)
 	{
-		MAMEMemoryDomain^ md = gcnew MAMEMemoryDomain();
-		
-		currentMD +=1;
+		currentMD += 1;
 		printf("Current MD Number: %i\n", currentMD);
+		md[i] = gcnew MAMEMemoryDomain(i + 1);
+		printf("Memory Domain Name: %s\n", Helpers::systemStringToUtf8String(md[i]->Name).c_str());
 		//md->ToString()->Remove(0);
 		//md->ToString()->Insert(0, md->Name);
-		if (md->Name != "")
+		if (!String::IsNullOrWhiteSpace(md[i]->Name))
 		{
-			printf("Memory Domain Name: %s\n", Helpers::systemStringToUtf8String(md->Name).c_str());
 
-			printf("Memory Domain Class Name: %s\n", Helpers::systemStringToUtf8String(md->ToString()).c_str());
-			interfaces[i] = (gcnew MemoryDomainProxy(md));
+			printf("Memory Domain Class Name: %s\n", Helpers::systemStringToUtf8String(md[i]->ToString()).c_str());
+			interfaces[i] = (gcnew MemoryDomainProxy(md[i]));
 		}
 	}
     //interfaces[1] = (gcnew MemoryDomainProxy(gcnew screen));
@@ -482,6 +483,7 @@ static cli::array<MemoryDomainProxy^>^ GetInterfaces() {
 }
 
 static bool RefreshDomains(bool updateSpecs = true) {
+	currentMD = 0;
     cli::array<MemoryDomainProxy^>^ oldInterfaces = AllSpec::VanguardSpec->Get<cli::array<MemoryDomainProxy^>^>(VSPEC::MEMORYDOMAINS_INTERFACES);
     cli::array<MemoryDomainProxy^>^ newInterfaces = GetInterfaces();
 
@@ -558,6 +560,8 @@ void VanguardClientUnmanaged::LOAD_GAME_START(std::string romPath) {
 
 
 void VanguardClientUnmanaged::LOAD_GAME_DONE() {
+
+	currentMD = 0;
 	if (ManagedWrapper::GetGameName() == "" || ManagedWrapper::GetGameName() == " ")
 		return;
 	if (VanguardInitializationComplete == false)
@@ -579,7 +583,6 @@ void VanguardClientUnmanaged::LOAD_GAME_DONE() {
         String^ oldGame = AllSpec::VanguardSpec->Get<String^>(VSPEC::GAMENAME);
 
         String^ gameName = Helpers::utf8StringToSystemString(UnmanagedWrapper::VANGUARD_GETGAMENAME());
-
         char replaceChar = L'-';
         gameDone->Set(VSPEC::GAMENAME,
             StringExtensions::MakeSafeFilename(gameName, replaceChar));
@@ -629,10 +632,12 @@ void VanguardClientUnmanaged::LOAD_STATE_DONE() {
 }
 
 void VanguardClientUnmanaged::GAME_CLOSED() {
+	if (VanguardInitializationComplete == false)
+		return;
     if(!VanguardClient::enableRTC)
         return;
 	currentMD = 0;
-    AllSpec::VanguardSpec->Update(VSPEC::OPENROMFILENAME, "", true, true);
+    AllSpec::VanguardSpec->Update(VSPEC::OPENROMFILENAME, String::Empty, true, true);
     RefreshDomains();
     RtcCore::InvokeGameClosed(true);
 }
