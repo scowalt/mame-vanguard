@@ -1,13 +1,13 @@
-
 #include <string>
 #include <mutex>
 #include <emu.h>
 #include "ManagedWrapper.h"
 #include "../src/frontend/mame/mame.h"
 #include "UnmanagedWrapper.h"
-unsigned char ManagedWrapper::PEEK(std::string memclass, std::string region, long long addr, int indexnum)
+#include "debug/dvmemory.h"
+unsigned char ManagedWrapper::PEEK(std::string memclass, std::string region, long long addr, int indexnum, std::string devicename)
 {
-	if (memclass == "region")
+	if (memclass == "Region")
 	{
 		memory_region& mregion = *mame_machine_manager::instance()->machine()->root_device().memregion(region);
 		unsigned char mem_content = 0;
@@ -16,7 +16,7 @@ unsigned char ManagedWrapper::PEEK(std::string memclass, std::string region, lon
 		return mem_content;
 
 	}
-	else if (memclass == "share")
+	else if (memclass == "Shared")
 	{
 		memory_share& mshare = *mame_machine_manager::instance()->machine()->root_device().memshare(region);
 		unsigned char mem_content = 0;
@@ -25,77 +25,87 @@ unsigned char ManagedWrapper::PEEK(std::string memclass, std::string region, lon
 
 		return mem_content;
 	}
-	else if (memclass == "addrmap")
+	else if (memclass == "Space")
 	{
 		int spacenum = indexnum;
-		if (mame_machine_manager::instance()->machine()->device("maincpu")->memory().has_space(spacenum))
-			return mame_machine_manager::instance()->machine()->device("maincpu")->memory().space(spacenum).read_byte(addr);
+		if (mame_machine_manager::instance()->machine()->device(devicename.c_str())->memory().has_space(spacenum))
+			return mame_machine_manager::instance()->machine()->device(devicename.c_str())->memory().space(spacenum).read_byte(addr);
 		else return NULL;
 	}
 	else return NULL;
 }
 
-void ManagedWrapper::POKE(std::string memclass, std::string region, long long addr, unsigned char val, int indexnum)
+void ManagedWrapper::POKE(std::string memclass, std::string region, long long addr, unsigned char val, int indexnum, std::string devicename)
 {
-	if (memclass == "region")
+	if (memclass == "Region")
 	{
 		memory_region& mregion = *mame_machine_manager::instance()->machine()->root_device().memregion(region);
 		mregion.base()[(BYTE8_XOR_LE(addr)) | (addr)] = val & 0xff;
 	}
-	else if (memclass == "share")
+	else if (memclass == "Shared")
 	{
 		memory_share& mshare = *mame_machine_manager::instance()->machine()->root_device().memshare(region);
 		u8* ptr = (u8*)mshare.ptr();
 		ptr[(BYTE8_XOR_LE(addr)) | (addr)] = val & 0xff;
 	}
-	else if (memclass == "addrmap")
+	else if (memclass == "Space")
 	{
 		int spacenum = indexnum;
-		if (mame_machine_manager::instance()->machine()->device("maincpu")->memory().has_space(spacenum))
-			mame_machine_manager::instance()->machine()->device("maincpu")->memory().space(spacenum).write_byte(addr, val);
+		if (mame_machine_manager::instance()->machine()->device(devicename.c_str())->memory().has_space(spacenum))
+			mame_machine_manager::instance()->machine()->device(devicename.c_str())->memory().space(spacenum).write_byte(addr, val);
 	}
 	else return;
 }
 
-long long ManagedWrapper::GetMemorySize(std::string memclass, std::string region, int indexnum)
+long long ManagedWrapper::GetMemorySize(std::string memclass, std::string region, int indexnum, std::string devicename)
 {
-	if (memclass == "region")
+	if (memclass == "Region")
 	{
 		memory_region& mregion = *mame_machine_manager::instance()->machine()->root_device().memregion(region);
 		return mregion.bytes();
 	}
-	if (memclass == "share")
+	if (memclass == "Shared")
 	{
 		memory_share& mshare = *mame_machine_manager::instance()->machine()->root_device().memshare(region);
 		return mshare.bytes();
 	}
-	if (memclass == "addrmap")
+	if (memclass == "Space")
 	{
 		int spacenum = indexnum;
-		if (mame_machine_manager::instance()->machine()->device("maincpu")->memory().has_space(spacenum))
-			return (long long)((((mame_machine_manager::instance()->machine()->device("maincpu")->memory().space(spacenum).data_width() / 8) * (mame_machine_manager::instance()->machine()->device("maincpu")->memory().space(spacenum).addr_width())))*1024*1024)/3; //Can't get the device memory map's actual size afaik so I'll just pretend its size is a third of its bytewidth times its address width
+		if (mame_machine_manager::instance()->machine()->device(devicename.c_str())->memory().has_space(spacenum))
+		{
+			//int returnValue = ((((mame_machine_manager::instance()->machine()->device(devicename.c_str())->memory().space(spacenum).data_width() / 24) * (mame_machine_manager::instance()->machine()->device(devicename.c_str())->memory().space(spacenum).addr_width()))) * 1024 * 1024); //Can't get the device memory map's actual size afaik so I'll just pretend its size is its bytewidth times its address width
+			//printf("%s size is %i (0x%x)\n", region.c_str(), returnValue, returnValue);
+			//if (returnValue < 1)
+			//{
+			//	return 1;
+			//}
+			//else return returnValue;
+			address_space& space = mame_machine_manager::instance()->machine()->device(devicename.c_str())->memory().space(spacenum);
+			return true ? space.addrmask() + 1 : space.logaddrmask() + 1;
+		}
 		else return 0;
 	}
 	else return 0;
 }
 
-int ManagedWrapper::GetByteWidth(std::string memclass, std::string region, int indexnum)
+int ManagedWrapper::GetByteWidth(std::string memclass, std::string region, int indexnum, std::string devicename)
 {
-	if (memclass == "region")
+	if (memclass == "Region")
 	{
 		memory_region& mregion = *mame_machine_manager::instance()->machine()->root_device().memregion(region);
 		return mregion.bytewidth();
 	}
-	if (memclass == "share")
+	if (memclass == "Shared")
 	{
 		memory_share& mshare = *mame_machine_manager::instance()->machine()->root_device().memshare(region);
 		return mshare.bytewidth();
 	}
-	if (memclass == "addrmap")
+	if (memclass == "Space")
 	{
 		int spacenum = indexnum;
-		if (mame_machine_manager::instance()->machine()->device("maincpu")->memory().has_space(spacenum))
-			return (int)mame_machine_manager::instance()->machine()->device("maincpu")->memory().space(spacenum).data_width() / 8;
+		if (mame_machine_manager::instance()->machine()->device(devicename.c_str())->memory().has_space(spacenum))
+			return (int)mame_machine_manager::instance()->machine()->device(devicename.c_str())->memory().space(spacenum).data_width() / 8;
 		else return 0;
 	}
 	else return 0;
@@ -113,7 +123,7 @@ std::string ManagedWrapper::GetMemoryDomain(int indexnum)
 	std::string deviceArray[500];
 	int regioncounter = 0;
 	int sharecounter = 0;
-	int devicecounter = 0; //I put "devicecounter" but by device I actually mean address space of the maincpu device
+	int devicecounter = 0;
 	for (auto i = mame_machine_manager::instance()->machine()->memory().regions().cbegin(); i != mame_machine_manager::instance()->machine()->memory().regions().cend(); ++i)
 	{
 		regioncounter += 1;
@@ -124,13 +134,16 @@ std::string ManagedWrapper::GetMemoryDomain(int indexnum)
 		sharecounter += 1;
 		shareArray[sharecounter] = i->first;
 	}
-	for (int i = 0; i < mame_machine_manager::instance()->machine()->device("maincpu")->memory().max_space_count(); i++)
+	for (device_memory_interface& memintf : memory_interface_enumerator(mame_machine_manager::instance()->machine()->root_device()))
 	{
-		if (mame_machine_manager::instance()->machine()->device("maincpu")->memory().has_space(i))
+		for (int spacenum = 0; spacenum < memintf.max_space_count(); ++spacenum)
 		{
-			devicecounter += 1;
-			deviceArray[devicecounter] = std::string(mame_machine_manager::instance()->machine()->device("maincpu")->memory().space(i).name());
-			//printf("Current detected address space of maincpu is #%i: %s.\n", i, deviceArray[devicecounter].c_str());
+			if (memintf.has_space(spacenum))
+			{
+				address_space& space(memintf.space(spacenum));
+				devicecounter += 1;
+				deviceArray[devicecounter] = space.name();
+			}
 		}
 	}
 	if (regionArray[indexnum] != "")
@@ -166,34 +179,37 @@ std::string ManagedWrapper::GetDomainClass(int indexnum)
 		sharecounter += 1;
 		shareArray[sharecounter] = i->first;
 	}
-	for (int i = 0; i < mame_machine_manager::instance()->machine()->device("maincpu")->memory().max_space_count(); ++i)
+	for (device_memory_interface& memintf : memory_interface_enumerator(mame_machine_manager::instance()->machine()->root_device()))
 	{
-
-		if (mame_machine_manager::instance()->machine()->device("maincpu")->memory().has_space(i))
+		for (int spacenum = 0; spacenum < memintf.max_space_count(); ++spacenum)
 		{
-			devicecounter += 1;
-			deviceArray[devicecounter] = mame_machine_manager::instance()->machine()->device("maincpu")->memory().space(i).name();
+			if (memintf.has_space(spacenum))
+			{
+				address_space& space(memintf.space(spacenum));
+				devicecounter += 1;
+				deviceArray[devicecounter] = space.name();
+			}
 		}
 	}
 
 	if (regionArray[indexnum] != "")
 	{
-		return "region";
+		return "Region";
 	}
 	else if (shareArray[indexnum - regioncounter] != "")
 	{
-		return "share";
+		return "Shared";
 	}
 	else if (deviceArray[indexnum - (regioncounter+sharecounter)] != "")
 	{
-		return "addrmap";
+		return "Space";
 	}
 	else return "";
 }
 
-bool ManagedWrapper::IsBigEndian(std::string memclass, std::string region, int indexnum)
+bool ManagedWrapper::IsBigEndian(std::string memclass, std::string region, int indexnum, std::string devicename)
 {
-	if (memclass == "region")
+	if (memclass == "Region")
 	{
 		if (mame_machine_manager::instance()->machine()->system().name != NULL)
 			if (mame_machine_manager::instance()->machine()->root_device().memregion(region.c_str())->endianness() == ENDIANNESS_BIG)
@@ -201,7 +217,7 @@ bool ManagedWrapper::IsBigEndian(std::string memclass, std::string region, int i
 			else return false;
 		else return false;
 	}
-	else if (memclass == "share")
+	else if (memclass == "Shared")
 	{
 		if (mame_machine_manager::instance()->machine()->system().name != NULL)
 			if (mame_machine_manager::instance()->machine()->root_device().memshare(region.c_str())->endianness() == ENDIANNESS_BIG)
@@ -209,12 +225,12 @@ bool ManagedWrapper::IsBigEndian(std::string memclass, std::string region, int i
 			else return false;
 		else return false;
 	}
-	else if (memclass == "addrmap")
+	else if (memclass == "Space")
 	{
 		int spacenum = indexnum;
 
-		if (mame_machine_manager::instance()->machine()->device("maincpu")->memory().has_space(spacenum))
-			if (mame_machine_manager::instance()->machine()->device("maincpu")->memory().space(spacenum).endianness() == ENDIANNESS_BIG)
+		if (mame_machine_manager::instance()->machine()->device(devicename.c_str())->memory().has_space(spacenum))
+			if (mame_machine_manager::instance()->machine()->device(devicename.c_str())->memory().space(spacenum).endianness() == ENDIANNESS_BIG)
 				return true;
 			else return false;
 		else return false;
@@ -225,25 +241,48 @@ bool ManagedWrapper::IsBigEndian(std::string memclass, std::string region, int i
 
 int ManagedWrapper::GetCPUSpaceNumber(int indexnum)
 {
-	std::string regionArray[500];
-	std::string shareArray[500];
 	int deviceArray[500];
-	int regioncounter = 0;
-	int sharecounter = 0;
-	int devicecounter = 0; //I put "devicecounter" but by device I actually mean address space of the maincpu device
-	for (int i = 0; i < mame_machine_manager::instance()->machine()->device("maincpu")->memory().max_space_count(); i++)
+	int devicecounter = 0;
+	for (device_memory_interface& memintf : memory_interface_enumerator(mame_machine_manager::instance()->machine()->root_device()))
 	{
-		if (mame_machine_manager::instance()->machine()->device("maincpu")->memory().has_space(i))
+		for (int spacenum = 0; spacenum < memintf.max_space_count(); ++spacenum)
 		{
-			devicecounter += 1;
-			deviceArray[devicecounter] = i;
+			if (memintf.has_space(spacenum))
+			{
+				devicecounter += 1;
+				deviceArray[devicecounter] = spacenum;
+			}
 		}
 	}
-	if (deviceArray[indexnum - (regioncounter + sharecounter)] != NULL)
+	if (deviceArray[indexnum - (ManagedWrapper::GetTotalNumOfRegionsAndSharesMinusMainCPUSpaces())] != NULL)
 	{
-		return deviceArray[indexnum - (regioncounter + sharecounter)];
+		return deviceArray[indexnum - (ManagedWrapper::GetTotalNumOfRegionsAndSharesMinusMainCPUSpaces())];
 	}
 	else return 0;
+}
+
+std::string ManagedWrapper::GetDeviceName(int indexnum)
+{
+	std::string deviceArray[500];
+	int devicecounter = 0;
+	for (device_memory_interface& memintf : memory_interface_enumerator(mame_machine_manager::instance()->machine()->root_device()))
+	{
+		for (int spacenum = 0; spacenum < memintf.max_space_count(); ++spacenum)
+		{
+			if (memintf.has_space(spacenum))
+			{
+				address_space& space(memintf.space(spacenum));
+				devicecounter += 1;
+				//printf("The following device has RAM: %s\n", space.device().tag());
+				deviceArray[devicecounter] = std::string(space.device().tag()).erase(0, 1);
+			}
+		}
+	}
+	if (deviceArray[indexnum - (ManagedWrapper::GetTotalNumOfRegionsAndSharesMinusMainCPUSpaces())] != "" && indexnum > ManagedWrapper::GetTotalNumOfRegionsAndSharesMinusMainCPUSpaces())
+	{
+		return deviceArray[indexnum - (ManagedWrapper::GetTotalNumOfRegionsAndSharesMinusMainCPUSpaces())];
+	}
+	else return "";
 }
 
 void ManagedWrapper::SaveSaveState(std::string filename)
@@ -278,11 +317,14 @@ int ManagedWrapper::GetTotalNumOfRegionsAndShares()
 		if (mame_machine_manager::instance()->machine()->memory().shares().size() != 0)
 			sharecounter += 1;
 	}
-	for (int i = 0; i < mame_machine_manager::instance()->machine()->device("maincpu")->memory().max_space_count(); ++i)
+	for (device_memory_interface& memintf : memory_interface_enumerator(mame_machine_manager::instance()->machine()->root_device()))
 	{
-		if (mame_machine_manager::instance()->machine()->device("maincpu")->memory().has_space(i))
+		for (int spacenum = 0; spacenum < memintf.max_space_count(); ++spacenum)
 		{
-			devicecounter += 1;
+			if (memintf.has_space(spacenum))
+			{
+				devicecounter += 1;
+			}
 		}
 	}
 	return regioncounter + sharecounter + devicecounter; //
@@ -292,7 +334,6 @@ int ManagedWrapper::GetTotalNumOfRegionsAndSharesMinusMainCPUSpaces()
 {
 	int regioncounter = 0;
 	int sharecounter = 0;
-	int devicecounter = 0;
 	for (auto i = mame_machine_manager::instance()->machine()->memory().regions().cbegin(); i != mame_machine_manager::instance()->machine()->memory().regions().cend(); ++i)
 	{
 		regioncounter += 1;
@@ -302,13 +343,7 @@ int ManagedWrapper::GetTotalNumOfRegionsAndSharesMinusMainCPUSpaces()
 		if (mame_machine_manager::instance()->machine()->memory().shares().size() != 0)
 			sharecounter += 1;
 	}
-	for (int i = 0; i < mame_machine_manager::instance()->machine()->device("maincpu")->memory().max_space_count(); ++i)
-	{
-		if (mame_machine_manager::instance()->machine()->device("maincpu")->memory().has_space(i))
-		{
-			devicecounter += 1;
-		}
-	}
+	
 	return regioncounter + sharecounter; //
 }
 

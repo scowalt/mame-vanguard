@@ -357,7 +357,8 @@ public:
 	property std::string MemoryClass {virtual std::string get(); }
 	virtual String^ ToString() override
 	{
-		return (Name + " (" + Helpers::utf8StringToSystemString(MemoryClass) + ")");
+		if (MemoryClass == "Space") return (Helpers::utf8StringToSystemString(ManagedWrapper::GetDeviceName(domainNumber)) /*+ " " + Helpers::utf8StringToSystemString(MemoryClass)*/ + " \'" + Name + "\'");
+		else return (Helpers::utf8StringToSystemString(MemoryClass) +" \'"+ Name + "\'");
 	}
 
 	
@@ -408,25 +409,25 @@ long long MAMEMemoryDomain::Size::get() {/*
 
     ///* roll memsize into memsizekb, simplify this code */
     //return (memsizekb/1024 + memsize) * 1024ul * 1024ul;
-	return ManagedWrapper::GetMemorySize(MemoryClass , Helpers::systemStringToUtf8String(Name), ManagedWrapper::GetCPUSpaceNumber(domainNumber));
+	return ManagedWrapper::GetMemorySize(MemoryClass , Helpers::systemStringToUtf8String(Name), ManagedWrapper::GetCPUSpaceNumber(domainNumber), ManagedWrapper::GetDeviceName(domainNumber));
 }
 
 int MAMEMemoryDomain::WordSize::get() {
-	return ManagedWrapper::GetByteWidth(MemoryClass, Helpers::systemStringToUtf8String(Name), ManagedWrapper::GetCPUSpaceNumber(domainNumber));
+	return ManagedWrapper::GetByteWidth(MemoryClass, Helpers::systemStringToUtf8String(Name), ManagedWrapper::GetCPUSpaceNumber(domainNumber), ManagedWrapper::GetDeviceName(domainNumber));
 }
 
 bool MAMEMemoryDomain::BigEndian::get() {
 	/*if (&memory_region::endianness == ENDIANNESS_BIG) {
 		return true;
 	}
-	else */return ManagedWrapper::IsBigEndian(MemoryClass, Helpers::systemStringToUtf8String(Name), ManagedWrapper::GetCPUSpaceNumber(domainNumber));
+	else */return ManagedWrapper::IsBigEndian(MemoryClass, Helpers::systemStringToUtf8String(Name), ManagedWrapper::GetCPUSpaceNumber(domainNumber), ManagedWrapper::GetDeviceName(domainNumber));
 }
 
 
 unsigned char MAMEMemoryDomain::PeekByte(long long addr) {
     if(addr < MAMEMemoryDomain::Size)
     {
-		return ManagedWrapper::PEEK(MemoryClass, Helpers::systemStringToUtf8String(Name), addr, ManagedWrapper::GetCPUSpaceNumber(domainNumber));
+		return ManagedWrapper::PEEK(MemoryClass, Helpers::systemStringToUtf8String(Name), addr, ManagedWrapper::GetCPUSpaceNumber(domainNumber), ManagedWrapper::GetDeviceName(domainNumber));
     }
     else
     {
@@ -438,7 +439,7 @@ unsigned char MAMEMemoryDomain::PeekByte(long long addr) {
 void MAMEMemoryDomain::PokeByte(long long addr, unsigned char val) {
     if(addr < MAMEMemoryDomain::Size)
     {
-		ManagedWrapper::POKE(MemoryClass, Helpers::systemStringToUtf8String(Name), addr, val, ManagedWrapper::GetCPUSpaceNumber(domainNumber));
+		ManagedWrapper::POKE(MemoryClass, Helpers::systemStringToUtf8String(Name), addr, val, ManagedWrapper::GetCPUSpaceNumber(domainNumber), ManagedWrapper::GetDeviceName(domainNumber));
     }
     else
     {
