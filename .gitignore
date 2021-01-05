@@ -78,3 +78,5 @@ regtests/jedutil/output
 /3rdparty/zlib/out/build/x64-Debug (default)
 /build/projects/windows/mamearcade/vs2019/.vs/mamearcade
 /build/vs2019
+/artwork
+/ui.bdf

@@ -73,7 +73,7 @@ long long ManagedWrapper::GetMemorySize(std::string memclass, std::string region
 	{
 		int spacenum = indexnum;
 		if (mame_machine_manager::instance()->machine()->device("maincpu")->memory().has_space(spacenum))
-			return (long long)(((mame_machine_manager::instance()->machine()->device("maincpu")->memory().space(spacenum).data_width() / 8) * (mame_machine_manager::instance()->machine()->device("maincpu")->memory().space(spacenum).addr_width())))*1024*1024; //Can't get the device memory map's actual size afaik so I'll just pretend its size is its bytewidth times its address width
+			return (long long)((((mame_machine_manager::instance()->machine()->device("maincpu")->memory().space(spacenum).data_width() / 8) * (mame_machine_manager::instance()->machine()->device("maincpu")->memory().space(spacenum).addr_width())))*1024*1024)/3; //Can't get the device memory map's actual size afaik so I'll just pretend its size is a third of its bytewidth times its address width
 		else return 0;
 	}
 	else return 0;
