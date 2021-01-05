@@ -122,7 +122,9 @@ static void EmuThreadExecute(Action^ callback) {
 static void EmuThreadExecute(IntPtr callbackPtr) {
     //SetEmuThread(false);
     //sdl.active = false;
+	ManagedWrapper::Resume(false);
     static_cast<void(__stdcall*)(void)>(callbackPtr.ToPointer())();
+	ManagedWrapper::Resume(true);
     //SetEmuThread(true);
     //sdl.active = true;
 }
@@ -406,25 +408,25 @@ long long MAMEMemoryDomain::Size::get() {/*
 
     ///* roll memsize into memsizekb, simplify this code */
     //return (memsizekb/1024 + memsize) * 1024ul * 1024ul;
-	return ManagedWrapper::GetMemorySize(MemoryClass , Helpers::systemStringToUtf8String(Name));
+	return ManagedWrapper::GetMemorySize(MemoryClass , Helpers::systemStringToUtf8String(Name), ManagedWrapper::GetCPUSpaceNumber(domainNumber));
 }
 
 int MAMEMemoryDomain::WordSize::get() {
-	return ManagedWrapper::GetByteWidth(MemoryClass, Helpers::systemStringToUtf8String(Name));
+	return ManagedWrapper::GetByteWidth(MemoryClass, Helpers::systemStringToUtf8String(Name), ManagedWrapper::GetCPUSpaceNumber(domainNumber));
 }
 
 bool MAMEMemoryDomain::BigEndian::get() {
 	/*if (&memory_region::endianness == ENDIANNESS_BIG) {
 		return true;
 	}
-	else */return ManagedWrapper::IsBigEndian(MemoryClass, Helpers::systemStringToUtf8String(Name));
+	else */return ManagedWrapper::IsBigEndian(MemoryClass, Helpers::systemStringToUtf8String(Name), ManagedWrapper::GetCPUSpaceNumber(domainNumber));
 }
 
 
 unsigned char MAMEMemoryDomain::PeekByte(long long addr) {
     if(addr < MAMEMemoryDomain::Size)
     {
-		return ManagedWrapper::PEEK(MemoryClass, Helpers::systemStringToUtf8String(Name), addr);
+		return ManagedWrapper::PEEK(MemoryClass, Helpers::systemStringToUtf8String(Name), addr, ManagedWrapper::GetCPUSpaceNumber(domainNumber));
     }
     else
     {
@@ -436,7 +438,7 @@ unsigned char MAMEMemoryDomain::PeekByte(long long addr) {
 void MAMEMemoryDomain::PokeByte(long long addr, unsigned char val) {
     if(addr < MAMEMemoryDomain::Size)
     {
-		ManagedWrapper::POKE(MemoryClass, Helpers::systemStringToUtf8String(Name), addr, val);
+		ManagedWrapper::POKE(MemoryClass, Helpers::systemStringToUtf8String(Name), addr, val, ManagedWrapper::GetCPUSpaceNumber(domainNumber));
     }
     else
     {
@@ -456,7 +458,7 @@ cli::array<unsigned char>^ MAMEMemoryDomain::PeekBytes(long long address, int le
 #pragma endregion
 
 static cli::array<MemoryDomainProxy^>^ GetInterfaces() {
-
+	currentMD = 0;
     if(String::IsNullOrWhiteSpace(AllSpec::VanguardSpec->Get<String^>(VSPEC::OPENROMFILENAME)))
         return gcnew cli::array<MemoryDomainProxy^>(0);
     cli::array<MemoryDomainProxy^>^ interfaces = gcnew cli::array<MemoryDomainProxy^>(ManagedWrapper::GetTotalNumOfRegionsAndShares());
@@ -736,16 +738,16 @@ void VanguardClient::LoadRom(String^ filename) {
 bool VanguardClient::LoadState(std::string filename) {
 
     //RTCV::CorruptCore::StepActions::ClearStepBlastUnits();
-    //RTCV::NetCore::LocalNetCoreRouter::Route(Endpoints::CorruptCore, NetCore::Commands::Remote::ClearStepBlastUnits, nullptr, false);
+    RTCV::NetCore::LocalNetCoreRouter::Route(Endpoints::CorruptCore, NetCore::Commands::Remote::ClearStepBlastUnits, nullptr, false);
 
     //control->ParseConfigFile(Helpers::systemStringToUtf8String((Helpers::utf8StringToSystemString(filename) + ".conf")).c_str());
     
     RtcClock::ResetCount();
     stateLoading = true;
-	ManagedWrapper::LoadSaveState(filename);
+	UnmanagedWrapper::VANGUARD_LOADSTATE(filename);
+	UnmanagedWrapper::VANGUARD_LOADSTATE_DONE();
     // We have to do it this way to prevent deadlock due to synced calls. It sucks but it's required
     // at the moment
-	Thread::Sleep(2000);
     int i = 0;
     do {
         Thread::Sleep(20);
@@ -757,7 +759,7 @@ bool VanguardClient::LoadState(std::string filename) {
             return false;
         }
     } while(stateLoading);
-    RefreshDomains();
+    //RefreshDomains();
     return true;
 }
 

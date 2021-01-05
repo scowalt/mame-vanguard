@@ -73,7 +73,7 @@ void UnmanagedWrapper::VANGUARD_LOADSTATE(const std::string& file) {
     //SaveState::save(SaveState::SLOT_COUNT);
     //SaveState::instance().load(1);
     //SaveState::instance().load(SaveState::SLOT_COUNT * SaveState::MAX_PAGE - 1, file);
-	//ManagedWrapper::LoadSaveState(file);
+	ManagedWrapper::LoadSaveState(file);
     return;
 }
 
