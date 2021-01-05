@@ -530,6 +530,7 @@ harddriv.cpp
 hazelgr.cpp
 hcastle.cpp
 headonb.cpp
+heromem.cpp
 hexion.cpp
 hideseek.cpp
 higemaru.cpp
@@ -1074,6 +1075,7 @@ saturn.cpp
 sauro.cpp
 savquest.cpp
 sbasketb.cpp
+sbmjb.cpp
 sbowling.cpp
 sbrkout.cpp
 sbugger.cpp
