@@ -80,3 +80,4 @@ regtests/jedutil/output
 /build/vs2019
 /artwork
 /ui.bdf
+/hlsl

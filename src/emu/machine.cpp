@@ -93,6 +93,7 @@
 #if defined(__EMSCRIPTEN__)
 #include <emscripten.h>
 #endif
+#include "../Vanguard/VanguardClient.h"
 
 
 
@@ -377,7 +378,7 @@ int running_machine::run(bool quiet)
 		while ((!m_hard_reset_pending && !m_exit_pending) || m_saveload_schedule != saveload_schedule::NONE)
 		{
 			g_profiler.start(PROFILER_EXTRA);
-
+			if (m_current_phase == machine_phase::RUNNING) VanguardClientUnmanaged::CORE_STEP();
 			// execute CPUs if not paused
 			if (!m_paused)
 				m_scheduler.timeslice();

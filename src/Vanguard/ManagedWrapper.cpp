@@ -296,8 +296,8 @@ void ManagedWrapper::LoadSaveState(std::string filename)
 {
 	printf("Savestate path is %s.\n", filename.c_str());
 	/*if (mame_machine_manager::instance()->machine()->system().name != NULL)
-	{
-		*/mame_machine_manager::instance()->machine()->immediate_load(filename.c_str());
+	{*/
+		mame_machine_manager::instance()->machine()->schedule_load(filename.c_str());
 		printf("%s loaded.\n", filename.c_str());
 	/*}
 	else return;*/

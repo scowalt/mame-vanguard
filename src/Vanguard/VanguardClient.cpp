@@ -67,8 +67,8 @@ using namespace Diagnostics;
 #define ARAM_SIZE 16777216
 #define EXRAM_SIZE 67108864
 
-static void EmuThreadExecute(Action^ callback);
-static void EmuThreadExecute(IntPtr ptr);
+//static void EmuThreadExecute(Action^ callback);
+//static void EmuThreadExecute(IntPtr ptr);
 static int currentMD = 0;
 // Define this in here as it's managed and weird stuff happens if it's in a header
 public
@@ -115,19 +115,19 @@ public:
     
 };
 
-static void EmuThreadExecute(Action^ callback) {
-    EmuThreadExecute(Marshal::GetFunctionPointerForDelegate(callback));
-}
-
-static void EmuThreadExecute(IntPtr callbackPtr) {
-    //SetEmuThread(false);
-    //sdl.active = false;
-	ManagedWrapper::Resume(false);
-    static_cast<void(__stdcall*)(void)>(callbackPtr.ToPointer())();
-	ManagedWrapper::Resume(true);
-    //SetEmuThread(true);
-    //sdl.active = true;
-}
+//static void EmuThreadExecute(Action^ callback) {
+//    EmuThreadExecute(Marshal::GetFunctionPointerForDelegate(callback));
+//}
+//
+//static void EmuThreadExecute(IntPtr callbackPtr) {
+//    //SetEmuThread(false);
+//    //sdl.active = false;
+//	ManagedWrapper::Resume(false);
+//    static_cast<void(__stdcall*)(void)>(callbackPtr.ToPointer())();
+//	ManagedWrapper::Resume(true);
+//    //SetEmuThread(true);
+//    //sdl.active = true;
+//}
 
 static PartialSpec^
 getDefaultPartial() {
@@ -149,7 +149,7 @@ getDefaultPartial() {
     partial->Set(VSPEC::OPENROMFILENAME, "IGNORE");
     partial->Set(VSPEC::OVERRIDE_DEFAULTMAXINTENSITY, 100000);
     partial->Set(VSPEC::SYNCSETTINGS, String::Empty);
-    partial->Set(VSPEC::MEMORYDOMAINS_BLACKLISTEDDOMAINS, gcnew cli::array<String^>{" "});
+	partial->Set(VSPEC::MEMORYDOMAINS_BLACKLISTEDDOMAINS, gcnew cli::array<String^>{"_RO"});
     partial->Set(VSPEC::SYSTEM, String::Empty);
     partial->Set(VSPEC::LOADSTATE_USES_CALLBACKS, true);
     partial->Set(VSPEC::EMUDIR, VanguardClient::emuDir);
@@ -231,6 +231,7 @@ static Assembly^ CurrentDomain_AssemblyResolve(Object^ sender, ResolveEventArgs^
 
 // Create our VanguardClient
 void VanguardClientInitializer::Initialize() {
+	VanguardClientUnmanaged::LOAD_GAME_DONE();
 	if (VanguardInitializationComplete == true) return;
     // This has to be in its own method where no other dlls are used so the JIT can compile it
     AppDomain::CurrentDomain->AssemblyResolve +=
@@ -257,7 +258,7 @@ void VanguardClientInitializer::StartVanguardClient()
     System::Windows::Forms::Form^ dummy = gcnew System::Windows::Forms::Form();
     IntPtr Handle = dummy->Handle;
     SyncObjectSingleton::SyncObject = dummy;
-    SyncObjectSingleton::EmuInvokeDelegate = gcnew SyncObjectSingleton::ActionDelegate(&EmuThreadExecute);
+    //SyncObjectSingleton::EmuInvokeDelegate = gcnew SyncObjectSingleton::ActionDelegate(&EmuThreadExecute);
     SyncObjectSingleton::UseQueue = true;
 
     // Start everything
@@ -358,6 +359,8 @@ public:
 	virtual String^ ToString() override
 	{
 		if (MemoryClass == "Space") return (Helpers::utf8StringToSystemString(ManagedWrapper::GetDeviceName(domainNumber)) /*+ " " + Helpers::utf8StringToSystemString(MemoryClass)*/ + " \'" + Name + "\'");
+		else if (MemoryClass == "Region")
+			return (Helpers::utf8StringToSystemString(MemoryClass) + " \'" + Name + "\'_RO");
 		else return (Helpers::utf8StringToSystemString(MemoryClass) +" \'"+ Name + "\'");
 	}
 
@@ -466,21 +469,27 @@ static cli::array<MemoryDomainProxy^>^ GetInterfaces() {
 	
 	printf("Total Memory Domains: %i\n", ManagedWrapper::GetTotalNumOfRegionsAndShares());
 	cli::array <MAMEMemoryDomain^>^ md = gcnew cli::array<MAMEMemoryDomain^>(ManagedWrapper::GetTotalNumOfRegionsAndShares());
+	PartialSpec^ spec = gcnew PartialSpec("VanguardSpec");
+	cli::array <String^>^ BlacklistDomains = gcnew cli::array<String^>(255);
 	for (int i = 0; i < ManagedWrapper::GetTotalNumOfRegionsAndShares(); i++)
 	{
 		currentMD += 1;
-		printf("Current MD Number: %i\n", currentMD);
+		printf("Current MD Number: %i\n", i);
 		md[i] = gcnew MAMEMemoryDomain(i + 1);
 		printf("Memory Domain Name: %s\n", Helpers::systemStringToUtf8String(md[i]->Name).c_str());
 		//md->ToString()->Remove(0);
 		//md->ToString()->Insert(0, md->Name);
 		if (!String::IsNullOrWhiteSpace(md[i]->Name))
 		{
-
+			if (md[i]->MemoryClass.find("Region") != std::string::npos)
+			{
+				BlacklistDomains[i] = md[i]->ToString();
+			}
 			printf("Memory Domain Class Name: %s\n", Helpers::systemStringToUtf8String(md[i]->ToString()).c_str());
 			interfaces[i] = (gcnew MemoryDomainProxy(md[i]));
 		}
 	}
+	spec->Set(VSPEC::MEMORYDOMAINS_BLACKLISTEDDOMAINS, BlacklistDomains);
     //interfaces[1] = (gcnew MemoryDomainProxy(gcnew screen));
     return interfaces;
 }
@@ -488,8 +497,9 @@ static cli::array<MemoryDomainProxy^>^ GetInterfaces() {
 static bool RefreshDomains(bool updateSpecs = true) {
 	currentMD = 0;
     cli::array<MemoryDomainProxy^>^ oldInterfaces = AllSpec::VanguardSpec->Get<cli::array<MemoryDomainProxy^>^>(VSPEC::MEMORYDOMAINS_INTERFACES);
+	
     cli::array<MemoryDomainProxy^>^ newInterfaces = GetInterfaces();
-
+	
     // Bruteforce it since domains can c`   hange inconsistently in some configs and we keep code
     // consistent between implementations
     bool domainsChanged = false;
@@ -745,22 +755,25 @@ bool VanguardClient::LoadState(std::string filename) {
     
     RtcClock::ResetCount();
     stateLoading = true;
-	UnmanagedWrapper::VANGUARD_LOADSTATE(filename);
-	UnmanagedWrapper::VANGUARD_LOADSTATE_DONE();
+	//ManagedWrapper::Resume(false);
+	ManagedWrapper::LoadSaveState(filename);
+	//UnmanagedWrapper::VANGUARD_LOADSTATE_DONE();
     // We have to do it this way to prevent deadlock due to synced calls. It sucks but it's required
     // at the moment
-    int i = 0;
-    do {
-        Thread::Sleep(20);
-        System::Windows::Forms::Application::DoEvents();
+    //int i = 0;
+    //do {
+    //    Thread::Sleep(20);
+    //    System::Windows::Forms::Application::DoEvents();
 
-        // We wait for 20 ms every time. If loading a game takes longer than 10 seconds, break out.
-        if(++i > 500) {
-            stateLoading = false;
-            return false;
-        }
-    } while(stateLoading);
-    //RefreshDomains();
+    //    // We wait for 20 ms every time. If loading a game takes longer than 10 seconds, break out.
+    //    if(++i > 500) {
+    //        stateLoading = false;
+    //        return false;
+    //    }
+    //} while(stateLoading);
+	UnmanagedWrapper::VANGUARD_LOADSTATE_DONE();
+	//ManagedWrapper::Resume(true);
+    RefreshDomains();
     return true;
 }
 
