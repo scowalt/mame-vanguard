@@ -12,6 +12,7 @@
 
 #pragma once
 
+#include "osdcore.h"
 #include "corefile.h"
 
 #include <list>
@@ -132,9 +133,6 @@ public:
 
 	// return whether a node has the specified attribute
 	bool has_attribute(const char *attribute) const;
-
-	// return a pointer to the string value of an attribute, or nullptr if not present
-	std::string const *get_attribute_string_ptr(const char *attribute) const;
 
 	// return the string value of an attribute, or the specified default if not present
 	const char *get_attribute_string(const char *attribute, const char *defvalue) const;

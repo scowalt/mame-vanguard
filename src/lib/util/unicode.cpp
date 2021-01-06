@@ -10,8 +10,6 @@
 
 #include "unicode.h"
 
-#include "osdcomm.h"
-
 #ifdef _WIN32
 #include "strconv.h"
 #define UTF8PROC_DLLEXPORT

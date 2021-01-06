@@ -288,7 +288,7 @@ to the same bank as defined through A20.
 #include "machine/315_5649.h"
 #include "sound/scsp.h"
 #include "emupal.h"
-#include "layout/generic.h"
+#include "rendlay.h"
 #include "screen.h"
 #include "speaker.h"
 

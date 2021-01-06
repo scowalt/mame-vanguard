@@ -117,20 +117,21 @@ void galaxy_state::setup_snapshot(const uint8_t * data, uint32_t size)
 
 SNAPSHOT_LOAD_MEMBER(galaxy_state::snapshot_cb)
 {
-	uint32_t snapshot_size = image.length();
+	uint8_t* snapshot_data;
+
 	switch (snapshot_size)
 	{
 		case GALAXY_SNAPSHOT_V1_SIZE:
 		case GALAXY_SNAPSHOT_V2_SIZE:
+			snapshot_data = auto_alloc_array(machine(), uint8_t, snapshot_size);
 			break;
 		default:
 			return image_init_result::FAIL;
 	}
 
-	std::vector<uint8_t> snapshot_data(snapshot_size);
-	image.fread(&snapshot_data[0], snapshot_size);
+	image.fread( snapshot_data, snapshot_size);
 
-	setup_snapshot(&snapshot_data[0], snapshot_size);
+	setup_snapshot(snapshot_data, snapshot_size);
 
 	return image_init_result::PASS;
 }

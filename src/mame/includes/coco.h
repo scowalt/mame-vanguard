@@ -8,10 +8,11 @@
 
 ***************************************************************************/
 
+#pragma once
+
 #ifndef MAME_INCLUDES_COCO_H
 #define MAME_INCLUDES_COCO_H
 
-#pragma once
 
 #include "imagedev/cassette.h"
 #include "bus/rs232/rs232.h"

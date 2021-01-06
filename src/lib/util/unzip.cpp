@@ -13,7 +13,6 @@
 #include "corestr.h"
 #include "hashing.h"
 #include "osdcore.h"
-#include "osdfile.h"
 #include "timeconv.h"
 
 #include "lzma/C/LzmaDec.h"

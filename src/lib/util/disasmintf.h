@@ -13,8 +13,7 @@
 #ifndef MAME_UTIL_DISASMINTF_H
 #define MAME_UTIL_DISASMINTF_H
 
-#include "osdcomm.h"
-#include <ostream>
+#include "coretmpl.h"
 
 namespace util {
 

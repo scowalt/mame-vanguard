@@ -11,6 +11,7 @@
 #if defined(SDLMAME_UNIX) && !defined(SDLMAME_MACOSX) && !defined(SDLMAME_HAIKU) && !defined(SDLMAME_ANDROID)
 
 #include "corestr.h"
+#include "corealloc.h"
 #include "fileio.h"
 #include "unicode.h"
 

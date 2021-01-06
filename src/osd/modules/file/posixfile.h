@@ -9,7 +9,7 @@
 //============================================================
 
 
-#include "osdfile.h"
+#include "osdcore.h"
 
 #include <cstdint>
 #include <string>

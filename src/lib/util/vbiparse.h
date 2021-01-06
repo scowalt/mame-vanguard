@@ -13,7 +13,7 @@
 
 #pragma once
 
-#include <cstdint>
+#include "osdcomm.h"
 
 /***************************************************************************
     CONSTANTS

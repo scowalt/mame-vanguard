@@ -283,9 +283,9 @@ void primo_state::setup_pss (uint8_t* snapshot_data, uint32_t snapshot_size)
 
 SNAPSHOT_LOAD_MEMBER(primo_state::snapshot_cb)
 {
-	std::vector<uint8_t> snapshot_data(image.length());
+	std::vector<uint8_t> snapshot_data(snapshot_size);
 
-	if (image.fread(&snapshot_data[0], image.length()) != image.length())
+	if (image.fread(&snapshot_data[0], snapshot_size) != snapshot_size)
 	{
 		return image_init_result::FAIL;
 	}
@@ -295,7 +295,7 @@ SNAPSHOT_LOAD_MEMBER(primo_state::snapshot_cb)
 		return image_init_result::FAIL;
 	}
 
-	setup_pss(&snapshot_data[0], image.length());
+	setup_pss(&snapshot_data[0], snapshot_size);
 
 	return image_init_result::PASS;
 }
@@ -322,7 +322,6 @@ void primo_state::setup_pp(uint8_t* quickload_data, uint32_t quickload_size)
 
 QUICKLOAD_LOAD_MEMBER(primo_state::quickload_cb)
 {
-	size_t quickload_size = image.length();
 	std::vector<uint8_t> quickload_data(quickload_size);
 
 	if (image.fread(&quickload_data[0], quickload_size) != quickload_size)

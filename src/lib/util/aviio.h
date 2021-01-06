@@ -11,6 +11,7 @@
 #ifndef MAME_LIB_UTIL_AVIIO_H
 #define MAME_LIB_UTIL_AVIIO_H
 
+#include "osdcore.h"
 #include "bitmap.h"
 
 #include <cstdint>

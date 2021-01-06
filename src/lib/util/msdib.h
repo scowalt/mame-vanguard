@@ -14,6 +14,7 @@
 
 #include "bitmap.h"
 #include "corefile.h"
+#include "osdcore.h"
 
 #include <cstdint>
 

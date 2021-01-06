@@ -10,8 +10,6 @@
 
 #include "corefile.h"
 
-#include "coretmpl.h"
-#include "osdcore.h"
 #include "unicode.h"
 #include "vecstream.h"
 
@@ -160,7 +158,7 @@ public:
 	virtual const void *buffer() override { return m_file.buffer(); }
 
 	virtual std::uint32_t write(const void *buffer, std::uint32_t length) override { return m_file.write(buffer, length); }
-	virtual int puts(std::string_view s) override { return m_file.puts(s); }
+	virtual int puts(const char *s) override { return m_file.puts(s); }
 	virtual int vprintf(util::format_argument_pack<std::ostream> const &args) override { return m_file.vprintf(args); }
 	virtual osd_file::error truncate(std::uint64_t offset) override { return m_file.truncate(offset); }
 
@@ -187,7 +185,7 @@ public:
 	virtual int getc() override;
 	virtual int ungetc(int c) override;
 	virtual char *gets(char *s, int n) override;
-	virtual int puts(std::string_view s) override;
+	virtual int puts(char const *s) override;
 	virtual int vprintf(util::format_argument_pack<std::ostream> const &args) override;
 
 protected:
@@ -544,7 +542,7 @@ char *core_text_file::gets(char *s, int n)
     puts - write a line to a text file
 -------------------------------------------------*/
 
-int core_text_file::puts(std::string_view s)
+int core_text_file::puts(char const *s)
 {
 	char convbuf[1024];
 	char *pconvbuf = convbuf;
@@ -559,9 +557,9 @@ int core_text_file::puts(std::string_view s)
 	}
 
 	// convert '\n' to platform dependant line endings
-	for (char ch : s)
+	while (*s != '\0')
 	{
-		if (ch == '\n')
+		if (*s == '\n')
 		{
 			if (CRLF == 1)      // CR only
 				*pconvbuf++ = 13;
@@ -574,7 +572,8 @@ int core_text_file::puts(std::string_view s)
 			}
 		}
 		else
-			*pconvbuf++ = ch;
+			*pconvbuf++ = *s;
+		s++;
 
 		// if we overflow, break into chunks
 		if (pconvbuf >= convbuf + ARRAY_LENGTH(convbuf) - 10)
@@ -602,7 +601,8 @@ int core_text_file::vprintf(util::format_argument_pack<std::ostream> const &args
 	m_printf_buffer.reserve(1024);
 	m_printf_buffer.seekp(0, ovectorstream::beg);
 	util::stream_format<std::ostream, std::ostream>(m_printf_buffer, args);
-	return puts(buf_to_string_view(m_printf_buffer));
+	m_printf_buffer.put('\0');
+	return puts(&m_printf_buffer.vec()[0]);
 }
 
 

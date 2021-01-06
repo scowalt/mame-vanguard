@@ -10,6 +10,7 @@
 
 #ifdef SDLMAME_MACOSX
 
+#include "corealloc.h"
 #include "fileio.h"
 
 #include <ApplicationServices/ApplicationServices.h>

@@ -28,7 +28,7 @@
 #include "machine/watchdog.h"
 #include "speaker.h"
 
-#include "layout/generic.h"
+#include "rendlay.h"
 
 
 /*************************************

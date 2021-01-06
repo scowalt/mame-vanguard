@@ -7,7 +7,6 @@
 //============================================================
 
 #include "osdcore.h"
-#include "osdfile.h"
 
 #include <cassert>
 #include <cstdint>

@@ -1,9 +1,5 @@
 // license:BSD-3-Clause
 // copyright-holders:Olivier Galibert
-#ifndef MAME_EMU_EMUMEM_HEM_H
-#define MAME_EMU_EMUMEM_HEM_H
-
-#pragma once
 
 // handler_entry_read_memory/handler_entry_write_memory
 
@@ -13,6 +9,7 @@ template<int Width, int AddrShift, endianness_t Endian> class handler_entry_read
 {
 public:
 	using uX = typename emu::detail::handler_entry_size<Width>::uX;
+	using inh = handler_entry_read_address<Width, AddrShift, Endian>;
 
 	handler_entry_read_memory(address_space *space, void *base) : handler_entry_read_address<Width, AddrShift, Endian>(space, 0), m_base(reinterpret_cast<uX *>(base)) {}
 	~handler_entry_read_memory() = default;
@@ -30,6 +27,7 @@ template<int Width, int AddrShift, endianness_t Endian> class handler_entry_writ
 {
 public:
 	using uX = typename emu::detail::handler_entry_size<Width>::uX;
+	using inh = handler_entry_write_address<Width, AddrShift, Endian>;
 
 	handler_entry_write_memory(address_space *space, void *base) : handler_entry_write_address<Width, AddrShift, Endian>(space, 0), m_base(reinterpret_cast<uX *>(base)) {}
 	~handler_entry_write_memory() = default;
@@ -52,6 +50,7 @@ template<int Width, int AddrShift, endianness_t Endian> class handler_entry_read
 {
 public:
 	using uX = typename emu::detail::handler_entry_size<Width>::uX;
+	using inh = handler_entry_read_address<Width, AddrShift, Endian>;
 
 	handler_entry_read_memory_bank(address_space *space, memory_bank &bank) : handler_entry_read_address<Width, AddrShift, Endian>(space, 0), m_bank(bank) {}
 	~handler_entry_read_memory_bank() = default;
@@ -69,6 +68,7 @@ template<int Width, int AddrShift, endianness_t Endian> class handler_entry_writ
 {
 public:
 	using uX = typename emu::detail::handler_entry_size<Width>::uX;
+	using inh = handler_entry_write_address<Width, AddrShift, Endian>;
 
 	handler_entry_write_memory_bank(address_space *space, memory_bank &bank) : handler_entry_write_address<Width, AddrShift, Endian>(space, 0), m_bank(bank) {}
 	~handler_entry_write_memory_bank() = default;
@@ -81,5 +81,3 @@ public:
 private:
 	memory_bank &m_bank;
 };
-
-#endif // MAME_EMU_EMUMEM_HEM_H

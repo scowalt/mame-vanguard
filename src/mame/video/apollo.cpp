@@ -20,6 +20,7 @@
 #include "includes/apollo.h"
 
 #include "emupal.h"
+#include "rendlay.h"
 #include "screen.h"
 
 #include "apollo.lh"

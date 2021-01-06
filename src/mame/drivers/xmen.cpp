@@ -31,9 +31,8 @@ likewise a 2 screen game.
 #include "machine/watchdog.h"
 #include "sound/ym2151.h"
 #include "emupal.h"
+#include "rendlay.h"
 #include "speaker.h"
-
-#include "layout/generic.h"
 
 
 /***************************************************************************

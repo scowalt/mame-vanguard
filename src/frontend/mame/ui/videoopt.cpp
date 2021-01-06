@@ -11,7 +11,6 @@
 #include "emu.h"
 #include "ui/videoopt.h"
 
-#include "rendlay.h"
 #include "rendutil.h"
 
 
@@ -148,8 +147,7 @@ void menu_video_options::populate(float &customtop, float &custombottom)
 	}
 
 	// add items for visibility toggles
-	layout_view const &curview = m_target.current_view();
-	auto const &toggles = curview.visibility_toggles();
+	auto const &toggles = m_target.visibility_toggles();
 	if (!toggles.empty())
 	{
 		ref = 0U;
@@ -179,7 +177,7 @@ void menu_video_options::populate(float &customtop, float &custombottom)
 	item_append(_("Rotate"), subtext, FLAG_LEFT_ARROW | FLAG_RIGHT_ARROW, reinterpret_cast<void *>(ITEM_ROTATE));
 
 	// cropping
-	bool const canzoom(curview.has_art() && !curview.visible_screens().empty());
+	bool const canzoom(m_target.current_view().has_art() && !m_target.current_view().visible_screens().empty());
 	item_append_on_off(_("Zoom to Screen Area"), m_target.zoom_to_screen(), canzoom ? 0U : (FLAG_INVERT | FLAG_DISABLE), reinterpret_cast<void *>(ITEM_ZOOM));
 
 	if (!m_snapshot)

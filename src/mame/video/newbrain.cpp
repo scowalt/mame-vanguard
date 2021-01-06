@@ -10,6 +10,7 @@
 
 #include "emu.h"
 #include "includes/newbrain.h"
+#include "rendlay.h"
 #include "screen.h"
 
 #define VERBOSE 0

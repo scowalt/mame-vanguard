@@ -11,6 +11,7 @@
 #include "zippath.h"
 #include "unzip.h"
 #include "corestr.h"
+#include "osdcore.h"
 
 #include <cstdlib>
 

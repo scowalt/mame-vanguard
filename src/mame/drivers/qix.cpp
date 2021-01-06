@@ -232,6 +232,7 @@ Interrupts:
 #include "emu.h"
 #include "includes/qix.h"
 
+#include "rendlay.h"
 #include "machine/nvram.h"
 
 #include "elecyoyo.lh"

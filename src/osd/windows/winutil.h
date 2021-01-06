@@ -9,7 +9,7 @@
 #ifndef __WINUTIL__
 #define __WINUTIL__
 
-#include "osdfile.h"
+#include "osdcore.h"
 #include <string>
 #include <vector>
 #include <chrono>

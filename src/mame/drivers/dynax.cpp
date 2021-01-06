@@ -90,7 +90,7 @@ TODO:
 #include "sound/ym2413.h"
 #include "sound/3812intf.h"
 
-#include "layout/generic.h"
+#include "rendlay.h"
 #include "speaker.h"
 
 

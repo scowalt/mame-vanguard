@@ -671,10 +671,10 @@ SNAPSHOT_LOAD_MEMBER(microtan_state::snapshot_cb)
 	if (!snapshot_buff)
 		return image_init_result::FAIL;
 
-	if (verify_snapshot(snapshot_buff, image.length()) != image_verify_result::PASS)
+	if (verify_snapshot(snapshot_buff, snapshot_size) != image_verify_result::PASS)
 		return image_init_result::FAIL;
 
-	snapshot_copy(snapshot_buff, image.length());
+	snapshot_copy(snapshot_buff, snapshot_size);
 	return image_init_result::PASS;
 }
 
@@ -682,12 +682,12 @@ QUICKLOAD_LOAD_MEMBER(microtan_state::quickload_cb)
 {
 	int snapshot_size = 8263;   /* magic size */
 	std::vector<uint8_t> snapshot_buff(snapshot_size, 0);
-	std::vector<char> buff(image.length() + 1);
+	std::vector<char> buff(quickload_size + 1);
 	image_init_result rc;
 
-	image.fread(&buff[0], image.length());
+	image.fread(&buff[0], quickload_size);
 
-	buff[image.length()] = '\0';
+	buff[quickload_size] = '\0';
 
 	if (buff[0] == ':')
 		rc = parse_intel_hex(&snapshot_buff[0], &buff[0]);

@@ -143,10 +143,9 @@ Changes:
 
 #include "cpu/m6502/n2a03.h"
 #include "cpu/z80/z80.h"
+#include "rendlay.h"
 #include "screen.h"
 #include "speaker.h"
-
-#include "layout/generic.h"
 
 
 /******************************************************************************/
