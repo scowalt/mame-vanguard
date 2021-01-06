@@ -483,7 +483,7 @@ static cli::array<MemoryDomainProxy^>^ GetInterfaces() {
 		{
 			if (md[i]->MemoryClass.find("Region") != std::string::npos)
 			{
-				BlacklistDomains[i] = md[i]->ToString();
+				BlacklistDomains[i] = md[i]->ToString() + "_RO";
 			}
 			printf("Memory Domain Class Name: %s\n", Helpers::systemStringToUtf8String(md[i]->ToString()).c_str());
 			interfaces[i] = (gcnew MemoryDomainProxy(md[i]));
