@@ -7,6 +7,9 @@
 ****************************************************************************/
 #include <stdio.h> // must be stdio.h and here otherwise issues with I64FMT in MINGW
 
+// osd
+#include "osdcore.h"
+
 // lib/util
 #include "avhuff.h"
 #include "aviio.h"
@@ -15,7 +18,6 @@
 #include "corefile.h"
 #include "hashing.h"
 #include "md5.h"
-#include "strformat.h"
 #include "vbiparse.h"
 
 #include <cassert>
@@ -30,8 +32,6 @@
 #include <memory>
 #include <new>
 #include <unordered_map>
-
-using util::string_format;
 
 
 

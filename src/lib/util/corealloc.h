@@ -13,6 +13,8 @@
 
 #pragma once
 
+#include "osdcore.h"
+
 #include <cstddef>
 #include <cstdlib>
 #include <cstring>

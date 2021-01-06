@@ -1,10 +1,7 @@
 // license:BSD-3-Clause
 // copyright-holders:Olivier Galibert
-#ifndef MAME_EMU_EMUMEM_HEDR_IPP
-#define MAME_EMU_EMUMEM_HEDR_IPP
 
-#pragma once
-
+#include "emu.h"
 #include "emumem_mud.h"
 #include "emumem_hea.h"
 #include "emumem_heu.h"
@@ -169,7 +166,7 @@ template<int HighBits, int Width, int AddrShift, endianness_t Endian> void handl
 	if(cur->is_dispatch())
 		cur->populate_nomirror(start, end, ostart, oend, handler);
 	else {
-		auto subdispatch = new handler_entry_read_dispatch<LowBits, Width, AddrShift, Endian>(this->m_space, m_u_ranges[entry], cur);
+		auto subdispatch = new handler_entry_read_dispatch<LowBits, Width, AddrShift, Endian>(handler_entry::m_space, m_u_ranges[entry], cur);
 		cur->unref();
 		m_u_dispatch[entry] = subdispatch;
 		subdispatch->populate_nomirror(start, end, ostart, oend, handler);
@@ -235,7 +232,7 @@ template<int HighBits, int Width, int AddrShift, endianness_t Endian> void handl
 	if(cur->is_dispatch())
 		cur->populate_mirror(start, end, ostart, oend, mirror, handler);
 	else {
-		auto subdispatch = new handler_entry_read_dispatch<LowBits, Width, AddrShift, Endian>(this->m_space, m_u_ranges[entry], cur);
+		auto subdispatch = new handler_entry_read_dispatch<LowBits, Width, AddrShift, Endian>(handler_entry::m_space, m_u_ranges[entry], cur);
 		cur->unref();
 		m_u_dispatch[entry] = subdispatch;
 		subdispatch->populate_mirror(start, end, ostart, oend, mirror, handler);
@@ -288,7 +285,7 @@ template<int HighBits, int Width, int AddrShift, endianness_t Endian> void handl
 		if(original)
 			replacement = new handler_entry_read_units<Width, AddrShift, Endian>(descriptor, ukey, static_cast<handler_entry_read_units<Width, AddrShift, Endian> *>(original));
 		else
-			replacement = new handler_entry_read_units<Width, AddrShift, Endian>(descriptor, ukey, this->m_space);
+			replacement = new handler_entry_read_units<Width, AddrShift, Endian>(descriptor, ukey, inh::m_space);
 
 		mappings.emplace_back(mapping{ original, replacement, ukey });
 	} else
@@ -303,7 +300,7 @@ template<int HighBits, int Width, int AddrShift, endianness_t Endian> void handl
 	if(cur->is_dispatch())
 		cur->populate_mismatched_nomirror(start, end, ostart, oend, descriptor, rkey, mappings);
 	else {
-		auto subdispatch = new handler_entry_read_dispatch<LowBits, Width, AddrShift, Endian>(this->m_space, m_u_ranges[entry], cur);
+		auto subdispatch = new handler_entry_read_dispatch<LowBits, Width, AddrShift, Endian>(handler_entry::m_space, m_u_ranges[entry], cur);
 		cur->unref();
 		m_u_dispatch[entry] = subdispatch;
 		subdispatch->populate_mismatched_nomirror(start, end, ostart, oend, descriptor, rkey, mappings);
@@ -375,7 +372,7 @@ template<int HighBits, int Width, int AddrShift, endianness_t Endian> void handl
 	if(cur->is_dispatch())
 		cur->populate_mismatched_mirror(start, end, ostart, oend, mirror, descriptor, mappings);
 	else {
-		auto subdispatch = new handler_entry_read_dispatch<LowBits, Width, AddrShift, Endian>(this->m_space, m_u_ranges[entry], cur);
+		auto subdispatch = new handler_entry_read_dispatch<LowBits, Width, AddrShift, Endian>(handler_entry::m_space, m_u_ranges[entry], cur);
 		cur->unref();
 		m_u_dispatch[entry] = subdispatch;
 		subdispatch->populate_mismatched_mirror(start, end, ostart, oend, mirror, descriptor, mappings);
@@ -434,7 +431,7 @@ template<int HighBits, int Width, int AddrShift, endianness_t Endian> void handl
 	if(cur->is_dispatch())
 		cur->populate_passthrough_nomirror(start, end, ostart, oend, handler, mappings);
 	else {
-		auto subdispatch = new handler_entry_read_dispatch<LowBits, Width, AddrShift, Endian>(this->m_space, m_u_ranges[entry], cur);
+		auto subdispatch = new handler_entry_read_dispatch<LowBits, Width, AddrShift, Endian>(handler_entry::m_space, m_u_ranges[entry], cur);
 		cur->unref();
 		m_u_dispatch[entry] = subdispatch;
 		subdispatch->populate_passthrough_nomirror(start, end, ostart, oend, handler, mappings);
@@ -490,7 +487,7 @@ template<int HighBits, int Width, int AddrShift, endianness_t Endian> void handl
 	if(cur->is_dispatch())
 		cur->populate_passthrough_mirror(start, end, ostart, oend, mirror, handler, mappings);
 	else {
-		auto subdispatch = new handler_entry_read_dispatch<LowBits, Width, AddrShift, Endian>(this->m_space, m_u_ranges[entry], cur);
+		auto subdispatch = new handler_entry_read_dispatch<LowBits, Width, AddrShift, Endian>(handler_entry::m_space, m_u_ranges[entry], cur);
 		cur->unref();
 		m_u_dispatch[entry] = subdispatch;
 		subdispatch->populate_passthrough_mirror(start, end, ostart, oend, mirror, handler, mappings);
@@ -632,5 +629,3 @@ template<int HighBits, int Width, int AddrShift, endianness_t Endian> handler_en
 
 	return new handler_entry_read_dispatch<HighBits, Width, AddrShift, Endian>(this);
 }
-
-#endif // MAME_EMU_EMUMEM_HEDR_IPP

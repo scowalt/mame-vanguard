@@ -22,7 +22,6 @@
 #include "luaengine.h"
 #include "mameopts.h"
 #include "pluginopts.h"
-#include "rendlay.h"
 #include "validity.h"
 
 #include "xmlfile.h"

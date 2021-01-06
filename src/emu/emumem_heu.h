@@ -1,9 +1,5 @@
 // license:BSD-3-Clause
 // copyright-holders:Olivier Galibert
-#ifndef MAME_EMU_EMUMEM_HEU_H
-#define MAME_EMU_EMUMEM_HEU_H
-
-#pragma once
 
 // handler_entry_read_units/handler_entry_write_units
 
@@ -13,6 +9,7 @@ template<int Width, int AddrShift, endianness_t Endian> class handler_entry_read
 {
 public:
 	using uX = typename emu::detail::handler_entry_size<Width>::uX;
+	using inh = handler_entry_read<Width, AddrShift, Endian>;
 
 	handler_entry_read_units(const memory_units_descriptor<Width, AddrShift, Endian> &descriptor, u8 ukey, address_space *space);
 	handler_entry_read_units(const memory_units_descriptor<Width, AddrShift, Endian> &descriptor, u8 ukey, const handler_entry_read_units *src);
@@ -55,6 +52,7 @@ template<int Width, int AddrShift, endianness_t Endian> class handler_entry_writ
 {
 public:
 	using uX = typename emu::detail::handler_entry_size<Width>::uX;
+	using inh = handler_entry_write<Width, AddrShift, Endian>;
 
 	handler_entry_write_units(const memory_units_descriptor<Width, AddrShift, Endian> &descriptor, u8 ukey, address_space *space);
 	handler_entry_write_units(const memory_units_descriptor<Width, AddrShift, Endian> &descriptor, u8 ukey, const handler_entry_write_units<Width, AddrShift, Endian> *src);
@@ -92,4 +90,3 @@ private:
 	static std::string m2r(uX mask);
 };
 
-#endif // MAME_EMU_EMUMEM_HEU_H

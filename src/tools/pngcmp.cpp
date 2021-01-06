@@ -13,7 +13,7 @@
 #include <cstring>
 #include <cctype>
 #include <cassert>
-#include "osdfile.h"
+#include "osdcore.h"
 #include "png.h"
 
 #include <new>

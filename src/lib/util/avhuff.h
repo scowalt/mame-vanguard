@@ -13,6 +13,8 @@
 
 #pragma once
 
+#include "osdcore.h"
+#include "coretmpl.h"
 #include "bitmap.h"
 #include "huffman.h"
 #include "flac.h"

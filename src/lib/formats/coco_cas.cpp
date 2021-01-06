@@ -35,7 +35,7 @@
 
 #include "coco_cas.h"
 
-#include <cassert>
+#include "emucore.h" // PAIR
 
 
 #define COCO_WAVESAMPLES_HEADER     (1.0)
@@ -44,6 +44,8 @@
 
 //some games load with only 5s, but most games need 15s
 #define ALICE32_WAVESAMPLES_HEADER  (15.0)
+
+static int synccount;
 
 const cassette_image::Modulation coco_cas_modulation =
 {
@@ -61,56 +63,59 @@ static cassette_image::error coco_cas_identify(cassette_image *cassette, cassett
 
 
 
-static bool get_cas_block(cassette_image *cassette, uint64_t &offset, uint8_t *block, int &block_len, int &synccount)
+static bool get_cas_block(cassette_image *cassette, uint64_t *offset, uint8_t *block, int *block_len)
 {
 	uint8_t block_length = 0;
 	uint8_t block_checksum = 0;
+	uint64_t current_offset;
+	uint64_t image_size;
+	PAIR p;
+	int i;
 	int state = 0;
 	int phase = 0;
 
 	synccount = 0;
-	uint16_t p = 0;
-	uint16_t image_size = cassette->image_size();
+	p.w.l = 0;
+	image_size = cassette->image_size();
+	current_offset = *offset;
 
-	for(uint64_t current_offset = offset; current_offset < image_size; )
+	while(current_offset < image_size)
 	{
-		assert((p & 0xFF00) == 0);
-		p |= cassette->image_read_byte(current_offset) << 8;
+		cassette->image_read(&p.b.h, current_offset, 1);
 		current_offset++;
 
-		for (int i = 0; i < 8; i++)
+		for (i = 0; i < 8; i++)
 		{
-			p >>= 1;
+			p.w.l >>= 1;
 
 			if (state == 0)
 			{
 				/* searching for a block */
-				if ((p & 0xFF) == 0x3C)
+				if (p.b.l == 0x3C)
 				{
 					/* found one! */
 					phase = i;
 					state++;
 				}
-				else if ((p & 0xFF) == 0x55)
+				else if (p.b.l == 0x55)
 				{
 					synccount++;
 				}
 			}
 			else if (i == phase)
 			{
-				uint8_t b = p & 0xFF;
-				*(block++) = b;
+				*(block++) = p.b.l;
 				switch(state) {
 				case 1:
 					/* found file type */
-					block_checksum = b;
+					block_checksum = p.b.l;
 					state++;
 					break;
 				case 2:
 					/* found file size */
-					block_length = b;
-					block_len = ((int) block_length) + 3;
-					block_checksum += b;
+					block_length = p.b.l;
+					*block_len = ((int) block_length) + 3;
+					block_checksum += p.b.l;
 					state++;
 					break;
 
@@ -119,12 +124,12 @@ static bool get_cas_block(cassette_image *cassette, uint64_t &offset, uint8_t *b
 					if (block_length)
 					{
 						block_length--;
-						block_checksum += b;
+						block_checksum += p.b.l;
 					}
 					else
 					{
 						/* end of block */
-						if (b != block_checksum)
+						if (p.b.l != block_checksum)
 						{
 							/* checksum failure */
 							return false;
@@ -132,7 +137,7 @@ static bool get_cas_block(cassette_image *cassette, uint64_t &offset, uint8_t *b
 						else
 						{
 							/* checksum success */
-							offset = current_offset;
+							*offset = current_offset;
 							return true;
 						}
 					}
@@ -158,7 +163,6 @@ static cassette_image::error cas_load(cassette_image *cassette, uint8_t silence)
 	double time_index = 0.0;
 	double time_displacement;
 	static const uint8_t magic_bytes[2] = { 0x55, 0x3C };
-	int synccount;
 
 #if 0
 	{
@@ -202,7 +206,7 @@ static cassette_image::error cas_load(cassette_image *cassette, uint8_t silence)
 	image_size = cassette->image_size();
 
 	/* try to find a block that we can untangle */
-	while(get_cas_block(cassette, offset, block, block_length, synccount))
+	while(get_cas_block(cassette, &offset, block, &block_length))
 	{
 		/* Forcing a silence before a filename block, improves the ability to load some */
 		/* copy protected Dragon games, e.g. Rommel's Revenge */

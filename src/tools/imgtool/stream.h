@@ -13,7 +13,6 @@
 
 #include "imgterrs.h"
 #include "corefile.h"
-#include "osdcomm.h"
 
 namespace imgtool
 {

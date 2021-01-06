@@ -24,8 +24,8 @@
  * 0x001c data */
 
 
-image_init_result general_cbm_loadsnap( device_image_interface &image, address_space &space, offs_t offset,
-	void (*cbm_sethiaddress)(address_space &space, uint16_t hiaddress) )
+image_init_result general_cbm_loadsnap( device_image_interface &image, const char *file_type, int snapshot_size,
+	address_space &space, offs_t offset, void (*cbm_sethiaddress)(address_space &space, uint16_t hiaddress) )
 {
 	char buffer[7];
 	std::vector<uint8_t> data;
@@ -33,13 +33,14 @@ image_init_result general_cbm_loadsnap( device_image_interface &image, address_s
 	uint16_t address = 0;
 	int i;
 
-	int snapshot_size = image.length();
+	if (!file_type)
+		goto error;
 
-	if (image.is_filetype("prg"))
+	if (!core_stricmp(file_type, "prg"))
 	{
 		/* prg files */
 	}
-	else if (image.is_filetype("p00"))
+	else if (!core_stricmp(file_type, "p00"))
 	{
 		/* p00 files */
 		if (image.fread( buffer, sizeof(buffer)) != sizeof(buffer))
@@ -49,7 +50,7 @@ image_init_result general_cbm_loadsnap( device_image_interface &image, address_s
 		image.fseek(26, SEEK_SET);
 		snapshot_size -= 26;
 	}
-	else if (image.is_filetype("t64"))
+	else if (!core_stricmp(file_type, "t64"))
 	{
 		/* t64 files - for GB64 Single T64s loading to x0801 - header is always the same size */
 		if (image.fread( buffer, sizeof(buffer)) != sizeof(buffer))
@@ -66,7 +67,7 @@ image_init_result general_cbm_loadsnap( device_image_interface &image, address_s
 
 	image.fread( &address, 2);
 	address = little_endianize_int16(address);
-	if (image.is_filetype("t64"))
+	if (!core_stricmp(file_type, "t64"))
 		address = 2049;
 	snapshot_size -= 2;
 

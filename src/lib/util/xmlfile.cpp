@@ -10,8 +10,6 @@
 
 #include "xmlfile.h"
 
-#include "osdcore.h"
-
 #include <expat.h>
 
 #include <algorithm>
@@ -605,19 +603,6 @@ data_node::attribute_node const *data_node::get_attribute(const char *attribute)
 
 
 //-------------------------------------------------
-//  get_attribute_string_ptr - get a pointer to
-//  the string value of the specified attribute;
-//  if not found, return = nullptr
-//-------------------------------------------------
-
-std::string const *data_node::get_attribute_string_ptr(const char *attribute) const
-{
-	attribute_node const *attr = get_attribute(attribute);
-	return attr ? &attr->value : nullptr;
-}
-
-
-//-------------------------------------------------
 //  get_attribute_string - get the string
 //  value of the specified attribute; if not
 //  found, return = the provided default
@@ -638,10 +623,9 @@ const char *data_node::get_attribute_string(const char *attribute, const char *d
 
 long long data_node::get_attribute_int(const char *attribute, long long defvalue) const
 {
-	attribute_node const *attr = get_attribute(attribute);
-	if (!attr)
+	char const *const string = get_attribute_string(attribute, nullptr);
+	if (!string)
 		return defvalue;
-	std::string const &string = attr->value;
 
 	std::istringstream stream;
 	stream.imbue(std::locale::classic());
@@ -682,16 +666,14 @@ long long data_node::get_attribute_int(const char *attribute, long long defvalue
 
 data_node::int_format data_node::get_attribute_int_format(const char *attribute) const
 {
-	attribute_node const *attr = get_attribute(attribute);
-	if (!attr)
+	char const *const string = get_attribute_string(attribute, nullptr);
+	if (!string)
 		return int_format::DECIMAL;
-	std::string const &string = attr->value;
-
-	if (string[0] == '$')
+	else if (string[0] == '$')
 		return int_format::HEX_DOLLAR;
 	else if (string[0] == '0' && string[1] == 'x')
 		return int_format::HEX_C;
-	else if (string[0] == '#')
+	if (string[0] == '#')
 		return int_format::DECIMAL_HASH;
 	else
 		return int_format::DECIMAL;
@@ -706,11 +688,11 @@ data_node::int_format data_node::get_attribute_int_format(const char *attribute)
 
 float data_node::get_attribute_float(const char *attribute, float defvalue) const
 {
-	attribute_node const *attr = get_attribute(attribute);
-	if (!attr)
+	char const *const string = get_attribute_string(attribute, nullptr);
+	if (!string)
 		return defvalue;
 
-	std::istringstream stream(attr->value);
+	std::istringstream stream(string);
 	stream.imbue(std::locale::classic());
 	float result;
 	return (stream >> result) ? result : defvalue;

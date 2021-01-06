@@ -78,12 +78,13 @@ Sonic Hedgehog 2           171-6215A   837-6963-62       610-0239-62         MPR
 #include "emu.h"
 #include "cpu/z80/z80.h"
 #include "machine/cxd1095.h"
+#include "rendlay.h"
 
 #include "includes/megadriv.h"
 #include "bus/generic/slot.h"
 #include "bus/generic/carts.h"
 
-#include "layout/generic.h"
+#include "softlist.h"
 
 #define MASTER_CLOCK        53693100
 
@@ -748,12 +749,12 @@ image_init_result mtech_state::load_cart(device_image_interface &image, generic_
 		return image_init_result::FAIL;
 	else
 	{
-		if (!strcmp("genesis", pcb_name))
+		if (!core_stricmp("genesis", pcb_name))
 		{
 			osd_printf_debug("cart%d is genesis\n", gameno + 1);
 			m_cart_is_genesis[gameno] = 1;
 		}
-		else if (!strcmp("sms", pcb_name))
+		else if (!core_stricmp("sms", pcb_name))
 		{
 			osd_printf_debug("cart%d is sms\n", gameno + 1);
 			m_cart_is_genesis[gameno] = 0;

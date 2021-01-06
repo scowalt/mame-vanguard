@@ -14,7 +14,10 @@
 #pragma once
 
 #include "osdcore.h"
+#include "coretmpl.h"
+#include "corestr.h"
 #include <string>
+#include "bitmap.h"
 #include "corefile.h"
 #include "hashing.h"
 #include "chdcodec.h"

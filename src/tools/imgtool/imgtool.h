@@ -21,7 +21,6 @@
 #include "opresolv.h"
 #include "library.h"
 #include "filter.h"
-#include "osdcomm.h"
 
 /* ----------------------------------------------------------------------- */
 

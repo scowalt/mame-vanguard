@@ -19,7 +19,6 @@
 #include <cassert>
 
 #include "corestr.h"
-#include "osdcomm.h"
 
 #include "formats/mfi_dsk.h"
 #include "formats/dfi_dsk.h"

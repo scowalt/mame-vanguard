@@ -18,6 +18,7 @@
 #include "machine/nvram.h"
 #include "sound/dac.h"
 #include "sound/ym2151.h"
+#include "rendlay.h"
 #include "speaker.h"
 
 #include "tceptor2.lh"

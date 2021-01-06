@@ -13,6 +13,7 @@
 
 #pragma once
 
+#include "osdcore.h"
 #include "jedparse.h"
 
 

@@ -17,7 +17,6 @@
 
 #include <cassert>
 #include <cstdio>
-#include <cstring>
 
 // standard windows headers
 #include <windows.h>

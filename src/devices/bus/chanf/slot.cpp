@@ -7,6 +7,7 @@
 
  ***********************************************************************************************************/
 
+
 #include "emu.h"
 #include "slot.h"
 
@@ -123,7 +124,7 @@ static int chanf_get_pcb_id(const char *slot)
 {
 	for (auto & elem : slot_list)
 	{
-		if (!strcmp(elem.slot_option, slot))
+		if (!core_stricmp(elem.slot_option, slot))
 			return elem.pcb_id;
 	}
 
