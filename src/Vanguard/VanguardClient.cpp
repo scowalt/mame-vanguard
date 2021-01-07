@@ -25,7 +25,6 @@
 //#include "control.h"
 #include <msclr/marshal_cppstd.h>
 //#include <src/hardware/vga_memory.cpp>
-
 #include "UnmanagedWrapper.h"
 //#include <src/hardware/mame/emu.h>
 #include "VanguardSettingsWrapper.h"
@@ -133,7 +132,7 @@ static PartialSpec^
 getDefaultPartial() {
     PartialSpec^ partial = gcnew PartialSpec("VanguardSpec");
     partial->Set(VSPEC::NAME, "MAME");
-    partial->Set(VSPEC::SUPPORTS_RENDERING, false);
+    partial->Set(VSPEC::SUPPORTS_RENDERING, true);
     partial->Set(VSPEC::SUPPORTS_CONFIG_MANAGEMENT, false);
     partial->Set(VSPEC::SUPPORTS_CONFIG_HANDOFF, true);
     partial->Set(VSPEC::SUPPORTS_KILLSWITCH, true);
@@ -483,7 +482,7 @@ static cli::array<MemoryDomainProxy^>^ GetInterfaces() {
 		{
 			if (md[i]->MemoryClass.find("Region") != std::string::npos)
 			{
-				BlacklistDomains[i] = md[i]->ToString();
+				BlacklistDomains[i] = md[i]->ToString() + "_RO";
 			}
 			printf("Memory Domain Class Name: %s\n", Helpers::systemStringToUtf8String(md[i]->ToString()).c_str());
 			interfaces[i] = (gcnew MemoryDomainProxy(md[i]));
@@ -682,7 +681,9 @@ enum COMMANDS {
     REMOTE_EVENT_CLOSEEMULATOR,
     REMOTE_ALLSPECSSENT,
     REMOTE_POSTCORRUPTACTION,
-    REMOTE_RESUMEEMULATION,
+	REMOTE_RESUMEEMULATION,
+	REMOTE_RENDERSTART,
+	REMOTE_RENDERSTOP,
     UNKNOWN
 };
 
@@ -715,8 +716,12 @@ inline COMMANDS CheckCommand(String^ inString) {
         return REMOTE_POSTCORRUPTACTION;
     else if(inString == RTCV::NetCore::Commands::Remote::ResumeEmulation)
         return REMOTE_RESUMEEMULATION;
+	else if (inString == RTCV::NetCore::Commands::Remote::RenderStart)
+		return REMOTE_RENDERSTART;
+	else if (inString == RTCV::NetCore::Commands::Remote::RenderStop)
+		return REMOTE_RENDERSTOP;
 
-    return UNKNOWN;
+    else return UNKNOWN;
 }
 
 /* IMPLEMENT YOUR COMMANDS HERE */
@@ -1094,7 +1099,43 @@ void VanguardClient::OnMessageReceived(Object^ sender, NetCoreEventArgs^ e) {
         UnmanagedWrapper::VANGUARD_RESUMEEMULATION();
     }
                                break;
-
+	case REMOTE_RENDERSTART:
+	{
+		String^ Key = "RENDER_" + (RtcCore::GetRandomKey());
+		switch (Render::RenderType)
+		{
+		case Render::RENDERTYPE::AVI:
+		{
+			ManagedWrapper::RenderStartAVI(Helpers::systemStringToUtf8String(IO::Path::Combine(RtcCore::RtcDir, "RENDEROUTPUT", Key + ".avi")));
+		} break;
+		case Render::RENDERTYPE::WAV:
+		{
+			ManagedWrapper::RenderStartWAV(Helpers::systemStringToUtf8String(IO::Path::Combine(RtcCore::RtcDir, "RENDEROUTPUT", Key + ".wav")));
+		} break;
+		case Render::RENDERTYPE::MPEG: //instead of mpeg, make an apng
+		{
+			ManagedWrapper::RenderStartMNG(Helpers::systemStringToUtf8String(IO::Path::Combine(RtcCore::RtcDir, "RENDEROUTPUT", Key + ".png")));
+		} break;
+		}
+	} break;
+	case REMOTE_RENDERSTOP:
+	{
+		switch (Render::RenderType)
+		{
+		case Render::RENDERTYPE::AVI:
+		{
+			ManagedWrapper::RenderStopAVI();
+		} break;
+		case Render::RENDERTYPE::WAV:
+		{
+			ManagedWrapper::RenderStopWAV();
+		} break;
+		case Render::RENDERTYPE::MPEG: //instead of mpeg, make an apng
+		{
+			ManagedWrapper::RenderStopMNG();
+		} break;
+		}
+	} break;
     case REMOTE_EVENT_EMU_MAINFORM_CLOSE:
     case REMOTE_EVENT_CLOSEEMULATOR: {
         //Don't allow re-entry on this
@@ -1106,7 +1147,7 @@ void VanguardClient::OnMessageReceived(Object^ sender, NetCoreEventArgs^ e) {
         Monitor::Exit(VanguardClient::GenericLockObject);
     }
                                    break;
-
+	
     default:
         break;
     }

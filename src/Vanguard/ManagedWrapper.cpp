@@ -4,7 +4,9 @@
 #include "ManagedWrapper.h"
 #include "../src/frontend/mame/mame.h"
 #include "UnmanagedWrapper.h"
+#include "screen.h"
 #include "debug/dvmemory.h"
+#include <modules/render/aviwrite.h>
 unsigned char ManagedWrapper::PEEK(std::string memclass, std::string region, long long addr, int indexnum, std::string devicename)
 {
 	if (memclass == "Region")
@@ -362,4 +364,44 @@ void ManagedWrapper::Resume(bool threadon)
 	{
 		mame_machine_manager::instance()->machine()->resume();
 	}
+}
+
+void ManagedWrapper::RenderStartAVI(std::string filename)
+{
+	//screen_device* const screen = screen_device_enumerator(mame_machine_manager::instance()->machine()->root_device()).first();
+	mame_machine_manager::instance()->machine()->video().begin_recording(filename.c_str(), movie_recording::format::AVI);
+}
+
+void ManagedWrapper::RenderStopAVI()
+{
+	//screen_device* const screen = screen_device_enumerator(mame_machine_manager::instance()->machine()->root_device()).first();
+	mame_machine_manager::instance()->machine()->video().end_recording();
+}
+void ManagedWrapper::RenderStartMNG(std::string filename)
+{
+	//screen_device* const screen = screen_device_enumerator(mame_machine_manager::instance()->machine()->root_device()).first();
+	mame_machine_manager::instance()->machine()->video().begin_recording(filename.c_str(), movie_recording::format::MNG);
+}
+
+void ManagedWrapper::RenderStopMNG()
+{
+	//screen_device* const screen = screen_device_enumerator(mame_machine_manager::instance()->machine()->root_device()).first();
+	mame_machine_manager::instance()->machine()->video().end_recording();
+}
+
+void ManagedWrapper::RenderIMAGE(std::string filename)
+{
+	emu_file file(filename.c_str(), OPEN_FLAG_WRITE | OPEN_FLAG_CREATE | OPEN_FLAG_CREATE_PATHS);
+	screen_device* const screen = screen_device_enumerator(mame_machine_manager::instance()->machine()->root_device()).first();
+	mame_machine_manager::instance()->machine()->video().save_snapshot(screen, file);
+}
+
+void ManagedWrapper::RenderStartWAV(std::string filename)
+{
+	mame_machine_manager::instance()->machine()->sound().start_recording(filename);
+}
+
+void ManagedWrapper::RenderStopWAV()
+{
+	mame_machine_manager::instance()->machine()->sound().stop_recording();
 }
