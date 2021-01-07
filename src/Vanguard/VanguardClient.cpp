@@ -358,10 +358,10 @@ public:
 	property std::string MemoryClass {virtual std::string get(); }
 	virtual String^ ToString() override
 	{
-		if (MemoryClass == "Space") return (Helpers::utf8StringToSystemString(ManagedWrapper::GetDeviceName(domainNumber)) /*+ " " + Helpers::utf8StringToSystemString(MemoryClass)*/ + " \'" + Name + "\'");
+		if (MemoryClass == "Space") return (Helpers::utf8StringToSystemString(ManagedWrapper::GetDeviceName(domainNumber)) + ":" + Helpers::utf8StringToSystemString(MemoryClass) + ":" + Name + "");
 		else if (MemoryClass == "Region")
-			return (Helpers::utf8StringToSystemString(MemoryClass) + " \'" + Name + "\'_RO");
-		else return (Helpers::utf8StringToSystemString(MemoryClass) +" \'"+ Name + "\'");
+			return (Helpers::utf8StringToSystemString(MemoryClass) + ":" + Name + "_RO");
+		else return (Helpers::utf8StringToSystemString(MemoryClass)+":"+ Name + "");
 	}
 
 	
