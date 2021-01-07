@@ -18,4 +18,12 @@ public:
 	static int GetTotalNumOfRegionsAndSharesMinusMainCPUSpaces();
 	static std::string GetGameName();
 	static void Resume(bool threadon);
+	static void RenderStartAVI(std::string filename);
+	static void RenderStopAVI();
+	static void RenderStartMNG(std::string filename);
+	static void RenderStopMNG();
+	static void RenderIMAGE(std::string filename);
+	static void RenderStartWAV(std::string filename);
+	static void RenderStopWAV();
+
 };
