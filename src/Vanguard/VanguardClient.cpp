@@ -148,7 +148,7 @@ getDefaultPartial() {
     partial->Set(VSPEC::OPENROMFILENAME, "IGNORE");
     partial->Set(VSPEC::OVERRIDE_DEFAULTMAXINTENSITY, 100000);
     partial->Set(VSPEC::SYNCSETTINGS, String::Empty);
-	partial->Set(VSPEC::MEMORYDOMAINS_BLACKLISTEDDOMAINS, gcnew cli::array<String^>{"_RO"});
+	partial->Set(VSPEC::MEMORYDOMAINS_BLACKLISTEDDOMAINS, gcnew cli::array<String^>{});
     partial->Set(VSPEC::SYSTEM, String::Empty);
     partial->Set(VSPEC::LOADSTATE_USES_CALLBACKS, true);
     partial->Set(VSPEC::EMUDIR, VanguardClient::emuDir);
@@ -482,7 +482,7 @@ static cli::array<MemoryDomainProxy^>^ GetInterfaces() {
 		{
 			if (md[i]->MemoryClass.find("Region") != std::string::npos)
 			{
-				BlacklistDomains[i] = md[i]->ToString() + "_RO";
+				BlacklistDomains[i] = md[i]->Name;
 			}
 			printf("Memory Domain Class Name: %s\n", Helpers::systemStringToUtf8String(md[i]->ToString()).c_str());
 			interfaces[i] = (gcnew MemoryDomainProxy(md[i]));
@@ -499,7 +499,7 @@ static bool RefreshDomains(bool updateSpecs = true) {
 	
     cli::array<MemoryDomainProxy^>^ newInterfaces = GetInterfaces();
 	
-    // Bruteforce it since domains can c`   hange inconsistently in some configs and we keep code
+    // Bruteforce it since domains can change inconsistently in some configs and we keep code
     // consistent between implementations
     bool domainsChanged = false;
     if(oldInterfaces == nullptr)
@@ -792,7 +792,7 @@ bool VanguardClient::SaveState(String^ filename, bool wait) {
     //    file->Directory->Create();
     ////control->PrintConfig((Helpers::systemStringToUtf8String((filename)+".conf")).c_str());
     ////LOG_MSG("Savestate filename is %s", VanguardClient::fileToCopy);
-    Thread::Sleep(2000);
+    //Thread::Sleep(2000);
     //IO::File::Copy(VanguardClient::fileToCopy, filename);
     VanguardClientUnmanaged::SAVE_STATE_DONE();
     return true;

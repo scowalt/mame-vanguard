@@ -158,10 +158,10 @@ void UnmanagedWrapper::LOAD_STATE_DONE() {
 //}
 
 void UnmanagedWrapper::VANGUARD_PAUSEEMULATION() {
-    ManagedWrapper::Resume(false);
+    //ManagedWrapper::Resume(false);
 }
 void UnmanagedWrapper::VANGUARD_RESUMEEMULATION() {
-	ManagedWrapper::Resume(true);
+	//ManagedWrapper::Resume(true);
 }
 
 void UnmanagedWrapper::VANGUARD_STOPGAME() {

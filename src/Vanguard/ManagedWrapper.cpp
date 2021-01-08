@@ -76,13 +76,7 @@ long long ManagedWrapper::GetMemorySize(std::string memclass, std::string region
 		int spacenum = indexnum;
 		if (mame_machine_manager::instance()->machine()->device(devicename.c_str())->memory().has_space(spacenum))
 		{
-			//int returnValue = ((((mame_machine_manager::instance()->machine()->device(devicename.c_str())->memory().space(spacenum).data_width() / 24) * (mame_machine_manager::instance()->machine()->device(devicename.c_str())->memory().space(spacenum).addr_width()))) * 1024 * 1024); //Can't get the device memory map's actual size afaik so I'll just pretend its size is its bytewidth times its address width
-			//printf("%s size is %i (0x%x)\n", region.c_str(), returnValue, returnValue);
-			//if (returnValue < 1)
-			//{
-			//	return 1;
-			//}
-			//else return returnValue;
+			
 			address_space& space = mame_machine_manager::instance()->machine()->device(devicename.c_str())->memory().space(spacenum);
 			return true ? space.addrmask() + 1 : space.logaddrmask() + 1;
 		}
@@ -289,9 +283,7 @@ std::string ManagedWrapper::GetDeviceName(int indexnum)
 
 void ManagedWrapper::SaveSaveState(std::string filename)
 {
-	if (mame_machine_manager::instance()->machine()->system().name != NULL)
-		mame_machine_manager::instance()->machine()->immediate_save(filename.c_str());
-	else return;
+	mame_machine_manager::instance()->machine()->schedule_save(filename.c_str());
 }
 
 void ManagedWrapper::LoadSaveState(std::string filename)
