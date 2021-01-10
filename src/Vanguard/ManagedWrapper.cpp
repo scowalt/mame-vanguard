@@ -31,7 +31,17 @@ unsigned char ManagedWrapper::PEEK(std::string memclass, std::string region, lon
 	{
 		int spacenum = indexnum;
 		if (mame_machine_manager::instance()->machine()->device(devicename.c_str())->memory().has_space(spacenum))
-			return mame_machine_manager::instance()->machine()->device(devicename.c_str())->memory().space(spacenum).read_byte(addr);
+		{
+			address_space& space = mame_machine_manager::instance()->machine()->device(devicename.c_str())->memory().space(spacenum);
+			offs_t address = static_cast<u32>(addr) & space.addrmask();
+			u8 data = 0;
+			address = address << (abs)(space.addr_shift());
+			if (!space.device().memory().translate(space.spacenum(), TRANSLATE_READ_DEBUG, address))
+				return 0;
+			data = space.read_byte(address);
+			//printf("value at address 0x%X is %X\n", address, data);
+			return data;
+		}
 		else return NULL;
 	}
 	else return NULL;
@@ -54,7 +64,14 @@ void ManagedWrapper::POKE(std::string memclass, std::string region, long long ad
 	{
 		int spacenum = indexnum;
 		if (mame_machine_manager::instance()->machine()->device(devicename.c_str())->memory().has_space(spacenum))
-			mame_machine_manager::instance()->machine()->device(devicename.c_str())->memory().space(spacenum).write_byte(addr, val);
+		{
+			address_space& space = mame_machine_manager::instance()->machine()->device(devicename.c_str())->memory().space(spacenum);
+			offs_t address = static_cast<u32>(addr) & space.addrmask();
+			address = address << (abs)(space.addr_shift());
+			if (!space.device().memory().translate(space.spacenum(), TRANSLATE_READ_DEBUG, address))
+				return;
+			space.write_byte(address, val);
+		}
 	}
 	else return;
 }
@@ -78,7 +95,12 @@ long long ManagedWrapper::GetMemorySize(std::string memclass, std::string region
 		{
 			
 			address_space& space = mame_machine_manager::instance()->machine()->device(devicename.c_str())->memory().space(spacenum);
-			return true ? space.addrmask() + 1 : space.logaddrmask() + 1;
+			unsigned long long maxaddr = (u64)(space.addrmask()) + 1;
+			if (maxaddr < 8)
+			{
+				maxaddr = 0x100000000;
+			}
+			return maxaddr;
 		}
 		else return 0;
 	}

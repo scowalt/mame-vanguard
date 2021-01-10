@@ -33,8 +33,7 @@ public:
 	debug_view_memory_source(std::string &&name, void *base, int element_size, int num_elements, int num_blocks, int block_stride);
 
 	address_space *space() const { return m_space; }
-
-private:
+	//RTC_Hijack: Make these public
 	address_space           *m_space;           // address space we reference (if any)
 	device_memory_interface *m_memintf;         // pointer to the memory interface of the device
 	void *                  m_base;             // pointer to memory base
