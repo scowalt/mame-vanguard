@@ -40,6 +40,7 @@
 #include <memory>
 #include <mutex>
 #include <thread>
+#include "../../../Vanguard/VanguardClientInitializer.h"
 
 
 extern const char UI_VERSION_TAG[];

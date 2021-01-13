@@ -25,6 +25,9 @@
 //#define VERBOSE 1
 #define LOG_OUTPUT_FUNC osd_printf_verbose
 #include "logmacro.h"
+#include "../../Vanguard/VanguardClient.h"
+#include "../../Vanguard/VanguardClientInitializer.h"
+#include "../../Vanguard/ManagedWrapper.h"
 
 
 namespace {
@@ -192,6 +195,7 @@ media_auditor::summary media_auditor::audit_media(const char *validation)
 		game_driver const &parent(m_enumerator.driver(drvindex));
 		LOG("Checking parent %s for ROM files\n", parent.type.shortname());
 		std::vector<rom_entry> const roms(rom_build_entries(parent.rom));
+
 		for (rom_entry const *region = rom_first_region(&roms.front()); region; region = rom_next_region(region))
 		{
 			for (rom_entry const *rom = rom_first_file(region); rom; rom = rom_next_file(rom))

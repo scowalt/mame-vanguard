@@ -37,6 +37,8 @@
 #include <algorithm>
 #include <new>
 #include <cctype>
+#include "../../Vanguard/VanguardClient.h"
+#include "../../Vanguard/ManagedWrapper.h"
 
 
 //**************************************************************************
@@ -262,7 +264,7 @@ void cli_frontend::start_execution(mame_machine_manager *manager, const std::vec
 	const game_driver *system = mame_options::system(m_options);
 	if (system == nullptr && *(m_options.system_name()) != 0)
 		throw emu_fatalerror(EMU_ERR_NO_SUCH_SYSTEM, "Unknown system '%s'", m_options.system_name());
-
+	
 	// otherwise just run the game
 	m_result = manager->execute();
 }

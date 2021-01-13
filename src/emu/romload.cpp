@@ -349,6 +349,8 @@ chd_file *rom_load_manager::get_disk_handle(const char *region)
 int rom_load_manager::set_disk_handle(const char *region, const char *fullpath)
 {
 	auto chd = std::make_unique<open_chd>(region);
+
+	VanguardClientUnmanaged::LOAD_GAME_START(fullpath, nullptr);
 	auto err = chd->orig_chd().open(fullpath);
 	if (err == CHDERR_NONE)
 		m_chd_list.push_back(std::move(chd));
@@ -666,7 +668,7 @@ std::unique_ptr<emu_file> rom_load_manager::open_rom_file(std::initializer_list<
 	// update counters
 	m_romsloaded++;
 	m_romsloadedsize += romsize;
-
+	printf("ROM name is %s\n", romp->name().c_str());
 	// return the result
 	if (osd_file::error::NONE != filerr)
 		return nullptr;
@@ -1476,8 +1478,6 @@ rom_load_manager::rom_load_manager(running_machine &machine)
 
 	// process the ROM entries we were passed
 	process_region_list();
-	VanguardClientUnmanaged::LOAD_GAME_DONE();
-
 	// display the results and exit
 	display_rom_load_results(false);
 }

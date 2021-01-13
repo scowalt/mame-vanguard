@@ -25,5 +25,13 @@ public:
 	static void RenderIMAGE(std::string filename);
 	static void RenderStartWAV(std::string filename);
 	static void RenderStopWAV();
-
+	static void LOADGAME(std::string filename, std::string gamename);
+	static void CATCHGAME(std::string rom);
+	static bool IsZipARom(std::string filename);
+	static std::string GETROMFILENAME(int indexnum);
+	static void SETROMFILENAME(std::string stringtoset);
+	static void LOADROM(std::string rompath, std::string shortgamename);
+	static void SAVEROM(std::string rompath);
+	static int COLLECTTOTALROMS();
+	static std::string GetShortGameName();
 };

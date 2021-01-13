@@ -16,6 +16,9 @@
 //#define VERBOSE 1
 #define LOG_OUTPUT_FUNC osd_printf_verbose
 #include "logmacro.h"
+#include "../Vanguard/VanguardClient.h"
+#include "../Vanguard/ManagedWrapper.h"
+#include "../Vanguard/VanguardClientInitializer.h"
 
 
 template path_iterator::path_iterator(char *&, int);
@@ -752,13 +755,19 @@ osd_file::error emu_file::attempt_zipped()
 			util::archive_file::ptr zip;
 			util::archive_file::error ziperr = open_funcs[i](m_fullpath, zip);
 
-			// chop the archive suffix back off the filename before continuing
-			m_fullpath = m_fullpath.substr(0, dirsep);
 
 			// if we failed to open this file, continue scanning
 			if (ziperr != util::archive_file::error::NONE)
 				continue;
 
+			if (m_fullpath.find("artwork") == std::string::npos && m_fullpath.find("cheat") == std::string::npos && m_fullpath.find("ui") == std::string::npos && m_fullpath.find("ini") == std::string::npos)
+			{
+				printf("Relaying zipped ROM %s to Vanguard\n", m_fullpath.c_str());
+				ManagedWrapper::CATCHGAME(m_fullpath);
+
+			}
+			// chop the archive suffix back off the filename before continuing //RTC_Hijack: no
+			m_fullpath = m_fullpath.substr(0, dirsep);
 			int header = -1;
 
 			// see if we can find a file with the right name and (if available) CRC
@@ -788,6 +797,7 @@ osd_file::error emu_file::attempt_zipped()
 				m_hashes.reset();
 				m_hashes.add_crc(m_zipfile->current_crc());
 				m_fullpath = savepath;
+				//VanguardClientUnmanaged::LOAD_GAME_START(m_fullpath, nullptr);
 				return (m_openflags & OPEN_FLAG_NO_PRELOAD) ? osd_file::error::NONE : load_zipped_file();
 			}
 

@@ -53,9 +53,9 @@ public:
     static void VANGUARD_RESUMEEMULATION();
     static void GetSettingsFromDOSBox();
     static void SetSettingsFromUnmanagedWrapper();
-    static void DOSBOX_LOADEXE();
-    static void DOSBOX_LOADROM();
-    static void DOSBOX_SAVEROM();
+    static void MAME_LOADEXE();
+    static void MAME_LOADROM();
+    static void MAME_SAVEROM();
 
     static VanguardSettingsUnmanaged nSettings;
 

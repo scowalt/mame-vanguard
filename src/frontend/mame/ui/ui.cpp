@@ -42,6 +42,7 @@
 
 #include <chrono>
 #include <type_traits>
+#include "../../../Vanguard/VanguardClientInitializer.h"
 
 
 /***************************************************************************
@@ -561,7 +562,6 @@ void mame_ui_manager::display_startup_screens(bool first_time)
 		set_handler(ui_callback_type::GENERAL, std::bind(&mame_ui_manager::handler_ingame, this, _1));
 		machine().video().frame_update();
 	}
-
 	// update last launch time if this was a run that was eligible for emulation warnings
 	if (m_has_warnings && show_warnings && !machine().scheduled_event_pending())
 		m_last_launch_time = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());

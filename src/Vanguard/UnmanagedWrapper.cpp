@@ -198,14 +198,14 @@ void UnmanagedWrapper::SetSettingsFromUnmanagedWrapper() {
 //Vanguard menu hooks
 
 
-//void UnmanagedWrapper::DOSBOX_LOADEXE() {
-//    VanguardClientUnmanaged::DOSBOX_LOADEXE();
-//}
-//void UnmanagedWrapper::DOSBOX_LOADROM() {
-//    VanguardClientUnmanaged::DOSBOX_LOADROM();
-//}
-//void UnmanagedWrapper::DOSBOX_SAVEROM() {
-//    VanguardClientUnmanaged::DOSBOX_SAVEROM();
-//}
+void UnmanagedWrapper::MAME_LOADEXE() {
+    //VanguardClientUnmanaged::MAME_LOADEXE();
+}
+void UnmanagedWrapper::MAME_LOADROM() {
+   // VanguardClientUnmanaged::MAME_LOADROM();
+}
+void UnmanagedWrapper::MAME_SAVEROM() {
+    //VanguardClientUnmanaged::MAME_SAVEROM();
+}
 
 

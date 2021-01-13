@@ -39,6 +39,7 @@
 #using < system.dll>
 #using < system.windows.forms.dll>
 #using <system.collections.dll>
+#using <System.IO.Compression.FileSystem.dll>
 
 //If we provide just the dll name and then compile with /AI it works, but intellisense doesn't pick up on it, so we use a full relative path
 #using <../../../../../../sourcecode/RTCV/Build/NetCore.dll> //it's like this because I accidentally placed the MAME source code in the root of the drive where I store my sourcecode and I'm too lazy to fix that
@@ -69,6 +70,7 @@ using namespace Diagnostics;
 //static void EmuThreadExecute(Action^ callback);
 //static void EmuThreadExecute(IntPtr ptr);
 static int currentMD = 0;
+int loadromcounter = 1;
 // Define this in here as it's managed and weird stuff happens if it's in a header
 public
 ref class VanguardClient {
@@ -85,7 +87,7 @@ public:
     static void RestartClient();
     static void StopClient();
 
-    static void LoadRom(String^ filename);
+    static void LoadRom(String^ filename, std::string gamename);
     static bool LoadState(std::string filename);
     static bool SaveState(String^ filename, bool wait);
 
@@ -145,7 +147,7 @@ getDefaultPartial() {
     partial->Set(VSPEC::SYSTEM, String::Empty);
     partial->Set(VSPEC::GAMENAME, String::Empty);
     partial->Set(VSPEC::SYSTEMPREFIX, String::Empty);
-    partial->Set(VSPEC::OPENROMFILENAME, "IGNORE");
+    partial->Set(VSPEC::OPENROMFILENAME, "");
     partial->Set(VSPEC::OVERRIDE_DEFAULTMAXINTENSITY, 100000);
     partial->Set(VSPEC::SYNCSETTINGS, String::Empty);
 	partial->Set(VSPEC::MEMORYDOMAINS_BLACKLISTEDDOMAINS, gcnew cli::array<String^>{});
@@ -230,7 +232,7 @@ static Assembly^ CurrentDomain_AssemblyResolve(Object^ sender, ResolveEventArgs^
 
 // Create our VanguardClient
 void VanguardClientInitializer::Initialize() {
-	VanguardClientUnmanaged::LOAD_GAME_DONE();
+	//VanguardClientUnmanaged::LOAD_GAME_DONE();
 	if (VanguardInitializationComplete == true) return;
     // This has to be in its own method where no other dlls are used so the JIT can compile it
     AppDomain::CurrentDomain->AssemblyResolve +=
@@ -556,18 +558,19 @@ void VanguardClientUnmanaged::CORE_STEP() {
 }
 
 // This is on the main thread not the emu thread
-void VanguardClientUnmanaged::LOAD_GAME_START(std::string romPath) {
-    RefreshDomains();
+void VanguardClientUnmanaged::LOAD_GAME_START(std::string romPath, std::string fullgamename) {
     if(!VanguardClient::enableRTC)
         return;
-
+	if (!VanguardInitializationComplete)
+		return;
+	//RefreshDomains();
     //StepActions::ClearStepBlastUnits();	
-    RTCV::NetCore::LocalNetCoreRouter::Route(Endpoints::CorruptCore, NetCore::Commands::Remote::ClearStepBlastUnits, nullptr, false);
+    LocalNetCoreRouter::Route(Endpoints::CorruptCore, Commands::Remote::ClearStepBlastUnits, false);
 
     RtcClock::ResetCount();
 
-    //String^ gameName = Helpers::utf8StringToSystemString(romPath);
-    //AllSpec::VanguardSpec->Update(VSPEC::OPENROMFILENAME, gameName, true, true);
+	VanguardClientUnmanaged::MAME_SAVEROM(romPath);
+	VanguardClientUnmanaged::LOAD_GAME_DONE();
 }
 
 
@@ -579,7 +582,7 @@ void VanguardClientUnmanaged::LOAD_GAME_DONE() {
 	if (VanguardInitializationComplete == false)
 		return;
     //RTCV::CorruptCore::StepActions::ClearStepBlastUnits();
-    RTCV::NetCore::LocalNetCoreRouter::Route(Endpoints::CorruptCore, NetCore::Commands::Remote::ClearStepBlastUnits, nullptr, false);
+    LocalNetCoreRouter::Route(Endpoints::CorruptCore, Commands::Remote::ClearStepBlastUnits, false);
     //This should make blast units go away when a program changes
     //Side effect: for games that use multiple exes, like Ultima 4, the blast units would go away when the game's exe switches to another one.
     if(!VanguardClient::enableRTC)
@@ -649,8 +652,8 @@ void VanguardClientUnmanaged::GAME_CLOSED() {
     if(!VanguardClient::enableRTC)
         return;
 	currentMD = 0;
+	RefreshDomains();
     AllSpec::VanguardSpec->Update(VSPEC::OPENROMFILENAME, String::Empty, true, true);
-    RefreshDomains();
     RtcCore::InvokeGameClosed(true);
 }
 
@@ -725,7 +728,7 @@ inline COMMANDS CheckCommand(String^ inString) {
 }
 
 /* IMPLEMENT YOUR COMMANDS HERE */
-void VanguardClient::LoadRom(String^ filename) {
+void VanguardClient::LoadRom(String^ filename, std::string gamename) {
     String^ currentOpenRom = "";
     if(AllSpec::VanguardSpec->Get<String^>(VSPEC::OPENROMFILENAME) != "")
         currentOpenRom = AllSpec::VanguardSpec->Get<String^>(VSPEC::OPENROMFILENAME);
@@ -737,7 +740,8 @@ void VanguardClient::LoadRom(String^ filename) {
         AllSpec::VanguardSpec->Update(partial, true, false);
         std::string path = Helpers::systemStringToUtf8String(filename);
         loading = true;
-        UnmanagedWrapper::VANGUARD_LOADGAME(path);
+        //UnmanagedWrapper::VANGUARD_LOADGAME(path);
+		ManagedWrapper::LOADGAME(path, gamename);
         RefreshDomains();
         // We have to do it this way to prevent deadlock due to synced calls. It sucks but it's
         // required at the moment
@@ -754,7 +758,7 @@ void VanguardClient::LoadRom(String^ filename) {
 bool VanguardClient::LoadState(std::string filename) {
 
     //RTCV::CorruptCore::StepActions::ClearStepBlastUnits();
-    RTCV::NetCore::LocalNetCoreRouter::Route(Endpoints::CorruptCore, NetCore::Commands::Remote::ClearStepBlastUnits, nullptr, false);
+	LocalNetCoreRouter::Route(Endpoints::CorruptCore, Commands::Remote::ClearStepBlastUnits, false);
 
     //control->ParseConfigFile(Helpers::systemStringToUtf8String((Helpers::utf8StringToSystemString(filename) + ".conf")).c_str());
     
@@ -816,7 +820,7 @@ void VanguardClientUnmanaged::SAVE_STATE_DONE() {
     AllSpec::VanguardSpec->Update(gameDone, true, false);
 }
 
-//void VanguardClientUnmanaged::DOSBOX_LOADEXE() {
+//void VanguardClientUnmanaged::MAME_LOADEXE() {
 //
 //    if(VanguardClient::DriveLoaded)
 //    {
@@ -853,109 +857,150 @@ void VanguardClientUnmanaged::SAVE_STATE_DONE() {
 //        }
 //}
 //
-//void VanguardClientUnmanaged::DOSBOX_LOADROM() {
-//
-//    if(VanguardClient::DriveLoaded)
-//    {
-//        MessageBox(GetHWND(), "Dosbox-x has to restart before a new drive is loaded", "Restarting Dosbox", MB_OK);
-//        System::Environment::Exit(0);
-//    }
-//
-//    char CurrentDir[512];
-//    char* Temp_CurrentDir = CurrentDir;
-//    getcwd(Temp_CurrentDir, 512);
-//    const char* lFilterPatterns[] = { "*.drive","*.drv","*.DRIVE","*.DRV" };
-//    const char* lFilterDescription = "RTC Drive file (*.drive, *.drv)";
-//    char const* lTheOpenFileName = tinyfd_openFileDialog("Select an RTC Drive file", "", 6, lFilterPatterns, lFilterDescription, 0);
-//
-//    if(lTheOpenFileName)
-//    {
-//        DOSBOX_LOADROM(lTheOpenFileName);
-//    }
-//}
-//
-//void VanguardClientUnmanaged::DOSBOX_LOADROM(char const* lTheOpenFileName) {
-//
-//    if(VanguardClient::DriveLoaded)
-//    {
-//        MessageBox(GetHWND(), "Dosbox-x has to restart before a new drive is loaded", "Restarting Dosbox", MB_OK);
-//        System::Environment::Exit(0);
-//    }
-//
-//        System::IO::FileInfo^ fi = gcnew System::IO::FileInfo(gcnew System::String(lTheOpenFileName));
-//        System::String^ autoexec = RTCV::CorruptCore::Drive::UnpackageDrive(fi->FullName);
-//
-//        //thx https://stackoverflow.com/questions/2093331/converting-systemstring-to-const-char
-//        msclr::interop::marshal_context oMarshalContext;
-//        const char* autoexecPath = oMarshalContext.marshal_as<const char*>(autoexec);
-//
-//        VanguardClient::LoadRom(fi->FullName);
-//        VanguardClient::DriveLoaded = true;
-//
-//        VanguardClientUnmanaged::LoadExecutable(autoexecPath);
-//
-//        
-// 
-//}
-//
-//void VanguardClientUnmanaged::DOSBOX_SAVEROM() {
-//
-//    if(VanguardClient::DriveLoaded)
-//    {
-//        MessageBox(GetHWND(), "Cannot generate a drive while a drive is loaded. Cancelling operation", "Error", MB_OK);
-//        return;
-//    }
-//
-//    System::String^ romSessionPath;
-//
-//    {
-//
-//        char CurrentDir[512];
-//        char* Temp_CurrentDir = CurrentDir;
-//        getcwd(Temp_CurrentDir, 512);
-//        const char* lFilterPatterns[] = { "*.com","*.exe","*.bat","*.COM","*.EXE","*.BAT" };
-//        const char* lFilterDescription = "Executable files (*.com, *.exe, *.bat)";
-//        char const* lTheOpenFileName = tinyfd_openFileDialog("Select an executable file to launch", "", 6, lFilterPatterns, lFilterDescription, 0);
-//
-//
-//
-//        if(lTheOpenFileName)
-//        {
-//            System::IO::FileInfo^ fi = gcnew System::IO::FileInfo(gcnew System::String(lTheOpenFileName));
-//            System::IO::DirectoryInfo^ di = fi->Directory;
-//            System::String^ autoexec_rom_path = System::IO::Path::Combine(di->FullName, gcnew System::String("autoexec.rom"));
-//            System::IO::File::WriteAllText(autoexec_rom_path, fi->Name);
-//
-//            romSessionPath = RTCV::CorruptCore::Drive::PackageDrive(di->FullName);
-//
-//            System::String^ autoexec = RTCV::CorruptCore::Drive::UnpackageDrive(romSessionPath);
-//
-//        }
-//        else
-//        {
-//            return;
-//        }
-//
-//
-//
-//    }
-//
-//
-//    {
-//        char CurrentDir[512];
-//        char* Temp_CurrentDir = CurrentDir;
-//        getcwd(Temp_CurrentDir, 512);
-//        const char* lFilterPatterns[] = { "*.drv","*.drive","*.DRV","*.DRIVE" };
-//        const char* lFilterDescription = "RTC Drive file (*.drv, *.drive)";
-//        char const* lTheOpenFileName = tinyfd_saveFileDialog("Select a destination for drive file", "", 6, lFilterPatterns, lFilterDescription);
-//
-//        if(lTheOpenFileName)
-//        {
-//            System::String^ path = gcnew System::String(lTheOpenFileName);
-//            RTCV::CorruptCore::Drive::SaveCurrentDriveAs(path);
-//        }
-//    }
-//}
+void VanguardClientUnmanaged::MAME_LOADROM() {
+
+    /*if(VanguardClient::DriveLoaded)
+    {
+        MessageBox(GetHWND(), "Dosbox-x has to restart before a new drive is loaded", "Restarting Dosbox", MB_OK);
+        System::Environment::Exit(0);
+    }*/
+
+    //char CurrentDir[512];
+    //char* Temp_CurrentDir = CurrentDir;
+    ////getcwd(Temp_CurrentDir, 512);
+    //MAME_LOA
+
+}
+
+void VanguardClientUnmanaged::MAME_LOADROM(char const* lTheOpenFileName) {
+
+    //if(VanguardClient::DriveLoaded)
+    //{
+    //    MessageBox(GetHWND(), "Dosbox-x has to restart before a new drive is loaded", "Restarting Dosbox", MB_OK);
+    //    System::Environment::Exit(0);
+    //}
+
+    System::IO::FileInfo^ fi = gcnew System::IO::FileInfo(gcnew System::String(lTheOpenFileName));
+    RTCV::CorruptCore::Drive::UnpackageDrive(fi->FullName);
+	System::String^ autoexec = System::IO::Path::Combine(RtcCore::workingDir, "DRIVE", "autoexec.rom");
+	System::String^ shortgamename = System::IO::File::ReadAllText(autoexec);
+	System::String^ autoexecdir = System::IO::Path::Combine(RtcCore::workingDir, "DRIVE");
+    //    //thx https://stackoverflow.com/questions/2093331/converting-systemstring-to-const-char
+    //    msclr::interop::marshal_context oMarshalContext;
+    //    const char* autoexecPath = oMarshalContext.marshal_as<const char*>(autoexec);
+
+    //    VanguardClientUnmanaged::LoadRom(fi->FullName);
+    //    VanguardClient::DriveLoaded = true;
+
+    //    VanguardClientUnmanaged::LoadExecutable(autoexecPath);
+	ManagedWrapper::LOADROM(Helpers::systemStringToUtf8String(autoexecdir), Helpers::systemStringToUtf8String(shortgamename));
+        
+ 
+}
+
+void VanguardClientUnmanaged::MAME_SAVEROM(std::string rompath) {
+
+	System::String^ romSessionPath;
+    /*if(VanguardClient::DriveLoaded)
+    {
+        MessageBox(GetHWND(), "Cannot generate a drive while a drive is loaded. Cancelling operation", "Error", MB_OK);
+        return;
+    }
+
+    System::String^ romSessionPath;
+
+    {
+
+        char CurrentDir[512];
+        char* Temp_CurrentDir = CurrentDir;
+        getcwd(Temp_CurrentDir, 512);
+        const char* lFilterPatterns[] = { "*.com","*.exe","*.bat","*.COM","*.EXE","*.BAT" };
+        const char* lFilterDescription = "Executable files (*.com, *.exe, *.bat)";
+        char const* lTheOpenFileName = tinyfd_openFileDialog("Select an executable file to launch", "", 6, lFilterPatterns, lFilterDescription, 0);
+
+
+
+        if(lTheOpenFileName)
+        {
+            System::IO::FileInfo^ fi = gcnew System::IO::FileInfo(gcnew System::String(lTheOpenFileName));
+            System::IO::DirectoryInfo^ di = fi->Directory;
+            System::String^ autoexec_rom_path = System::IO::Path::Combine(di->FullName, gcnew System::String("autoexec.rom"));
+            System::IO::File::WriteAllText(autoexec_rom_path, fi->Name);
+
+            romSessionPath = RTCV::CorruptCore::Drive::PackageDrive(di->FullName);
+
+            System::String^ autoexec = RTCV::CorruptCore::Drive::UnpackageDrive(romSessionPath);
+
+        }
+        else
+        {
+            return;
+        }
+
+
+
+    }
+
+
+    {
+        char CurrentDir[512];
+        char* Temp_CurrentDir = CurrentDir;
+        getcwd(Temp_CurrentDir, 512);
+        const char* lFilterPatterns[] = { "*.drv","*.drive","*.DRV","*.DRIVE" };
+        const char* lFilterDescription = "RTC Drive file (*.drv, *.drive)";
+        char const* lTheOpenFileName = tinyfd_saveFileDialog("Select a destination for drive file", "", 6, lFilterPatterns, lFilterDescription);
+
+        if(lTheOpenFileName)
+        {
+            System::String^ path = gcnew System::String(lTheOpenFileName);
+            RTCV::CorruptCore::Drive::SaveCurrentDriveAs(path);
+        }
+    }*/
+	//ManagedWrapper::SAVEROM(rompath);
+	std::string romfilenames[500];
+	cli::array<System::IO::FileInfo^>^ fi = gcnew cli::array<System::IO::FileInfo^> (500);
+	cli::array<System::String^>^ finame = gcnew cli::array<System::String^>(500);
+	//cli::array<System::IO::FileInfo^>^ destfi;
+	std::string destfile;
+	std::string destfolder;
+	loadromcounter = 1;
+	for (loadromcounter = 1; loadromcounter <= ManagedWrapper::COLLECTTOTALROMS(); loadromcounter++)
+	{
+		if (ManagedWrapper::GETROMFILENAME(loadromcounter) != " ")
+		{
+			printf("Current filename number: %i\n", loadromcounter);
+			romfilenames[loadromcounter] = ManagedWrapper::GETROMFILENAME(loadromcounter);
+			printf("Current filename detected: %s\n", romfilenames[loadromcounter].c_str());
+			finame[loadromcounter] = Helpers::utf8StringToSystemString(romfilenames[loadromcounter]);
+			printf("Converted filename for System::String: %s\n", Helpers::systemStringToUtf8String(finame[loadromcounter]).c_str());
+			fi[loadromcounter] = gcnew System::IO::FileInfo(finame[loadromcounter]);
+			printf("File opened: %s\n", Helpers::systemStringToUtf8String(fi[loadromcounter]->Name).c_str());
+			destfile = Helpers::systemStringToUtf8String(fi[loadromcounter]->DirectoryName + "\\" + Helpers::utf8StringToSystemString(ManagedWrapper::GetGameName()) + "\\" + fi[loadromcounter]->Name);
+			destfolder = Helpers::systemStringToUtf8String(fi[loadromcounter]->DirectoryName + "\\" + Helpers::utf8StringToSystemString(ManagedWrapper::GetGameName()));
+			if(!System::IO::Directory::Exists(Helpers::utf8StringToSystemString(destfolder)))
+			{
+				System::IO::Directory::CreateDirectory(Helpers::utf8StringToSystemString(destfolder));
+				printf("Destination file for %s: %s\n", Helpers::systemStringToUtf8String(fi[loadromcounter]->Name).c_str(), destfile.c_str());
+				if (!System::IO::File::Exists(Helpers::utf8StringToSystemString(destfile)))
+				{
+					System::IO::File::Copy(fi[loadromcounter]->FullName, Helpers::utf8StringToSystemString(destfile));
+					
+				}
+			}
+		}
+
+	}
+	System::IO::FileInfo^ destfi = gcnew System::IO::FileInfo(Helpers::utf8StringToSystemString(destfile));
+	System::IO::DirectoryInfo^ di = destfi->Directory;
+	System::String^ autoexec_rom_path = System::IO::Path::Combine(di->FullName, gcnew System::String("autoexec.rom"));
+	if (!System::IO::File::Exists(autoexec_rom_path))
+	{
+		System::IO::File::WriteAllText(autoexec_rom_path, Helpers::utf8StringToSystemString(ManagedWrapper::GetShortGameName()));
+		romSessionPath = RTCV::CorruptCore::Drive::PackageDrive(di->FullName);
+		AllSpec::VanguardSpec->Update(VSPEC::OPENROMFILENAME, romSessionPath, true, true);
+		//RTCV::CorruptCore::Drive::SaveCurrentDriveAs(romSessionPath);
+	}
+}
 
 
 // No fun anonymous classes with closure here
@@ -1036,26 +1081,27 @@ void VanguardClient::OnMessageReceived(Object^ sender, NetCoreEventArgs^ e) {
     }
                       break;
 
-    //case REMOTE_LOADROM: {
-    //    String^ filename = (String^)advancedMessage->objectValue;
+    case REMOTE_LOADROM: {
+        String^ filename = (String^)advancedMessage->objectValue;
 
-    //    //thx https://stackoverflow.com/questions/2093331/converting-systemstring-to-const-char
-    //    msclr::interop::marshal_context oMarshalContext;
-    //    const char* filenamePath = oMarshalContext.marshal_as<const char*>(filename);
+        //thx https://stackoverflow.com/questions/2093331/converting-systemstring-to-const-char
+        msclr::interop::marshal_context oMarshalContext;
+        const char* filenamePath = oMarshalContext.marshal_as<const char*>(filename);
 
-    //    String^ currentOpenRom = "";
-    //    if(AllSpec::VanguardSpec->Get<String^>(VSPEC::OPENROMFILENAME) != "")
-    //        currentOpenRom = AllSpec::VanguardSpec->Get<String^>(VSPEC::OPENROMFILENAME);
+        String^ currentOpenRom = "";
+        if(AllSpec::VanguardSpec->Get<String^>(VSPEC::OPENROMFILENAME) != "")
+            currentOpenRom = AllSpec::VanguardSpec->Get<String^>(VSPEC::OPENROMFILENAME);
 
-    //    // Game is not running
-    //    if(currentOpenRom != filename) {
-    //        //System::Action<const char*>^ a = gcnew Action<const char*>(VanguardClientUnmanaged::DOSBOX_LOADROM);
-    //        //SyncObjectSingleton::FormExecute<const char*>(a, filenamePath);
+        // Game is not running
+        if(currentOpenRom != filename) {
+            //System::Action<const char*>^ a = gcnew Action<const char*>(VanguardClientUnmanaged::MAME_LOADROM);
+            //SyncObjectSingleton::FormExecute<const char*>(a, filenamePath);
 
-    //        VanguardClientUnmanaged::DOSBOX_LOADROM(filenamePath);
-    //    }
-    //}
-    //                   break;
+        VanguardClientUnmanaged::MAME_LOADROM(filenamePath);
+        }
+		//LoadRom(filename, nullptr);
+    }
+                       break;
 
     case REMOTE_CLOSEGAME: {
         SyncObjectSingleton::GenericDelegate^ g = gcnew SyncObjectSingleton::GenericDelegate(&StopGame);

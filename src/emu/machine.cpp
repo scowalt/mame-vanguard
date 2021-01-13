@@ -94,6 +94,8 @@
 #include <emscripten.h>
 #endif
 #include "../Vanguard/VanguardClient.h"
+#include "../Vanguard/ManagedWrapper.h"
+#include "../Vanguard/VanguardClientInitializer.h"
 
 
 
@@ -292,6 +294,7 @@ void running_machine::start()
 	// if we're in autosave mode, schedule a load
 	else if (options().autosave() && (m_system.flags & MACHINE_SUPPORTS_SAVE) != 0)
 		schedule_load("auto");
+	VanguardClientUnmanaged::LOAD_GAME_START(ManagedWrapper::GETROMFILENAME(1), "");
 	manager().update_machine();
 }
 
@@ -302,6 +305,7 @@ void running_machine::start()
 
 int running_machine::run(bool quiet)
 {
+	VanguardClientInitializer::Initialize();
 	int error = EMU_ERR_NONE;
 
 	// use try/catch for deep error recovery

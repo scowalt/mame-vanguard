@@ -30,6 +30,7 @@
 
 #include <ctime>
 #include "../../Vanguard/VanguardClientInitializer.h"
+#include "../../Vanguard/VanguardClient.h"
 
 
 //**************************************************************************
@@ -258,12 +259,11 @@ int mame_machine_manager::execute()
 
 		// create the machine configuration
 		machine_config config(*system, m_options);
-
 		// create the machine structure and driver
 		running_machine machine(config, *this);
 
 		set_machine(&machine);
-
+		
 		// run the machine
 		error = machine.run(is_empty);
 		m_firstrun = false;
@@ -272,7 +272,6 @@ int mame_machine_manager::execute()
 		if (m_new_driver_pending)
 		{
 			// set up new system name and adjust device options accordingly
-			VanguardClientInitializer::Initialize();
 			m_options.set_system_name(m_new_driver_pending->name);
 			m_firstrun = true;
 		}

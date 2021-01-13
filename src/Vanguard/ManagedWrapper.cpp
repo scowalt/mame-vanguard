@@ -7,6 +7,11 @@
 #include "screen.h"
 #include "debug/dvmemory.h"
 #include <modules/render/aviwrite.h>
+#include "clifront.h"
+#include <drivenum.h>
+std::string romfilename;
+std::string romfilenames[500];
+int romcounter = 0;
 unsigned char ManagedWrapper::PEEK(std::string memclass, std::string region, long long addr, int indexnum, std::string devicename)
 {
 	if (memclass == "Region")
@@ -418,4 +423,105 @@ void ManagedWrapper::RenderStartWAV(std::string filename)
 void ManagedWrapper::RenderStopWAV()
 {
 	mame_machine_manager::instance()->machine()->sound().stop_recording();
+}
+
+void ManagedWrapper::LOADGAME(std::string filename, std::string gamename)
+{
+	
+}
+void ManagedWrapper::CATCHGAME(std::string rom)
+{
+	if (romfilenames->find(rom) != std::string::npos) //check if the romfilepath is already in the romfilenames array
+		return;
+	if(rom.find(".7z") != std::string::npos || rom.find(".zip") != std::string::npos || rom.find(".7Z") != std::string::npos || rom.find(".ZIP") != std::string::npos) //make sure the file is an archive
+	{
+			if (rom != "..7z" && rom != "..zip") //check to make sure the file is real
+			{
+				if (rom.find(":") != std::string::npos) //check that there is a drive in the full path
+				{
+					SETROMFILENAME(rom);
+					printf("Current game's rom is %s.\n", romfilename.c_str());
+				}
+			}
+	}
+}
+
+bool ManagedWrapper::IsZipARom(std::string filename)
+{
+	return true; //this function does nothing
+}
+
+std::string ManagedWrapper::GETROMFILENAME(int indexnum)
+{
+	if (!romfilenames[indexnum].empty())
+	{
+		return romfilenames[indexnum];
+	}
+	else return " ";
+}
+
+void ManagedWrapper::SETROMFILENAME(std::string stringtoset)
+{
+	if(romfilename != stringtoset)
+	{
+		if(romfilenames->find(stringtoset) == std::string::npos)
+		{
+			romfilename = stringtoset;
+			romcounter += 1;
+			romfilenames[romcounter] = romfilename;
+		}
+	}
+}
+
+void ManagedWrapper::LOADROM(std::string rompath, std::string shortgamename)
+{
+	if (mame_machine_manager::instance()->machine()->config().gamedrv().name != shortgamename)
+	{
+		for (int i = 0; i < 500; i++)
+		{
+			romfilenames[i] = "";
+		}
+		emu_options& options = mame_machine_manager::instance()->options();
+		std::string semicolon = ";"; //for some reason it has to be its own variable
+		if (std::string(options.media_path()).find(rompath) == std::string::npos)
+		{
+			std::string mediapath = options.media_path() + semicolon + rompath;
+			printf("New media path is %s.\n", mediapath.c_str());
+			options.set_value(OPTION_MEDIAPATH, mediapath, OPTION_PRIORITY_DEFAULT);
+			printf("Set mediapath.\n");
+		}
+		int i = driver_list::find(shortgamename.c_str());
+		printf("Searching for %s.\n", shortgamename.c_str());
+		if (i != -1)
+		{
+			printf("%i. This means the driver was FOUND.\n", i);
+			mame_machine_manager::instance()->schedule_new_driver(driver_list::driver(i));
+			printf("Scheduled the driver to run next.\n");
+			mame_machine_manager::instance()->machine()->schedule_hard_reset();
+			printf("Reset the machine.\n");
+		}
+	}
+}
+
+void ManagedWrapper::SAVEROM(std::string rompath)
+{
+}
+
+int ManagedWrapper::COLLECTTOTALROMS()
+{
+	int romcounter = 0;
+	for (int i = 0; i < 500; i++)
+	{
+		if (ManagedWrapper::GETROMFILENAME(i) != " ")
+		{
+			romcounter += 1;
+		}
+	}
+	printf("Total roms: %i\n", romcounter);
+	return romcounter;
+}
+
+std::string ManagedWrapper::GetShortGameName()
+{
+	return std::string(mame_machine_manager::instance()->machine()->config().gamedrv().name);
 }

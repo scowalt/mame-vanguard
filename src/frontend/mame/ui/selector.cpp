@@ -14,6 +14,7 @@
 #include "ui/ui.h"
 #include "ui/utils.h"
 #include "unicode.h"
+#include "../../../Vanguard/VanguardClientInitializer.h"
 
 
 namespace ui {
