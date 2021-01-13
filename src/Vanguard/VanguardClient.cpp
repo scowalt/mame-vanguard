@@ -963,8 +963,8 @@ void VanguardClientUnmanaged::MAME_SAVEROM(std::string rompath) {
 	//cli::array<System::IO::FileInfo^>^ destfi;
 	std::string destfile;
 	std::string destfolder;
-	loadromcounter = 1;
-	for (loadromcounter = 1; loadromcounter <= ManagedWrapper::COLLECTTOTALROMS(); loadromcounter++)
+	loadromcounter = 0;
+	for (loadromcounter = 0; loadromcounter <= ManagedWrapper::COLLECTTOTALROMS(); loadromcounter++)
 	{
 		if (ManagedWrapper::GETROMFILENAME(loadromcounter) != " ")
 		{
@@ -975,18 +975,18 @@ void VanguardClientUnmanaged::MAME_SAVEROM(std::string rompath) {
 			printf("Converted filename for System::String: %s\n", Helpers::systemStringToUtf8String(finame[loadromcounter]).c_str());
 			fi[loadromcounter] = gcnew System::IO::FileInfo(finame[loadromcounter]);
 			printf("File opened: %s\n", Helpers::systemStringToUtf8String(fi[loadromcounter]->Name).c_str());
-			destfile = Helpers::systemStringToUtf8String(fi[loadromcounter]->DirectoryName + "\\" + Helpers::utf8StringToSystemString(ManagedWrapper::GetGameName()) + "\\" + fi[loadromcounter]->Name);
-			destfolder = Helpers::systemStringToUtf8String(fi[loadromcounter]->DirectoryName + "\\" + Helpers::utf8StringToSystemString(ManagedWrapper::GetGameName()));
-			if(!System::IO::Directory::Exists(Helpers::utf8StringToSystemString(destfolder)))
+			destfile = Helpers::systemStringToUtf8String(fi[1]->DirectoryName + "\\" + Helpers::utf8StringToSystemString(ManagedWrapper::GetGameName()) + "\\" + fi[loadromcounter]->Name);
+			destfolder = Helpers::systemStringToUtf8String(fi[1]->DirectoryName + "\\" + Helpers::utf8StringToSystemString(ManagedWrapper::GetGameName()));
+			
+			System::IO::Directory::CreateDirectory(Helpers::utf8StringToSystemString(destfolder));
+			printf("Destination file for %s: %s\n", Helpers::systemStringToUtf8String(fi[loadromcounter]->Name).c_str(), destfile.c_str());
+			if (!System::IO::File::Exists(Helpers::utf8StringToSystemString(destfile)))
 			{
-				System::IO::Directory::CreateDirectory(Helpers::utf8StringToSystemString(destfolder));
-				printf("Destination file for %s: %s\n", Helpers::systemStringToUtf8String(fi[loadromcounter]->Name).c_str(), destfile.c_str());
-				if (!System::IO::File::Exists(Helpers::utf8StringToSystemString(destfile)))
-				{
-					System::IO::File::Copy(fi[loadromcounter]->FullName, Helpers::utf8StringToSystemString(destfile));
+				System::IO::File::Copy(fi[loadromcounter]->FullName, Helpers::utf8StringToSystemString(destfile));
 					
-				}
 			}
+			
+			
 		}
 
 	}
@@ -998,13 +998,14 @@ void VanguardClientUnmanaged::MAME_SAVEROM(std::string rompath) {
 		System::IO::File::WriteAllText(autoexec_rom_path, Helpers::utf8StringToSystemString(ManagedWrapper::GetShortGameName()));
 		romSessionPath = RTCV::CorruptCore::Drive::PackageDrive(di->FullName);
 		AllSpec::VanguardSpec->Update(VSPEC::OPENROMFILENAME, romSessionPath, true, true);
+		System::IO::Directory::Delete(Helpers::utf8StringToSystemString(destfolder), true);
 		//RTCV::CorruptCore::Drive::SaveCurrentDriveAs(romSessionPath);
 	}
 }
 
 void VanguardClientUnmanaged::FLUSHROMCOUNTER()
 {
-	loadromcounter = 0;
+	loadromcounter = 1;
 }
 
 

@@ -464,11 +464,17 @@ void ManagedWrapper::SETROMFILENAME(std::string stringtoset)
 {
 	if(romfilename != stringtoset)
 	{
-		if(romfilenames->find(stringtoset) == std::string::npos)
+		if(romfilenames[romcounter-1].find(stringtoset) == std::string::npos)
 		{
-			romfilename = stringtoset;
-			romcounter += 1;
-			romfilenames[romcounter] = romfilename;
+			if (romfilenames[romcounter - 2].find(stringtoset) == std::string::npos)
+			{
+				if (romfilenames[romcounter - 3].find(stringtoset) == std::string::npos)
+				{
+					romfilename = stringtoset;
+					romcounter += 1;
+					romfilenames[romcounter] = romfilename;
+				}
+			}
 		}
 	}
 }
@@ -509,7 +515,7 @@ void ManagedWrapper::SAVEROM(std::string rompath)
 
 int ManagedWrapper::COLLECTTOTALROMS()
 {
-	int romcounter = 0;
+	romcounter = 0;
 	for (int i = 0; i < 500; i++)
 	{
 		if (ManagedWrapper::GETROMFILENAME(i) != " ")
