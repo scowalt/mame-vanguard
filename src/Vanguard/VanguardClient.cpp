@@ -1002,6 +1002,11 @@ void VanguardClientUnmanaged::MAME_SAVEROM(std::string rompath) {
 	}
 }
 
+void VanguardClientUnmanaged::FLUSHROMCOUNTER()
+{
+	loadromcounter = 0;
+}
+
 
 // No fun anonymous classes with closure here
 #pragma region Delegates

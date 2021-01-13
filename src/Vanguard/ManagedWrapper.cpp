@@ -525,3 +525,8 @@ std::string ManagedWrapper::GetShortGameName()
 {
 	return std::string(mame_machine_manager::instance()->machine()->config().gamedrv().name);
 }
+
+void ManagedWrapper::FLUSHROMCOUNTER()
+{
+	romcounter = 0;
+}

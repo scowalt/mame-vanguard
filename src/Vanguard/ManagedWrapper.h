@@ -34,4 +34,5 @@ public:
 	static void SAVEROM(std::string rompath);
 	static int COLLECTTOTALROMS();
 	static std::string GetShortGameName();
+	static void FLUSHROMCOUNTER();
 };

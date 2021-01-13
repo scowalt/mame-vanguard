@@ -31,6 +31,7 @@
 #include <ctime>
 #include "../../Vanguard/VanguardClientInitializer.h"
 #include "../../Vanguard/VanguardClient.h"
+#include "../../Vanguard/ManagedWrapper.h"
 
 
 //**************************************************************************
@@ -89,6 +90,8 @@ mame_machine_manager::~mame_machine_manager()
 
 void mame_machine_manager::schedule_new_driver(const game_driver &driver)
 {
+	VanguardClientUnmanaged::FLUSHROMCOUNTER();
+	ManagedWrapper::FLUSHROMCOUNTER();
 	m_new_driver_pending = &driver;
 }
 

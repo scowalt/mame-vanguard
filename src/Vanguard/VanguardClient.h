@@ -20,4 +20,5 @@ public:
     static void MAME_LOADROM(char const* lTheOpenFileName);
     static void MAME_SAVEROM(std::string rompath);
     static void LoadExecutable(char const* lTheOpenFileName);
+	static void FLUSHROMCOUNTER();
 };
