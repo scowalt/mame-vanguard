@@ -9,6 +9,7 @@
 #include <modules/render/aviwrite.h>
 #include "clifront.h"
 #include <drivenum.h>
+#include <luaengine.ipp>
 std::string romfilename;
 std::string romfilenames[500];
 int romcounter = 0;
@@ -39,13 +40,76 @@ unsigned char ManagedWrapper::PEEK(std::string memclass, std::string region, lon
 		{
 			address_space& space = mame_machine_manager::instance()->machine()->device(devicename.c_str())->memory().space(spacenum);
 			offs_t address = static_cast<u32>(addr) & space.addrmask();
-			u8 data = 0;
+			u64 data = 0;
 			address = address << (abs)(space.addr_shift());
-			if (!space.device().memory().translate(space.spacenum(), TRANSLATE_READ_DEBUG, address))
-				return 0;
-			data = space.read_byte(address);
-			//printf("value at address 0x%X is %X\n", address, data);
-			return data;
+			if (space.addr_shift() != 0)
+			{
+				address = (address / space.addr_width());
+				if (space.data_width() == 8)
+					data = space.read_byte(address);
+				if (space.data_width() == 16)
+					data = space.read_word(address);
+				if (space.data_width() == 32)
+					data = space.read_dword(address);
+				if (space.data_width() == 64)
+					data = space.read_qword(address);
+			}
+			else data = space.read_byte(address);
+			//address %= space.addr_width();
+			//address = static_cast<u32>(addr);
+			//data = space.read_byte(address);
+			u8 byte = 0;
+			std::stringstream stream;
+			std::string alignment;
+			stream << std::hex << addr;
+			alignment = stream.str();
+			alignment = alignment.back();
+			//printf("alignment of address %IX is %s\n", addr, alignment.c_str());
+			if (space.addr_shift() != 0)
+			{
+				if (space.data_width() == 16)
+				{
+					if (alignment == "0" || alignment == "2" || alignment == "4" || alignment == "6" || alignment == "8" || alignment == "a" || alignment == "c" || alignment == "e")
+						byte = data & 0xFF;
+					if (alignment == "1" || alignment == "3" || alignment == "5" || alignment == "7" || alignment == "9" || alignment == "b" || alignment == "d" || alignment == "f")
+						byte = (data >> 8) & 0xFF;
+				}
+				if (space.data_width() == 32)
+				{
+					if (alignment == "0" || alignment == "4" || alignment == "8" || alignment == "c")
+						byte = data & 0xFF;
+					if (alignment == "1" || alignment == "5" || alignment == "9" || alignment == "d")
+						byte = (data >> 8) & 0xFF;
+					if (alignment == "2" || alignment == "6" || alignment == "a" || alignment == "e")
+						byte = ((data >> 8) >> 8) & 0xFF;
+					if (alignment == "3" || alignment == "7" || alignment == "b" || alignment == "f")
+						byte = (((data >> 8) >> 8) >> 8) & 0xFF;
+				}
+				if (space.data_width() == 64)
+				{
+					if (alignment == "0" || alignment == "8")
+						byte = data & 0xFF;
+					if (alignment == "1" || alignment == "9")
+						byte = (data >> 8) & 0xFF;
+					if (alignment == "2" || alignment == "a")
+						byte = ((data >> 8) >> 8) & 0xFF;
+					if (alignment == "3" || alignment == "b")
+						byte = (((data >> 8) >> 8) >> 8) & 0xFF;
+					if (alignment == "4" || alignment == "c")
+						byte = ((((data >> 8) >> 8) >> 8) >> 8) & 0xFF;
+					if (alignment == "5" || alignment == "d")
+						byte = (((((data >> 8) >> 8) >> 8) >> 8) >> 8) & 0xFF;
+					if (alignment == "6" || alignment == "e")
+						byte = ((((((data >> 8) >> 8) >> 8) >> 8) >> 8) >> 8) & 0xFF;
+					if (alignment == "7" || alignment == "f")
+						byte = (((((((data >> 8) >> 8) >> 8) >> 8) >> 8) >> 8) >> 8) & 0xFF;
+				}
+				if (space.data_width() == 8)
+					byte = data;
+			}
+			else byte = data;
+			//printf("value at address 0x%IX, which was converted into address %I32X, is %IX, and the byte grabbed from it is %X\n", addr, address, data, byte);
+			return byte;
 		}
 		else return NULL;
 	}
@@ -70,12 +134,62 @@ void ManagedWrapper::POKE(std::string memclass, std::string region, long long ad
 		int spacenum = indexnum;
 		if (mame_machine_manager::instance()->machine()->device(devicename.c_str())->memory().has_space(spacenum))
 		{
-			address_space& space = mame_machine_manager::instance()->machine()->device(devicename.c_str())->memory().space(spacenum);
-			offs_t address = static_cast<u32>(addr) & space.addrmask();
-			address = address << (abs)(space.addr_shift());
-			if (!space.device().memory().translate(space.spacenum(), TRANSLATE_READ_DEBUG, address))
-				return;
-			space.write_byte(address, val);
+			//address_space& space = mame_machine_manager::instance()->machine()->device(devicename.c_str())->memory().space(spacenum);
+			//offs_t address = static_cast<u32>(addr);
+			//address = address << (space.addr_shift());
+			/*std::stringstream stream;
+			std::string alignment;
+			stream << std::hex << addr;
+			alignment = stream.str();
+			alignment = alignment.back();
+			if (space.addr_shift() != 0)
+			{
+				address = (address / space.addr_width());
+				if (alignment == "0")
+					address += 0;
+				if (alignment == "1")
+					address += 1;
+				if (alignment == "2")
+					address += 2;
+				if (alignment == "3")
+					address += 3;
+				if (alignment == "4")
+					address += 4;
+				if (alignment == "5")
+					address += 5;
+				if (alignment == "6")
+					address += 6;
+				if (alignment == "7")
+					address += 7;
+				if (alignment == "8")
+					address += 8;
+				if (alignment == "9")
+					address += 9;
+				if (alignment == "a")
+					address += 10;
+				if (alignment == "b")
+					address += 11;
+				if (alignment == "c")
+					address += 12;
+				if (alignment == "d")
+					address += 13;
+				if (alignment == "e")
+					address += 14;
+				if (alignment == "f")
+					address += 15;
+			}*/
+			//space.write_byte(address, val);
+			std::stringstream addr2hex;
+			addr2hex << "0x" << std::hex << addr;
+			std::stringstream val2hex;
+			unsigned int value = val;
+			val2hex << "0x" << std::hex << value;
+			//std::stringstream stream;
+			//printf("manager.machine.devices[\":%s\"].spaces[\"%s\"]:write_u8(0x%IX, 0x%X)", devicename.c_str(), region.c_str(), addr, val);
+			std::string luacommand = "manager.machine.devices[\":" + devicename + "\"].spaces[\"" + region + "\"]:write_u8(" + addr2hex.str() +", " + val2hex.str() + ")";
+			printf("Sending \"%s\"\n", luacommand.c_str());
+			mame_machine_manager::instance()->lua()->load_string(luacommand.c_str()); //sorry, it seems I have to use the lua engine
+
 		}
 	}
 	else return;
