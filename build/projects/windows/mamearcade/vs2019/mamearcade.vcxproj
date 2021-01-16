@@ -12565,16 +12565,16 @@ python ../../../../../scripts/build/makedep.py  driverlist ../../../../../src/ma
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\..\sourcecode\RTCV\Source\Libraries\Common\Common.csproj">
+    <ProjectReference Include="..\..\..\..\..\..\RTCV\Source\Libraries\Common\Common.csproj">
       <Project>{fb2f629a-34f0-48b3-b56c-cdda57c95e89}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\..\sourcecode\RTCV\Source\Libraries\CorruptCore\CorruptCore.csproj">
+    <ProjectReference Include="..\..\..\..\..\..\RTCV\Source\Libraries\CorruptCore\CorruptCore.csproj">
       <Project>{e147be34-050b-466f-b0cb-98f36d95d24a}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\..\sourcecode\RTCV\Source\Libraries\NetCore\NetCore.csproj">
+    <ProjectReference Include="..\..\..\..\..\..\RTCV\Source\Libraries\NetCore\NetCore.csproj">
       <Project>{2ff4a94e-11a5-4323-ace6-32b8c179ed6f}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\..\sourcecode\RTCV\Source\Libraries\Vanguard\Vanguard.csproj">
+    <ProjectReference Include="..\..\..\..\..\..\RTCV\Source\Libraries\Vanguard\Vanguard.csproj">
       <Project>{42aa03eb-b5ff-4f24-aa34-9c102cd914fe}</Project>
     </ProjectReference>
     <ProjectReference Include="fuuki.vcxproj">

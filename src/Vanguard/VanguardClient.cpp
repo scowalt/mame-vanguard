@@ -42,11 +42,11 @@
 #using <System.IO.Compression.FileSystem.dll>
 
 //If we provide just the dll name and then compile with /AI it works, but intellisense doesn't pick up on it, so we use a full relative path
-#using <../../../../../../sourcecode/RTCV/Build/NetCore.dll> //it's like this because I accidentally placed the MAME source code in the root of the drive where I store my sourcecode and I'm too lazy to fix that
+#using <../../../../../../RTCV/Build/NetCore.dll> //it's like this because I accidentally placed the MAME source code in the root of the drive where I store my sourcecode and I'm too lazy to fix that
 // sorry about that ¯\_(ツ)_/¯
-#using <../../../../../../sourcecode/RTCV/Build/Vanguard.dll>
-#using <../../../../../../sourcecode/RTCV/Build/CorruptCore.dll>
-#using <../../../../../../sourcecode/RTCV/Build/RTCV.Common.dll>
+#using <../../../../../../RTCV/Build/Vanguard.dll>
+#using <../../../../../../RTCV/Build/CorruptCore.dll>
+#using <../../../../../../RTCV/Build/RTCV.Common.dll>
 
 
 using namespace cli;

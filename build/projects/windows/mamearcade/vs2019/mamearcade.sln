@@ -421,13 +421,13 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pinball", "pinball.vcxproj"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "misc", "misc.vcxproj", "{0856EA64-F4E4-732E-9D03-8829897184D4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CorruptCore", "..\..\..\..\..\..\sourcecode\RTCV\Source\Libraries\CorruptCore\CorruptCore.csproj", "{E147BE34-050B-466F-B0CB-98F36D95D24A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CorruptCore", "..\..\..\..\..\..\RTCV\Source\Libraries\CorruptCore\CorruptCore.csproj", "{E147BE34-050B-466F-B0CB-98F36D95D24A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common", "..\..\..\..\..\..\sourcecode\RTCV\Source\Libraries\Common\Common.csproj", "{FB2F629A-34F0-48B3-B56C-CDDA57C95E89}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common", "..\..\..\..\..\..\RTCV\Source\Libraries\Common\Common.csproj", "{FB2F629A-34F0-48B3-B56C-CDDA57C95E89}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetCore", "..\..\..\..\..\..\sourcecode\RTCV\Source\Libraries\NetCore\NetCore.csproj", "{2FF4A94E-11A5-4323-ACE6-32B8C179ED6F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetCore", "..\..\..\..\..\..\RTCV\Source\Libraries\NetCore\NetCore.csproj", "{2FF4A94E-11A5-4323-ACE6-32B8C179ED6F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vanguard", "..\..\..\..\..\..\sourcecode\RTCV\Source\Libraries\Vanguard\Vanguard.csproj", "{42AA03EB-B5FF-4F24-AA34-9C102CD914FE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vanguard", "..\..\..\..\..\..\RTCV\Source\Libraries\Vanguard\Vanguard.csproj", "{42AA03EB-B5FF-4F24-AA34-9C102CD914FE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
