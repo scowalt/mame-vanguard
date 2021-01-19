@@ -650,3 +650,15 @@ void ManagedWrapper::FLUSHROMCOUNTER()
 {
 	romcounter = 0;
 }
+
+void ManagedWrapper::hardreset()
+{
+	mame_machine_manager::instance()->machine()->schedule_hard_reset();
+}
+
+std::string ManagedWrapper::CheckMachineState()
+{
+	if (mame_machine_manager::instance()->machine()->phase() == machine_phase::RUNNING)
+		return "RUNNING";
+	else return "";
+}

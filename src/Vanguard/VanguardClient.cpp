@@ -759,26 +759,27 @@ bool VanguardClient::LoadState(std::string filename) {
     //RTCV::CorruptCore::StepActions::ClearStepBlastUnits();
 	LocalNetCoreRouter::Route(Endpoints::CorruptCore, Commands::Remote::ClearStepBlastUnits, false);
 
+	//ManagedWrapper::hardreset();
     //control->ParseConfigFile(Helpers::systemStringToUtf8String((Helpers::utf8StringToSystemString(filename) + ".conf")).c_str());
     
     RtcClock::ResetCount();
     stateLoading = true;
 	//ManagedWrapper::Resume(false);
-	ManagedWrapper::LoadSaveState(filename);
 	//UnmanagedWrapper::VANGUARD_LOADSTATE_DONE();
-    // We have to do it this way to prevent deadlock due to synced calls. It sucks but it's required
-    // at the moment
-    //int i = 0;
+    //// We have to do it this way to prevent deadlock due to synced calls. It sucks but it's required
+    //// at the moment
+    ////int i = 0;
     //do {
     //    Thread::Sleep(20);
     //    System::Windows::Forms::Application::DoEvents();
 
     //    // We wait for 20 ms every time. If loading a game takes longer than 10 seconds, break out.
-    //    if(++i > 500) {
+    //    /*if(++i > 500) {
     //        stateLoading = false;
     //        return false;
-    //    }
+    //    }*/
     //} while(stateLoading);
+	ManagedWrapper::LoadSaveState(filename);
 	UnmanagedWrapper::VANGUARD_LOADSTATE_DONE();
 	//ManagedWrapper::Resume(true);
     RefreshDomains();

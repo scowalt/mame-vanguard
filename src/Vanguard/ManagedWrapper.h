@@ -35,4 +35,6 @@ public:
 	static int COLLECTTOTALROMS();
 	static std::string GetShortGameName();
 	static void FLUSHROMCOUNTER();
+	static void hardreset();
+	static std::string CheckMachineState();
 };

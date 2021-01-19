@@ -145,6 +145,7 @@ void UnmanagedWrapper::VANGUARD_CORESTEP() {
 
 void UnmanagedWrapper::LOAD_STATE_DONE() {
 
+
     VanguardClientUnmanaged::LOAD_STATE_DONE();
 }
 
