@@ -5,25 +5,41 @@ jobs:
   emu:
     runs-on: windows-2019
     steps:
-    - name: Checkout repository
+    - name: Checkout build target
       uses: actions/checkout@v2
+      with:
+        path: 'mame-vanguard'
+
+    - name: Checkout RTCV
+      uses: actions/checkout@v2
+      with:
+        path: 'RTCV'
+        refspec: '506'
 
     - name: Setup MSBuild.exe
       uses: microsoft/setup-msbuild@v1.0.2
 
     - name: Build emu.vxcproj
       shell: powershell
-      run: msbuild build/projects/windows/mamearcade/vs2019/emu.vcxproj
+      run: msbuild mame-vanguard/build/projects/windows/mamearcade/vs2019/emu.vcxproj
 
   mamearcade:
     runs-on: windows-2019
     steps:
-    - name: Checkout repository
+    - name: Checkout build target
       uses: actions/checkout@v2
+      with:
+        path: 'mame-vanguard'
+
+    - name: Checkout RTCV
+      uses: actions/checkout@v2
+      with:
+        path: 'RTCV'
+        refspec: '506'
 
     - name: Setup MSBuild.exe
       uses: microsoft/setup-msbuild@v1.0.2
 
     - name: Build mamearcade.vxcproj
       shell: powershell
-      run: msbuild build/projects/windows/mamearcade/vs2019/mamearcade.vcxproj
+      run: msbuild mame-vanguard/build/projects/windows/mamearcade/vs2019/mamearcade.vcxproj
